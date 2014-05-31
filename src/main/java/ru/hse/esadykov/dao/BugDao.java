@@ -19,7 +19,7 @@ public class BugDao {
     
     private Bug extractBug(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
-        Date created = new Date(rs.getDate("created").getTime());
+        Date created = rs.getTimestamp("created");
         int priority = rs.getInt("priority");
         String title = rs.getString("title");
         String description = rs.getString("description");
@@ -33,7 +33,8 @@ public class BugDao {
         List<Bug> result = new ArrayList<>();
         try (Connection con = ConnectionFactory.getConnection()) {
             ResultSet resultSet = con.createStatement().executeQuery(
-                    "select id, created, priority, title, description, responsible_id, status from bug");
+                    "select id, created, priority, title, description, responsible_id, status " +
+                            "from bug order by created desc");
             while (resultSet.next()) {
                 result.add(extractBug(resultSet));
             }

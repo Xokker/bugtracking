@@ -1,6 +1,7 @@
 package ru.hse.esadykov.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Ernest Sadykov
@@ -15,6 +16,7 @@ public class Bug {
     private Integer responsibleId;
     private BugStatus status;
     private transient User responsible;
+    private List<Comment> comments;
 
     public Bug() {
     }
@@ -93,6 +95,14 @@ public class Bug {
         this.responsible = responsible;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Bug{");
@@ -102,7 +112,7 @@ public class Bug {
         sb.append(", title='").append(title).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", responsibleId=").append(responsibleId);
-        sb.append(", responsible=").append(responsible);
+        sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();
     }

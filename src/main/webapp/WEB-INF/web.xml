@@ -28,6 +28,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>Bugs</servlet-name>
+        <servlet-class>ru.hse.esadykov.servlets.BugsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Bugs</servlet-name>
+        <url-pattern>/bugs</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>DBConnection</servlet-name>
         <servlet-class>ru.hse.esadykov.servlets.DBConnectionServlet</servlet-class>
     </servlet>

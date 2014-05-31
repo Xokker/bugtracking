@@ -21,7 +21,8 @@ public class CommentDao {
         List<Comment> result = new ArrayList<>();
         try (Connection con = ConnectionFactory.getConnection()) {
             PreparedStatement ps = con.prepareStatement(
-                    "select id, body, created, author_id, bug_id from comment where bug_id = ?");
+                    "select id, body, created, author_id, bug_id from comment " +
+                            "where bug_id = ? order by created desc");
             ps.setInt(1, bugId);
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
@@ -35,7 +36,7 @@ public class CommentDao {
     private Comment extractComment(ResultSet resultSet) throws SQLException {
         Integer id = resultSet.getInt("id");
         String body = resultSet.getString("body");
-        Date created = new Date(resultSet.getDate("created").getTime());
+        Date created = resultSet.getTimestamp("created");
         Integer authorId = resultSet.getInt("author_id");
         Integer bugId = resultSet.getInt("bug_id");
 

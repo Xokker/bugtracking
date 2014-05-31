@@ -5,6 +5,7 @@
     <title>Users</title>
 </head>
 <body>
+    <h1>User List</h1>
 
     <c:forEach items="${users}" var="user">
         <p>${user}</p>
