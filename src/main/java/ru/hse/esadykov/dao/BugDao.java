@@ -42,4 +42,17 @@ public class BugDao {
 
         return result;
     }
+
+    public Bug getBug(int bugId) throws SQLException {
+        try (Connection con = ConnectionFactory.getConnection()) {
+            ResultSet resultSet = con.createStatement().executeQuery(
+                    "select id, created, priority, title, description, responsible_id, status " +
+                            "from bug order by created desc");
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            return extractBug(resultSet);
+        }
+    }
 }

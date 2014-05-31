@@ -29,11 +29,20 @@
 
     <servlet>
         <servlet-name>Bugs</servlet-name>
-        <servlet-class>ru.hse.esadykov.servlets.BugsServlet</servlet-class>
+        <servlet-class>ru.hse.esadykov.servlets.BugListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Bugs</servlet-name>
         <url-pattern>/bugs</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Bug</servlet-name>
+        <servlet-class>ru.hse.esadykov.servlets.BugServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Bug</servlet-name>
+        <url-pattern>/bug/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
