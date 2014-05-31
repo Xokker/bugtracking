@@ -34,8 +34,11 @@ public class BugDao {
         List<Bug> result = new ArrayList<>();
         try (Connection con = ConnectionFactory.getConnection()) {
             ResultSet resultSet = con.createStatement().executeQuery(
-                    "select id, created, priority, title, description, responsible_id, status " +
-                            "from bug order by created desc");
+                    "(select id, created, priority, title, description, responsible_id, status " +
+                            "from bug where status = 'NEW' order by priority desc)" +
+                    " union " +
+                    "(select id, created, priority, title, description, responsible_id, status " +
+                            "from bug where status <> 'NEW' order by priority desc)");
             while (resultSet.next()) {
                 result.add(extractBug(resultSet));
             }
@@ -56,6 +59,19 @@ public class BugDao {
             }
 
             return extractBug(resultSet);
+        }
+    }
+
+    public boolean addBug(Bug bug) throws SQLException {
+        try (Connection con = ConnectionFactory.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "insert into bug (priority, title, description, responsible_id) values (?, ?, ?, ?)");
+            ps.setInt(1, bug.getPriority());
+            ps.setString(2, bug.getTitle());
+            ps.setString(3, bug.getDescription());
+            ps.setInt(4, bug.getResponsibleId());
+
+            return ps.executeUpdate() > 0;
         }
     }
 }

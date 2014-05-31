@@ -30,14 +30,14 @@
                                    pattern="dd.MM.yyyy HH:mm"
                                    value="${comment.created}"/>
         </p>
-        <p><c:out value="${comment.body}"/></p>
+        <p><c:out value="${comment.body}" escapeXml="false"/></p>
         <hr>
     </c:forEach>
 
     <h3>Add comment</h3>
     <form name="input" action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
         Username:   <input type="text" name="username"/>     <br/>
-        Text:       <textarea rows="5" cols="50" name="body">Enter your comment</textarea>    <br/>
+        Text:       <textarea rows="5" cols="50" name="body" placeholder="Enter your comment"></textarea>    <br/>
         <input type="submit" value="Submit"/>
     </form>
 </body>
