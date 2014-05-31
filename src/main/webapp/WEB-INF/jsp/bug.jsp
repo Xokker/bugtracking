@@ -35,7 +35,7 @@
     <h3>Add comment</h3>
     <form name="input" action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
         Username:   <input type="text" name="username"/>     <br/>
-        Text:       <textarea rows="5" cols="50" type="text" name="body">Enter your comment</textarea>    <br/>
+        Text:       <textarea rows="5" cols="50" name="body">Enter your comment</textarea>    <br/>
         <input type="submit" value="Submit"/>
     </form>
 </body>

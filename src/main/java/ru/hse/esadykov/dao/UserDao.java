@@ -70,4 +70,16 @@ public class UserDao {
             return preparedStatement.executeUpdate() > 0;
         }
     }
+
+    public boolean addUser(User user) throws SQLException {
+        try (Connection con = ConnectionFactory.getConnection()) {
+            PreparedStatement ps = con.prepareStatement(
+                    "insert into user (username, full_name, email) values (?, ?, ?)");
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getFullName());
+            ps.setString(3, user.getEmail());
+
+            return ps.executeUpdate() > 0;
+        }
+    }
 }
