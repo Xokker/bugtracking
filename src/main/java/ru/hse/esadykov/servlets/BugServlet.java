@@ -42,12 +42,19 @@ public class BugServlet extends HttpServlet {
         Matcher matcher = pattern.matcher(pathInfo);
         boolean found = matcher.find(); // TODO: 404 if not found
 
+        if (!found) {
+            return -1;
+        }
         return Integer.parseInt(matcher.group(1));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
+        if (bugId == -1) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
         String username = request.getParameter("username");
         String body = request.getParameter("body");
 
@@ -72,6 +79,10 @@ public class BugServlet extends HttpServlet {
 
         try {
             Bug bug = bugDao.getBug(bugId);
+            if (bug == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
             request.setAttribute("bug", bug);
