@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Connection config</title>
 </head>
 <body>
     <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
