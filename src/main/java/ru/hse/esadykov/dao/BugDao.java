@@ -33,7 +33,7 @@ public class BugDao {
         List<Bug> result = new ArrayList<>();
         try (Connection con = ConnectionFactory.getConnection()) {
             ResultSet resultSet = con.createStatement().executeQuery(
-                    "select id, created, priority, title, description, responsible_id from bug");
+                    "select id, created, priority, title, description, responsible_id, status from bug");
             while (resultSet.next()) {
                 result.add(extractBug(resultSet));
             }
