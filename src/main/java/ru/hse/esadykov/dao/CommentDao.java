@@ -42,4 +42,27 @@ public class CommentDao {
 
         return new Comment(id, body, created, authorId, bugId);
     }
+
+    public boolean saveComment(Comment comment) throws SQLException {
+        try (Connection con = ConnectionFactory.getConnection()) {
+            PreparedStatement ps;
+            if (comment.getAuthorId() != null) {
+                ps = con.prepareStatement("insert into comment (body, author_id, bug_id) values " +
+                        "(?, ?, ?)");
+                ps.setString(1, comment.getBody());
+                ps.setInt(2, comment.getAuthorId());
+                ps.setInt(3, comment.getBugId());
+            } else if (comment.getAuthor() != null && comment.getAuthor().getUsername() != null) {
+                ps = con.prepareStatement("insert into comment (body, author_id, bug_id) " +
+                        "select ?, id, ? from user where username = ?");
+                ps.setString(1, comment.getBody());
+                ps.setInt(2, comment.getBugId());
+                ps.setString(3, comment.getAuthor().getUsername());
+            } else {
+                throw new RuntimeException("Author id or username must be specified");
+            }
+
+            return ps.executeUpdate() > 0;
+        }
+    }
 }

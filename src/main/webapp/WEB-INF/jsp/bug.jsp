@@ -22,14 +22,21 @@
     <h2>Comments</h2>
     <c:forEach items="${comments}" var="comment">
         <p>
-            <strong>Author id:</strong> ${comment.author_id}.
+            <strong>Author id:</strong> ${comment.authorId}.
             Added: <fmt:formatDate type="both"
                                    dateStyle="short"
                                    pattern="dd.MM.yyyy HH:mm"
-                                   value="${bug.created}"/>
+                                   value="${comment.created}"/>
         </p>
         <p><c:out value="${comment.body}"/></p>
         <hr>
     </c:forEach>
+
+    <h3>Add comment</h3>
+    <form name="input" action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
+        Username:   <input type="text" name="username"/>     <br/>
+        Text:       <textarea rows="5" cols="50" type="text" name="body">Enter your comment</textarea>    <br/>
+        <input type="submit" value="Submit"/>
+    </form>
 </body>
 </html>

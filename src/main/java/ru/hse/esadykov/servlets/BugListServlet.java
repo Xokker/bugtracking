@@ -35,7 +35,7 @@ public class BugListServlet extends HttpServlet {
         }
         req.setAttribute("bugs", bugs);
 
-        RequestDispatcher view = req.getRequestDispatcher("/jsp/bugs.jsp");
+        RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/bugs.jsp");
         view.forward(req, resp);
     }
 

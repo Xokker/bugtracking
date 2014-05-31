@@ -38,17 +38,37 @@ public class BugServlet extends HttpServlet {
         pattern = Pattern.compile("/(\\d+)/?");
     }
 
+    private int getBugIdFromPathInfo(String pathInfo) {
+        Matcher matcher = pattern.matcher(pathInfo);
+        boolean found = matcher.find(); // TODO: 404 if not found
+
+        return Integer.parseInt(matcher.group(1));
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int bugId = getBugIdFromPathInfo(request.getPathInfo());
+        String username = request.getParameter("username");
+        String body = request.getParameter("body");
 
+        Comment comment = new Comment();
+        User user = new User();
+        user.setUsername(username);
+        comment.setAuthor(user);
+        comment.setBody(body);
+        comment.setBugId(bugId);
+        try {
+            commentDao.saveComment(comment);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        doGet(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String pathInfo = request.getPathInfo();
-        Matcher matcher = pattern.matcher(pathInfo);
-        boolean found = matcher.find(); // TODO: 404 if not found
-        int bugId = Integer.parseInt(matcher.group(1));
+        int bugId = getBugIdFromPathInfo(request.getPathInfo());
 
         try {
             Bug bug = bugDao.getBug(bugId);
@@ -61,7 +81,7 @@ public class BugServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        RequestDispatcher view = request.getRequestDispatcher("/jsp/bug.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/bug.jsp");
         view.forward(request, response);
     }
 

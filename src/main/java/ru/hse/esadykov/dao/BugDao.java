@@ -5,6 +5,7 @@ import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.BugStatus;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,9 +46,11 @@ public class BugDao {
 
     public Bug getBug(int bugId) throws SQLException {
         try (Connection con = ConnectionFactory.getConnection()) {
-            ResultSet resultSet = con.createStatement().executeQuery(
+            PreparedStatement ps = con.prepareStatement(
                     "select id, created, priority, title, description, responsible_id, status " +
-                            "from bug order by created desc");
+                            "from bug where id = ?");
+            ps.setInt(1, bugId);
+            ResultSet resultSet = ps.executeQuery();
             if (!resultSet.next()) {
                 return null;
             }

@@ -16,7 +16,7 @@ import java.io.IOException;
 public class DBConnectionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher view = req.getRequestDispatcher("/jsp/dbconnection.jsp");
+        RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/dbconnection.jsp");
         view.forward(req, resp);
     }
 
@@ -36,7 +36,7 @@ public class DBConnectionServlet extends HttpServlet {
 
         req.setAttribute("success", success);
 
-        RequestDispatcher view = req.getRequestDispatcher("/jsp/dbconnection.jsp");
+        RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/dbconnection.jsp");
         view.forward(req, resp);
     }
 }
