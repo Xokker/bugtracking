@@ -13,18 +13,20 @@ public class Bug {
     private String title;
     private String description;
     private Integer responsibleId;
+    private BugStatus status;
     private transient User responsible;
 
     public Bug() {
     }
 
-    public Bug(Integer id, Date created, int priority, String title, String description, Integer responsibleId) {
+    public Bug(Integer id, Date created, int priority, String title, String description, Integer responsibleId, BugStatus status) {
         this.id = id;
         this.created = created;
         this.priority = priority;
         this.title = title;
         this.description = description;
         this.responsibleId = responsibleId;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -73,6 +75,14 @@ public class Bug {
 
     public void setResponsibleId(Integer responsibleId) {
         this.responsibleId = responsibleId;
+    }
+
+    public BugStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BugStatus status) {
+        this.status = status;
     }
 
     public User getResponsible() {

@@ -3,7 +3,10 @@ package ru.hse.esadykov.dao;
 import ru.hse.esadykov.ConnectionFactory;
 import ru.hse.esadykov.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +16,14 @@ import java.util.List;
  */
 public class UserDao {
 
+    private User extractUser(ResultSet rs) throws SQLException {
+        Integer id = rs.getInt("id");
+        String username = rs.getString("username");
+        String fullName = rs.getString("full_name");
+        String email = rs.getString("email");
+        return new User(id, username, fullName, email);
+    }
+
     public List<User> getUsers() throws SQLException {
         List<User> result = new ArrayList<>();
 
@@ -20,15 +31,22 @@ public class UserDao {
             ResultSet resultSet = connection.createStatement().executeQuery("select id, username, full_name, email from user");
 
             while (resultSet.next()) {
-                Integer id = resultSet.getInt("id");
-                String username = resultSet.getString("username");
-                String fullName = resultSet.getString("full_name");
-                String email = resultSet.getString("email");
-                result.add(new User(id, username, fullName, email));
+                result.add(extractUser(resultSet));
             }
         }
 
         return result;
+    }
+
+    public User getUser(int userId) throws SQLException {
+        try (Connection connection = ConnectionFactory.getConnection()) {
+            ResultSet resultSet = connection.createStatement().executeQuery("select id, username, full_name, email from user");
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            return extractUser(resultSet);
+        }
     }
 
     public boolean saveUser(User user) throws SQLException {
