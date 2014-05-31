@@ -6,6 +6,8 @@
     <title>Bugs</title>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
+
     <h1>Bug List</h1>
 
     <c:forEach items="${bugs}" var="bug">

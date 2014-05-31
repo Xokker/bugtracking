@@ -7,6 +7,8 @@
     <title></title>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
+
     <c:if test="${not empty success}">
         <c:if test="${success}">
             <strong>Connection was successfully configured</strong>

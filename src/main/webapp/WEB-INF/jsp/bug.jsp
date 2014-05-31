@@ -6,6 +6,8 @@
     <title>Bug #${bug.id}. ${bug.title}</title>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
+
     <h1>Bug #${bug.id}. ${bug.title}</h1>
     <p>${bug.description}</p>
     <p>

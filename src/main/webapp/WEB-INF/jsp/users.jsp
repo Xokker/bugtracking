@@ -5,6 +5,8 @@
     <title>Users</title>
 </head>
 <body>
+    <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
+
     <c:if test="${not empty message}">
         <p><strong>${message}</strong></p>
     </c:if>
