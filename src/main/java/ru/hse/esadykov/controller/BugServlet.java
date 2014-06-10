@@ -1,5 +1,6 @@
-package ru.hse.esadykov.servlets;
+package ru.hse.esadykov.controller;
 
+import org.springframework.stereotype.Controller;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.UserDao;
@@ -7,6 +8,8 @@ import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.Comment;
 import ru.hse.esadykov.model.User;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +24,7 @@ import java.util.regex.Pattern;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
+@Controller
 public class BugServlet {
 
     private BugDao bugDao;
@@ -28,9 +32,8 @@ public class BugServlet {
     private UserDao userDao;
     private Pattern pattern;
 
-//    @Override
+    @PostConstruct
     public void init() throws ServletException {
-//        super.init();
         bugDao = new BugDao();
         commentDao = new CommentDao();
         userDao = new UserDao();
@@ -47,7 +50,6 @@ public class BugServlet {
         return Integer.parseInt(matcher.group(1));
     }
 
-//    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
         if (bugId == -1) {
@@ -72,7 +74,6 @@ public class BugServlet {
         doGet(request, response);
     }
 
-//    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
 
@@ -95,12 +96,11 @@ public class BugServlet {
         view.forward(request, response);
     }
 
-//    @Override
+    @PreDestroy
     public void destroy() {
         bugDao = null;
         commentDao = null;
         userDao = null;
         pattern = null;
-//        super.destroy();
     }
 }

@@ -1,5 +1,10 @@
 package ru.hse.esadykov.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.hse.esadykov.ConnectionFactory;
 import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.BugStatus;
@@ -16,7 +21,11 @@ import java.util.List;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
+@Repository("bugDao")
 public class BugDao {
+
+    @Autowired
+    private NamedParameterJdbcTemplate template;
     
     private Bug extractBug(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
@@ -29,22 +38,24 @@ public class BugDao {
 
         return new Bug(id, created, priority, title, description, responsibleId, status);
     }
-    
-    public List<Bug> getBugs() throws SQLException {
-        List<Bug> result = new ArrayList<>();
-        try (Connection con = ConnectionFactory.getConnection()) {
-            ResultSet resultSet = con.createStatement().executeQuery(
-                    "(select id, created, priority, title, description, responsible_id, status " +
-                            "from bug where status = 'NEW' order by priority desc)" +
-                    " union " +
-                    "(select id, created, priority, title, description, responsible_id, status " +
-                            "from bug where status <> 'NEW' order by priority desc)");
-            while (resultSet.next()) {
-                result.add(extractBug(resultSet));
-            }
-        }
 
-        return result;
+    public List<Bug> getBugs() {
+        return template.query(
+                "(select id, created, priority, title, description, responsible_id, status " +
+                        "from bug where status = 'NEW' order by priority desc)" +
+                        " union " +
+                        "(select id, created, priority, title, description, responsible_id, status " +
+                        "from bug where status <> 'NEW' order by priority desc)", new ResultSetExtractor<List<Bug>>() {
+                    @Override
+                    public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        List<Bug> result = new ArrayList<>();
+                        while (rs.next()) {
+                            result.add(extractBug(rs));
+                        }
+
+                        return result;
+                    }
+                });
     }
 
     public Bug getBug(int bugId) throws SQLException {

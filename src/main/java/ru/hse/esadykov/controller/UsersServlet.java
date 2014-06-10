@@ -1,8 +1,11 @@
-package ru.hse.esadykov.servlets;
+package ru.hse.esadykov.controller;
 
+import org.springframework.stereotype.Controller;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.User;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +20,13 @@ import java.util.regex.Pattern;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
+@Controller
 public class UsersServlet {
     private UserDao userDao;
     private Pattern pattern;
 
-//    @Override
+    @PostConstruct
     public void init() throws ServletException {
-//        super.init();
         userDao = new UserDao();
         pattern = Pattern.compile(".*(\\d+).*");
     }
@@ -35,7 +38,6 @@ public class UsersServlet {
         return Integer.parseInt(matcher.group(1));
     }
 
-//    @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String message;
 
@@ -52,7 +54,6 @@ public class UsersServlet {
         doGet(req, resp);
     }
 
-//    @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String message;
 
@@ -73,7 +74,6 @@ public class UsersServlet {
         doGet(req, resp);
     }
 
-//    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
 
@@ -90,7 +90,6 @@ public class UsersServlet {
         view.forward(req, resp);
     }
 
-//    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<User> users = null;
         try {
@@ -104,10 +103,9 @@ public class UsersServlet {
         view.forward(req, resp);
     }
 
-//    @Override
+    @PreDestroy
     public void destroy() {
         userDao = null;
         pattern = null;
-//        super.destroy();
     }
 }

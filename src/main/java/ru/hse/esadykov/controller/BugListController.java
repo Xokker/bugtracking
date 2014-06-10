@@ -1,12 +1,15 @@
-package ru.hse.esadykov.servlets;
+package ru.hse.esadykov.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.BugStatus;
 import ru.hse.esadykov.model.User;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,19 +21,16 @@ import java.util.List;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
-public class BugListServlet {
+@Controller
+public class BugListController {
+    @Autowired
     private BugDao bugDao;
+
+    @Autowired
     private UserDao userDao;
 
-//    @Override
-    public void init() throws ServletException {
-//        super.init();
-        bugDao = new BugDao();
-        userDao = new UserDao();
-    }
-
-//    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @RequestMapping(value = "/bugs", method = RequestMethod.GET)
+    protected String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Bug> bugs = null;
         List<User> users = null;
         try {
@@ -42,11 +42,10 @@ public class BugListServlet {
         req.setAttribute("bugs", bugs);
         req.setAttribute("users", users);
 
-        RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/bugs.jsp");
-        view.forward(req, resp);
+        return "bugs";
     }
 
-//    @Override
+    @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer priority;
         try {
@@ -69,20 +68,5 @@ public class BugListServlet {
 
         req.setAttribute("message", message);
         doGet(req, resp);
-    }
-
-//    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pathInfo = req.getPathInfo();
-        if (pathInfo.contains("add")) {
-            doPut(req, resp);
-        }
-    }
-
-//    @Override
-    public void destroy() {
-        bugDao = null;
-        userDao = null;
-//        super.destroy();
     }
 }
