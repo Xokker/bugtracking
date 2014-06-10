@@ -34,17 +34,4 @@
         </listener-class>
     </listener>
 
-    <listener>
-        <listener-class>ru.hse.esadykov.ContextListener</listener-class>
-    </listener>
-
-    <!--<context-param>-->
-        <!--<param-name>connection_host</param-name>-->
-        <!--<param-value>localhost</param-value>-->
-    <!--</context-param>-->
-    <!--<context-param>-->
-        <!--<param-name>connection_port</param-name>-->
-        <!--<param-value>3306</param-value>-->
-    <!--</context-param>-->
-
 </web-app>

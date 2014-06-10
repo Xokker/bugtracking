@@ -1,5 +1,6 @@
 package ru.hse.esadykov.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
@@ -9,7 +10,6 @@ import ru.hse.esadykov.model.Comment;
 import ru.hse.esadykov.model.User;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,16 +27,19 @@ import java.util.regex.Pattern;
 @Controller
 public class BugServlet {
 
+    @Autowired
     private BugDao bugDao;
+
+    @Autowired
     private CommentDao commentDao;
+
+    @Autowired
     private UserDao userDao;
+
     private Pattern pattern;
 
     @PostConstruct
     public void init() throws ServletException {
-        bugDao = new BugDao();
-        commentDao = new CommentDao();
-        userDao = new UserDao();
         pattern = Pattern.compile("/(\\d+)/?");
     }
 
@@ -50,6 +53,7 @@ public class BugServlet {
         return Integer.parseInt(matcher.group(1));
     }
 
+    // TODO: request mapping
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
         if (bugId == -1) {
@@ -74,6 +78,7 @@ public class BugServlet {
         doGet(request, response);
     }
 
+    // TODO: request mapping
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
 
@@ -94,13 +99,5 @@ public class BugServlet {
 
         RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/jsp/bug.jsp");
         view.forward(request, response);
-    }
-
-    @PreDestroy
-    public void destroy() {
-        bugDao = null;
-        commentDao = null;
-        userDao = null;
-        pattern = null;
     }
 }

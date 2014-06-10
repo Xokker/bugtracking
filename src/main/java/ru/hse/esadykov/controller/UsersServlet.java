@@ -1,20 +1,18 @@
 package ru.hse.esadykov.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.User;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Ernest Sadykov
@@ -22,23 +20,11 @@ import java.util.regex.Pattern;
  */
 @Controller
 public class UsersServlet {
+    @Autowired
     private UserDao userDao;
-    private Pattern pattern;
 
-    @PostConstruct
-    public void init() throws ServletException {
-        userDao = new UserDao();
-        pattern = Pattern.compile(".*(\\d+).*");
-    }
-
-    private int extractUserId(String pathInfo) {
-        Matcher matcher = pattern.matcher(pathInfo);
-        boolean found = matcher.find();
-
-        return Integer.parseInt(matcher.group(1));
-    }
-
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @RequestMapping(value = "/users/delete", method = RequestMethod.POST)
+    protected String doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String message;
 
         int userId = Integer.parseInt(req.getParameter("user_id"));
@@ -51,10 +37,11 @@ public class UsersServlet {
         }
         req.setAttribute("message", message);
 
-        doGet(req, resp);
+        return "users";
     }
 
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @RequestMapping(value = "/users/add", method = RequestMethod.POST)
+    protected String doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String message;
 
         String username = req.getParameter("username");
@@ -71,26 +58,11 @@ public class UsersServlet {
         }
         req.setAttribute("message", message);
 
-        doGet(req, resp);
+        return "users";
     }
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pathInfo = req.getPathInfo();
-
-        if (pathInfo.contains("delete")) {
-            doDelete(req, resp);
-            return;
-        }
-        if (pathInfo.contains("add")) {
-            doPut(req, resp);
-            return;
-        }
-
-        RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
-        view.forward(req, resp);
-    }
-
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @RequestMapping(value = "/users")
+    protected String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<User> users = null;
         try {
             users = userDao.getUsers();
@@ -99,13 +71,6 @@ public class UsersServlet {
         }
         req.setAttribute("users", users);
 
-        RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
-        view.forward(req, resp);
-    }
-
-    @PreDestroy
-    public void destroy() {
-        userDao = null;
-        pattern = null;
+        return "users";
     }
 }

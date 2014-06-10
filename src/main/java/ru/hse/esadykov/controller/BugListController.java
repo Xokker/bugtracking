@@ -46,7 +46,7 @@ public class BugListController {
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected String doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer priority;
         try {
             priority = Integer.parseInt(req.getParameter("priority"));
@@ -67,6 +67,7 @@ public class BugListController {
         }
 
         req.setAttribute("message", message);
-        doGet(req, resp);
+
+        return "bugs";
     }
 }

@@ -13,6 +13,7 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <!-- TODO: move db config to properties file -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://localhost:3306/bugtracking"/>
