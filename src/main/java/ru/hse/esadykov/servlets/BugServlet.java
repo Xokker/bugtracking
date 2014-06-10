@@ -9,7 +9,6 @@ import ru.hse.esadykov.model.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,16 +21,16 @@ import java.util.regex.Pattern;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
-public class BugServlet extends HttpServlet {
+public class BugServlet {
 
     private BugDao bugDao;
     private CommentDao commentDao;
     private UserDao userDao;
     private Pattern pattern;
 
-    @Override
+//    @Override
     public void init() throws ServletException {
-        super.init();
+//        super.init();
         bugDao = new BugDao();
         commentDao = new CommentDao();
         userDao = new UserDao();
@@ -48,7 +47,7 @@ public class BugServlet extends HttpServlet {
         return Integer.parseInt(matcher.group(1));
     }
 
-    @Override
+//    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
         if (bugId == -1) {
@@ -73,7 +72,7 @@ public class BugServlet extends HttpServlet {
         doGet(request, response);
     }
 
-    @Override
+//    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int bugId = getBugIdFromPathInfo(request.getPathInfo());
 
@@ -96,12 +95,12 @@ public class BugServlet extends HttpServlet {
         view.forward(request, response);
     }
 
-    @Override
+//    @Override
     public void destroy() {
         bugDao = null;
         commentDao = null;
         userDao = null;
         pattern = null;
-        super.destroy();
+//        super.destroy();
     }
 }

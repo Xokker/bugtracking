@@ -8,7 +8,6 @@ import ru.hse.esadykov.model.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,18 +18,18 @@ import java.util.List;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
-public class BugListServlet extends HttpServlet {
+public class BugListServlet {
     private BugDao bugDao;
     private UserDao userDao;
 
-    @Override
+//    @Override
     public void init() throws ServletException {
-        super.init();
+//        super.init();
         bugDao = new BugDao();
         userDao = new UserDao();
     }
 
-    @Override
+//    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Bug> bugs = null;
         List<User> users = null;
@@ -47,7 +46,7 @@ public class BugListServlet extends HttpServlet {
         view.forward(req, resp);
     }
 
-    @Override
+//    @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer priority;
         try {
@@ -72,7 +71,7 @@ public class BugListServlet extends HttpServlet {
         doGet(req, resp);
     }
 
-    @Override
+//    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
         if (pathInfo.contains("add")) {
@@ -80,10 +79,10 @@ public class BugListServlet extends HttpServlet {
         }
     }
 
-    @Override
+//    @Override
     public void destroy() {
         bugDao = null;
         userDao = null;
-        super.destroy();
+//        super.destroy();
     }
 }

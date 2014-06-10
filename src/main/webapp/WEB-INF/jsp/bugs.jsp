@@ -25,7 +25,7 @@
     </c:forEach>
     <hr/>
     <h2>Add bug</h2>
-    <form name="input" action="/bugs/add" method="post">
+    <form name="input" action="/bugs/add" enctype="application/x-www-form-urlencoded; charset=utf-8" method="post">
         Responsible: <select name="responsible_id">
             <c:forEach items="${users}" var="user">
                 <option value="${user.id}">${user.username}</option>

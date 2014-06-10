@@ -3,7 +3,36 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+
     <display-name>Bug Tracker</display-name>
+
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>
+            org.springframework.web.servlet.DispatcherServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:application-context.xml</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:application-context.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
 
     <listener>
         <listener-class>ru.hse.esadykov.ContextListener</listener-class>
@@ -17,41 +46,5 @@
         <!--<param-name>connection_port</param-name>-->
         <!--<param-value>3306</param-value>-->
     <!--</context-param>-->
-
-    <servlet>
-        <servlet-name>Users</servlet-name>
-        <servlet-class>ru.hse.esadykov.servlets.UsersServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Users</servlet-name>
-        <url-pattern>/users/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Bugs</servlet-name>
-        <servlet-class>ru.hse.esadykov.servlets.BugListServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Bugs</servlet-name>
-        <url-pattern>/bugs/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>Bug</servlet-name>
-        <servlet-class>ru.hse.esadykov.servlets.BugServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Bug</servlet-name>
-        <url-pattern>/bug/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>DBConnection</servlet-name>
-        <servlet-class>ru.hse.esadykov.servlets.DBConnectionServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DBConnection</servlet-name>
-        <url-pattern>/connection</url-pattern>
-    </servlet-mapping>
 
 </web-app>
