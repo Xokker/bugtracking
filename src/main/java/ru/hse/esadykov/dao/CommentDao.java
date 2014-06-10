@@ -5,17 +5,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hse.esadykov.ConnectionFactory;
 import ru.hse.esadykov.model.Comment;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Ernest Sadykov
@@ -55,25 +49,22 @@ public class CommentDao {
     }
 
     public boolean saveComment(Comment comment) throws SQLException {
-        try (Connection con = ConnectionFactory.getConnection()) {
-            PreparedStatement ps;
+            Map<String, Object> params = new HashMap<>();
+            params.put("body", comment.getBody());
+            params.put("bugId", comment.getBugId());
+            String sql;
             if (comment.getAuthorId() != null) {
-                ps = con.prepareStatement("insert into comment (body, author_id, bug_id) values " +
-                        "(?, ?, ?)");
-                ps.setString(1, comment.getBody());
-                ps.setInt(2, comment.getAuthorId());
-                ps.setInt(3, comment.getBugId());
+                params.put("authorId", comment.getAuthorId());
+                sql = "insert into comment (body, author_id, bug_id) values " +
+                        "(:body, :authorId, :bugId)";
             } else if (comment.getAuthor() != null && comment.getAuthor().getUsername() != null) {
-                ps = con.prepareStatement("insert into comment (body, author_id, bug_id) " +
-                        "select ?, id, ? from user where username = ?");
-                ps.setString(1, comment.getBody());
-                ps.setInt(2, comment.getBugId());
-                ps.setString(3, comment.getAuthor().getUsername());
+                params.put("username", comment.getAuthor().getUsername());
+                sql = "insert into comment (body, author_id, bug_id) " +
+                        "select :body, id, :bugId from user where username = :username";
             } else {
-                throw new RuntimeException("Author id or username must be specified");
+                throw new IllegalArgumentException("Author id or username must be specified");
             }
 
-            return ps.executeUpdate() > 0;
-        }
+            return template.update(sql, params) > 0;
     }
 }

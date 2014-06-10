@@ -5,15 +5,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hse.esadykov.ConnectionFactory;
 import ru.hse.esadykov.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Ernest Sadykov
@@ -47,47 +43,37 @@ public class UserDao {
     }
 
     public User getUser(int userId) throws SQLException {
-        try (Connection connection = ConnectionFactory.getConnection()) {
-            ResultSet resultSet = connection.createStatement().executeQuery("select id, username, full_name, email from user");
-            if (!resultSet.next()) {
-                return null;
-            }
+        return template.query("select id, username, full_name, email from user", new ResultSetExtractor<User>() {
+            @Override
+            public User extractData(ResultSet rs) throws SQLException, DataAccessException {
+                if (!rs.next()) {
+                    return null;
+                }
 
-            return extractUser(resultSet);
-        }
+                return extractUser(rs);
+            }
+        });
     }
 
     public boolean saveUser(User user) throws SQLException {
-        try (Connection connection = ConnectionFactory.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "insert into user (username, full_name, email) values (?, ?, ?)");
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getFullName());
-            preparedStatement.setString(3, user.getEmail());
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", user.getUsername());
+        params.put("fullName", user.getFullName());
+        params.put("email", user.getEmail());
 
-            return preparedStatement.executeUpdate() > 0;
-        }
+        return template.update("insert into user (username, full_name, email) values (:username, :fullName, :email)", params) > 0;
     }
 
     public boolean deleteUser(int userId) throws SQLException {
-        try (Connection connection = ConnectionFactory.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "delete from user where id = ?");
-            preparedStatement.setInt(1, userId);
-
-            return preparedStatement.executeUpdate() > 0;
-        }
+        return template.update("delete from user where id = :id", Collections.singletonMap("id", userId)) > 0;
     }
 
     public boolean addUser(User user) throws SQLException {
-        try (Connection con = ConnectionFactory.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "insert into user (username, full_name, email) values (?, ?, ?)");
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getFullName());
-            ps.setString(3, user.getEmail());
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", user.getUsername());
+        params.put("fullName", user.getFullName());
+        params.put("email", user.getEmail());
 
-            return ps.executeUpdate() > 0;
-        }
+        return template.update("insert into user (username, full_name, email) values (:username, :fullName, :email)", params) > 0;
     }
 }

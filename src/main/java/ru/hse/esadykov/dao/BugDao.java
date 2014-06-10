@@ -5,17 +5,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hse.esadykov.ConnectionFactory;
 import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.BugStatus;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Ernest Sadykov
@@ -40,49 +35,47 @@ public class BugDao {
     }
 
     public List<Bug> getBugs() {
-        return template.query(
+        return template.query("(select id, created, priority, title, description, responsible_id, status " +
+                "from bug where status = 'NEW' order by priority desc)" +
+                " union " +
                 "(select id, created, priority, title, description, responsible_id, status " +
-                        "from bug where status = 'NEW' order by priority desc)" +
-                        " union " +
-                        "(select id, created, priority, title, description, responsible_id, status " +
-                        "from bug where status <> 'NEW' order by priority desc)", new ResultSetExtractor<List<Bug>>() {
-                    @Override
-                    public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                        List<Bug> result = new ArrayList<>();
-                        while (rs.next()) {
-                            result.add(extractBug(rs));
-                        }
+                "from bug where status <> 'NEW' order by priority desc)", new ResultSetExtractor<List<Bug>>() {
+            @Override
+            public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                List<Bug> result = new ArrayList<>();
+                while (rs.next()) {
+                    result.add(extractBug(rs));
+                }
 
-                        return result;
+                return result;
+            }
+        });
+    }
+
+    public Bug getBug(int bugId) throws SQLException {
+        return template.query("select id, created, priority, title, description, responsible_id, status " +
+                        "from bug where id = :bugId",
+                Collections.singletonMap("bugId", bugId),
+                new ResultSetExtractor<Bug>() {
+                    @Override
+                    public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        if (!rs.next()) {
+                            return null;
+                        }
+                        return extractBug(rs);
                     }
                 });
     }
 
-    public Bug getBug(int bugId) throws SQLException {
-        try (Connection con = ConnectionFactory.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "select id, created, priority, title, description, responsible_id, status " +
-                            "from bug where id = ?");
-            ps.setInt(1, bugId);
-            ResultSet resultSet = ps.executeQuery();
-            if (!resultSet.next()) {
-                return null;
-            }
-
-            return extractBug(resultSet);
-        }
-    }
-
     public boolean addBug(Bug bug) throws SQLException {
-        try (Connection con = ConnectionFactory.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "insert into bug (priority, title, description, responsible_id) values (?, ?, ?, ?)");
-            ps.setInt(1, bug.getPriority());
-            ps.setString(2, bug.getTitle());
-            ps.setString(3, bug.getDescription());
-            ps.setInt(4, bug.getResponsibleId());
+        Map<String, Object> params = new HashMap<>();
+        params.put("priority", bug.getPriority());
+        params.put("title", bug.getTitle());
+        params.put("description", bug.getDescription());
+        params.put("responsibleId", bug.getResponsibleId());
 
-            return ps.executeUpdate() > 0;
+        return template.update("insert into bug (priority, title, description, responsible_id) values " +
+                "(:priority, :title, :description, :responsibleId)", params) > 0;
         }
     }
 }
