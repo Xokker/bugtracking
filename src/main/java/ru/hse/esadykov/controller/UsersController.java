@@ -19,7 +19,7 @@ import java.util.List;
  * @since 31.05.2014
  */
 @Controller
-public class UsersServlet {
+public class UsersController {
     @Autowired
     private UserDao userDao;
 
@@ -37,7 +37,7 @@ public class UsersServlet {
         }
         req.setAttribute("message", message);
 
-        return "users";
+        return "redirect:/users";
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
@@ -58,7 +58,7 @@ public class UsersServlet {
         }
         req.setAttribute("message", message);
 
-        return "users";
+        return "redirect:/users";
     }
 
     @RequestMapping(value = "/users")

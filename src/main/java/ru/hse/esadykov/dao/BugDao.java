@@ -35,7 +35,7 @@ public class BugDao {
     }
 
     public List<Bug> getBugs() {
-        // TODO: rewrite - http://stackoverflow.com/a/12268963/1970544
+        // TODO: [FIXME] rewrite - http://stackoverflow.com/a/12268963/1970544
         return template.query("(select id, created, priority, title, description, responsible_id, status " +
                 "from bug where status = 'NEW' order by priority desc)" +
                 " union " +

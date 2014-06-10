@@ -33,7 +33,7 @@
         </select> <br/>
         Title:        <input type="text" name="title"></input>     <br/>
         Description:  <textarea rows="5" cols="50" name="description"></textarea> <br/>
-        Priority: <input type="text" name="title" placeholder="100"></input>
+        Priority: <input type="text" name="priority" placeholder="100"></input>
         <input type="submit" value="Submit bug"/>
     </form>
 </body>
