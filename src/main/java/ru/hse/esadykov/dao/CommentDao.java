@@ -1,5 +1,10 @@
 package ru.hse.esadykov.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.hse.esadykov.ConnectionFactory;
 import ru.hse.esadykov.model.Comment;
 
@@ -8,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -15,22 +21,27 @@ import java.util.List;
  * @author Ernest Sadykov
  * @since 31.05.2014
  */
+@Repository("commentDao")
 public class CommentDao {
 
-    public List<Comment> getComments(int bugId) throws SQLException {
-        List<Comment> result = new ArrayList<>();
-        try (Connection con = ConnectionFactory.getConnection()) {
-            PreparedStatement ps = con.prepareStatement(
-                    "select id, body, created, author_id, bug_id from comment " +
-                            "where bug_id = ? order by created desc");
-            ps.setInt(1, bugId);
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                result.add(extractComment(resultSet));
-            }
-        }
+    @Autowired
+    private NamedParameterJdbcTemplate template;
 
-        return result;
+    public List<Comment> getComments(int bugId) throws SQLException {
+        return template.query(
+                "select id, body, created, author_id, bug_id from comment " +
+                        "where bug_id = :bugId order by created desc",
+                Collections.singletonMap("bugId", bugId),
+                new ResultSetExtractor<List<Comment>>() {
+                    @Override
+                    public List<Comment> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        List<Comment> result = new ArrayList<>();
+                        while (rs.next()) {
+                            result.add(extractComment(rs));
+                        }
+                        return result;
+                    }
+                });
     }
 
     private Comment extractComment(ResultSet resultSet) throws SQLException {
