@@ -35,16 +35,13 @@ public class BugListController {
     private ProjectDao projectDao;
 
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
-    protected ModelAndView doGet(@RequestParam(value = "project_id", required = false) Integer projectId) {
+    protected ModelAndView doGet(@RequestParam(value = "project_id", required = false) Integer projectId,
+                                 @RequestParam(value = "showclosed", required = false) Boolean showClosed) {
         List<Bug> bugs = null;
         List<User> users = null;
         List<Project> projects = null;
         try {
-            if (projectId != null) {
-                bugs = bugDao.getBugs(projectId);
-            } else {
-                bugs = bugDao.getBugs();
-            }
+            bugs = bugDao.getBugs(projectId, showClosed);
             for (Bug bug : bugs) {
                 Project project = projectDao.getProject(bug.getProjectId());
                 User responsible = userDao.getUser(bug.getResponsibleId());
