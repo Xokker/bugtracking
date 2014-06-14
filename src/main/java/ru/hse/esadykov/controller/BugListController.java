@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Bug;
+import ru.hse.esadykov.model.BugPriority;
 import ru.hse.esadykov.model.BugStatus;
 import ru.hse.esadykov.model.User;
 import ru.hse.esadykov.utils.UserService;
@@ -47,20 +48,22 @@ public class BugListController {
         }
         req.setAttribute("bugs", bugs);
         req.setAttribute("users", users);
+        req.setAttribute("priorities", BugPriority.values());
 
         return "bugs";
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
-    protected String doPut(@RequestParam(value = "priority", defaultValue = "100") Integer priority,
+    protected String doPut(@RequestParam(value = "priority_id", defaultValue = "4") Integer priority,
                                  @RequestParam(value = "title") String title,
                                  @RequestParam(value = "description") String description,
                                  @RequestParam(value = "responsible_id") Integer responsibleId,
                                  ModelMap model) throws IOException {
         int creatorId = userService.getCurrentUserId().getId();
+        BugPriority bugPriority = BugPriority.values()[priority - 1];
         String message;
         try {
-            bugDao.addBug(new Bug(null, null, null, priority, title, description, responsibleId, creatorId, BugStatus.NEW));
+            bugDao.addBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, bugPriority));
             message = "Bug '" + title + "' was successfully added";
         } catch (SQLException e) {
             message = "Error during saving the bug";

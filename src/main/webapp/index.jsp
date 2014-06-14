@@ -8,53 +8,11 @@
     <title>Bug Tracking</title>
 </head>
 <body>
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-           <img  src="resources/img/logo.png" width="50" height="50"/>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="/projects">Projects</a></li>
-                <li><a href="/bugs">Issues</a></li>
-            </ul>
-            <form class="navbar-form navbar-right"  role="search">
-                <div class="form-group">
-                    <input style="height:28px;" type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li><span style="margin-top:15px;" class="glyphicon glyphicon-user"></span></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Username <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Profile</a></li>
-                        <li class="divider"></li>
-                        <li><form name='logout'
-                                      action="<c:url value='/logout'/>" method='POST'>
-                            <input type="hidden" name="${_csrf.parameterName}"
-                                   value="${_csrf.token}"/>
-                            <input type="submit" value="Log Out"/></form></li>
-                    </ul>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+<jsp:include page="WEB-INF/jsp/navigation.jsp"/>
 <table style="margin:1.5%; width:97%">
-    <tr style="height:10px; overflow:scroll">
+    <tr style="overflow:visible">
         <td style="width:50%;">
-<div style="margin-right:5%; height:275px" class="panel panel-primary">
+<div style="margin-right:5%; height:280px; overflow-y:auto" class="panel panel-primary">
     <div class="panel-heading">Projects</div>
     <table class="table table-hover">
         <thead>
@@ -90,7 +48,7 @@
 </div>
     </td>
      <td style="width:50%;">
-         <div style="margin-left:5%" class="panel panel-primary">
+         <div style="margin-left:5%; height:280px; overflow-y:auto" class="panel panel-primary">
          <div class="panel-heading">Latest Issues</div>
          <table class="table table-hover">
              <thead>
