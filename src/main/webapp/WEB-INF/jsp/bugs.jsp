@@ -31,36 +31,32 @@
                 <li><a href="/projects">Projects</a></li>
                 <li><a href="/bugs">Issues</a></li>
             </ul>
-            <form class="navbar-form navbar-right"  role="search">
+            <form style="margin-left: 45%" class="navbar-form navbar-left"  role="search">
                 <div class="form-group">
                     <input style="height:28px;" type="text" class="form-control" placeholder="Search">
                 </div>
                 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
             </form>
+            <form class="navbar-form navbar-right" name='logout'
+                  action="<c:url value='/logout'/>" method='POST'>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+                <input style="height:28px;" class="btn btn-default" type="submit" value="Log Out"/></form>
             <ul class="nav navbar-nav navbar-right">
-                <li><span style="margin-top:15px;" class="glyphicon glyphicon-user"></span></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Username <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Profile</a></li>
-                        <li class="divider"></li>
-                        <li><form name='logout'
-                                  action="<c:url value='/logout'/>" method='POST'>
-                            <input type="hidden" name="${_csrf.parameterName}"
-                                   value="${_csrf.token}"/>
-                            <input type="submit" value="Log Out"/></form></li>
-                    </ul>
-                </li>
+                <li><span style="margin-top:15px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
+                <li><a href="/user">Username</a></li>
             </ul>
+            </form>
+
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 <table style="width:98%; margin:1%">
     <tr>
         <td></td>
-        <td >
+        <td>
             <input style="margin-left:2%" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
-            <div style="margin-left:25%;" class="btn-group">
+            <div style="margin-left:32%;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
                     <span class="caret"></span>
@@ -71,12 +67,12 @@
                     <li><a href="#">Status</a></li>
                 </ul>
                 </div>
-                <button style="margin-left:30%;" type="button" class="btn btn-default">New issue</button>
+                <button style="margin-left:40%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button>
         </td>
     </tr>
     <tr>
         <td >
-            <div class="panel panel-primary">
+            <div style="margin-top: -6px;" class="panel panel-primary">
             <!-- Default panel contents -->
             <div class="panel-heading">Browse issues</div>
 
@@ -89,8 +85,9 @@
             </ul>
         </div>
         </td>
-        <td rowspan="2">
-        <div style="margin-left:2%" class="panel panel-primary">
+        <td rowspan="2" style="vertical-align: top;">
+        <div style="margin-left:2%;margin-top: -6px;height: 93%;
+overflow-y: hidden;" class="panel panel-primary">
             <div class="panel-heading">Issues</div>
             <table class="table table-hover">
                 <thead>
@@ -100,6 +97,7 @@
                     <th>Description</th>
                     <th>Priority</th>
                     <th>Status</th>
+                    <th>Type</th>
                     <th>Deadline</th>
                 </tr>
                 </thead>
@@ -110,6 +108,7 @@
                     <td>Водку не купили</td>
                     <td>Critical</td>
                     <td>Open</td>
+                    <td>Enhancement</td>
                     <td>26.06.2014</td>
                 </tr>
                 <tr>
@@ -118,6 +117,7 @@
                     <td>Не готов к Гостеву</td>
                     <td>Major</td>
                     <td>In progress</td>
+                    <td>Bug</td>
                     <td>25.06.2014</td>
                 </tr>
                 <tr>
@@ -126,6 +126,7 @@
                     <td>Потеряли Эльдара и его гитару</td>
                     <td>Major</td>
                     <td>Resolved</td>
+                    <td>Bug</td>
                     <td>26.06.2014</td>
                 </tr>
                 <tr>
@@ -134,6 +135,7 @@
                     <td>Добавить таблицу с проектами </td>
                     <td>Major</td>
                     <td>In progress</td>
+                    <td>Enhancement</td>
                     <td>15.06.2014</td>
                 </tr>
                 <tr>
@@ -142,7 +144,17 @@
                     <td>Сдать Бреймана</td>
                     <td>Minor</td>
                     <td>In progress</td>
+                    <td>Feature</td>
                     <td>23.06.2014</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>

@@ -33,17 +33,17 @@
 <body style=" overflow-y:visible;margin-left:37%;margin-top:10%" onload='document.loginForm.username.focus();'>
 
 <h3><span class="label label-default">Please, Login BugsBunny.  </span></h3>
-
+<c:if test="${not empty error}">
+    <div style="width:346px;" class="error">${error}</div>
+</c:if>
+<c:if test="${not empty msg}">
+    <div style="width:346px;" class="msg">${msg}</div>
+</c:if>
 <div style="width:346px; height:307px;background-image: url('/resources/img/logo.png') " class="panel panel-default">
     <div class="panel-body">
 
 
-    <c:if test="${not empty error}">
-        <div class="error">${error}</div>
-    </c:if>
-    <c:if test="${not empty msg}">
-        <div class="msg">${msg}</div>
-    </c:if>
+
 
     <form name='loginForm'
           action="<c:url value='j_spring_security_check'/>" method='POST'>
