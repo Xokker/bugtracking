@@ -10,6 +10,7 @@
 
     <h1>Bug #${bug.id}. ${bug.title}</h1>
     <p> <strong>Status:</strong> ${bug.status}</p>
+    <p> <strong>Priority:</strong> ${bug.priority}</p>
 
     <p>${bug.description}</p>
     <p>

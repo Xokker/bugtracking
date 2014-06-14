@@ -31,9 +31,14 @@
                 <option value="${user.id}">${user.username}</option>
             </c:forEach>
         </select> <br/>
-        Title:        <input type="text" name="title"></input>     <br/>
+        Title:        <input type="text" name="title"/>     <br/>
         Description:  <textarea rows="5" cols="50" name="description"></textarea> <br/>
-        Priority: <input type="text" name="priority" placeholder="100"></input>
+        Priority: <select name="priority_id">
+        <c:forEach items="${priorities}" varStatus="status" var="priority">
+            <option value="${status.count}">${priority}</option>
+        </c:forEach>
+    </select>
+
         <input type="hidden" name="${_csrf.parameterName}"
                value="${_csrf.token}"/>
         <input type="submit" value="Submit bug"/>

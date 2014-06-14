@@ -27,7 +27,7 @@ public class BugDao {
         Integer id = rs.getInt("id");
         Date created = rs.getTimestamp("created");
         Date closed = rs.getTimestamp("closed");
-        BugPriority priority = BugPriority.values()[rs.getInt("priority")];
+        BugPriority priority = BugPriority.values()[rs.getInt("priority") - 1];
         String title = rs.getString("title");
         String description = rs.getString("description");
         Integer responsibleId = rs.getInt("responsible_id");
@@ -85,7 +85,7 @@ public class BugDao {
 
     public boolean addBug(Bug bug) throws SQLException {
         Map<String, Object> params = new HashMap<>();
-        params.put("priority", bug.getPriority());
+        params.put("priority", bug.getPriority().getId());
         params.put("title", bug.getTitle());
         params.put("description", bug.getDescription());
         params.put("responsibleId", bug.getResponsibleId());
