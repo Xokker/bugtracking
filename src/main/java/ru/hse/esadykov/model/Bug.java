@@ -13,12 +13,12 @@ public class Bug {
     private List<Bug> dependencies;
     private Date created;
     private Date closed;
-    private int priority;
     private String title;
     private String description;
     private Integer responsibleId;
     private Integer creatorId;
     private BugStatus status;
+    private BugPriority priority;
     private transient User responsible;
     private transient User creator;
     private List<Comment> comments;
@@ -32,17 +32,17 @@ public class Bug {
         this.title = title;
     }
     
-    public Bug(Integer id, Date created, Date closed, int priority, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status) {    
+    public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority) {
         this();
         this.id = id;
         this.created = created;
         this.closed = closed;
-        this.priority = priority;
         this.title = title;
         this.description = description;
         this.responsibleId = responsibleId;
         this.creatorId = creatorId;
         this.status = status;
+        this.priority = priority;
     }
 
     public void addDependency(Bug bug) {
@@ -77,11 +77,11 @@ public class Bug {
         this.closed = closed;
     }
 
-    public int getPriority() {
+    public BugPriority getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(BugPriority priority) {
         this.priority = priority;
     }
 

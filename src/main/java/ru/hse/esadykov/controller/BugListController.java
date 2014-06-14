@@ -60,7 +60,7 @@ public class BugListController {
         int creatorId = userService.getCurrentUserId().getId();
         String message;
         try {
-            bugDao.addBug(new Bug(null, null, null, priority, title, description, responsibleId, creatorId, BugStatus.NEW));
+            bugDao.addBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, priority));
             message = "Bug '" + title + "' was successfully added";
         } catch (SQLException e) {
             message = "Error during saving the bug";

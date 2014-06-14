@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.hse.esadykov.model.Bug;
+import ru.hse.esadykov.model.BugPriority;
 import ru.hse.esadykov.model.BugStatus;
 
 import java.sql.ResultSet;
@@ -26,14 +27,14 @@ public class BugDao {
         Integer id = rs.getInt("id");
         Date created = rs.getTimestamp("created");
         Date closed = rs.getTimestamp("closed");
-        int priority = rs.getInt("priority");
+        BugPriority priority = BugPriority.values()[rs.getInt("priority")];
         String title = rs.getString("title");
         String description = rs.getString("description");
         Integer responsibleId = rs.getInt("responsible_id");
         Integer creatorId = rs.getInt("creator_id");
         BugStatus status = BugStatus.valueOf(rs.getString("status"));
 
-        return new Bug(id, created, closed, priority, title, description, responsibleId, creatorId, status);
+        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority);
     }
 
     public List<Bug> getBugs() {
