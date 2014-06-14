@@ -30,7 +30,7 @@ public class UserDao {
         return template.query("select id, username, full_name, email from user", new UserMapper());
     }
 
-    public User getUser(int userId) throws SQLException {
+    public User getUser(int userId) {
         return template.queryForObject("select id, username, full_name, email from user where id = :id",
                 Collections.singletonMap("id", userId), new UserMapper());
     }

@@ -38,11 +38,11 @@ public class BugController {
     private UserDao userDao;
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
-    protected ModelAndView doPost(@RequestParam(value = "username") String username,
+    protected ModelAndView doPost(@PathVariable("id") String id,
+                                  @RequestParam(value = "username") String username,
                                   @RequestParam(value = "body") String body,
                                   ModelMap model,
-                                  HttpServletResponse response,
-                                  @PathVariable("id") String id) throws IOException {
+                                  HttpServletResponse response) throws IOException {
         int bugId;
         try {
             bugId = Integer.parseInt(id);
@@ -68,8 +68,8 @@ public class BugController {
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.GET)
     protected ModelAndView doGet(ModelMap model,
-                           HttpServletResponse response,
-                           @PathVariable("id") String id) throws IOException {
+                                 HttpServletResponse response,
+                                 @PathVariable("id") String id) throws IOException {
         int bugId;
         try {
             bugId = Integer.parseInt(id);
@@ -89,7 +89,8 @@ public class BugController {
             User creator = userDao.getUser(bug.getCreatorId());
             bug.setCreator(creator);
             model.addAttribute("bug", bug);
-            List<Comment> comments = commentDao.getComments(bugId);
+
+            List<Comment> comments = commentDao.getComments(bugId, true);
             model.addAttribute("comments", comments);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -114,10 +115,9 @@ public class BugController {
     }
 
     @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
-    protected ModelAndView addDependency(
-                                 HttpServletResponse response,
-                                 @PathVariable("id") String id,
-                                 @PathVariable("id1") String id1) throws IOException {
+    protected ModelAndView addDependency(HttpServletResponse response,
+                                         @PathVariable("id") String id,
+                                         @PathVariable("id1") String id1) throws IOException {
         int bugId;
         int bug1Id;
         ModelMap model = new ModelMap();
@@ -151,10 +151,9 @@ public class BugController {
     }
 
     @RequestMapping(value = "/bug/{id}/remove/{id1}", method = RequestMethod.GET)
-    protected ModelAndView removeDependency(
-            HttpServletResponse response,
-            @PathVariable("id") String id,
-            @PathVariable("id1") String id1) throws IOException {
+    protected ModelAndView removeDependency(HttpServletResponse response,
+                                            @PathVariable("id") String id,
+                                            @PathVariable("id1") String id1) throws IOException {
         int bugId;
         int bug1Id;
         ModelMap model = new ModelMap();
