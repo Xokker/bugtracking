@@ -34,8 +34,9 @@
     </p>
     <hr>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/close" method="post">
-        <input type="hidden" value="${bug.id}" name="id"></input>
-        <input type="submit" value="Close bug"></input>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" value="${bug.id}" name="id"/>
+        <input type="submit" value="Close bug"/>
     </form>
 
     <hr>

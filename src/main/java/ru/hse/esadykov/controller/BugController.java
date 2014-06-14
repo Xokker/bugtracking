@@ -112,4 +112,78 @@ public class BugController {
 
         return "redirect:/bugs";
     }
+
+    @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
+    protected ModelAndView addDependency(
+                                 HttpServletResponse response,
+                                 @PathVariable("id") String id,
+                                 @PathVariable("id1") String id1) throws IOException {
+        int bugId;
+        int bug1Id;
+        ModelMap model = new ModelMap();
+        try {
+            bugId = Integer.parseInt(id);
+            bug1Id = Integer.parseInt(id1);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+
+        try {
+            Bug bug = bugDao.getBug(bugId);
+            Bug bug1 = bugDao.getBug(bug1Id);
+            if (bug == null || bug1 == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
+            }
+            User responsible = userDao.getUser(bug.getResponsibleId());
+            bug.setResponsible(responsible);
+            bug.addDependency(bug1);
+            bugDao.addDependency(bug, bug1);
+            model.addAttribute("bug", bug);
+            List<Comment> comments = commentDao.getComments(bugId);
+            model.addAttribute("comments", comments);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new ModelAndView("bug", model);
+    }
+
+    @RequestMapping(value = "/bug/{id}/remove/{id1}", method = RequestMethod.GET)
+    protected ModelAndView removeDependency(
+            HttpServletResponse response,
+            @PathVariable("id") String id,
+            @PathVariable("id1") String id1) throws IOException {
+        int bugId;
+        int bug1Id;
+        ModelMap model = new ModelMap();
+        try {
+            bugId = Integer.parseInt(id);
+            bug1Id = Integer.parseInt(id1);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+
+        try {
+            Bug bug = bugDao.getBug(bugId);
+            Bug bug1 = bugDao.getBug(bug1Id);
+            if (bug == null || bug1 == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
+            }
+            User responsible = userDao.getUser(bug.getResponsibleId());
+            bug.setResponsible(responsible);
+            bug.removeDependency(bug1);
+            bugDao.removeDependency(bug, bug1);
+            model.addAttribute("bug", bug);
+            List<Comment> comments = commentDao.getComments(bugId);
+            model.addAttribute("comments", comments);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new ModelAndView("bug", model);
+    }
 }

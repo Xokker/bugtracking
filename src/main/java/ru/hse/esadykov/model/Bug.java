@@ -1,5 +1,6 @@
 package ru.hse.esadykov.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  */
 public class Bug {
     private Integer id;
+    private List<Bug> dependencies;
     private Date created;
     private Date closed;
     private int priority;
@@ -22,9 +24,16 @@ public class Bug {
     private List<Comment> comments;
 
     public Bug() {
+        dependencies = new ArrayList<Bug>();
     }
-
-    public Bug(Integer id, Date created, Date closed, int priority, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status) {
+    public Bug(Integer id, String title) {
+        this();
+        this.id = id;
+        this.title = title;
+    }
+    
+    public Bug(Integer id, Date created, Date closed, int priority, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status) {    
+        this();
         this.id = id;
         this.created = created;
         this.closed = closed;
@@ -34,6 +43,14 @@ public class Bug {
         this.responsibleId = responsibleId;
         this.creatorId = creatorId;
         this.status = status;
+    }
+
+    public void addDependency(Bug bug) {
+        dependencies.add(bug);
+    }
+
+    public void removeDependency(Bug bug) {
+        dependencies.remove(bug);
     }
 
     public Integer getId() {
@@ -132,6 +149,32 @@ public class Bug {
         this.comments = comments;
     }
 
+    public Bug getDependentBug(Integer bug_id) {
+        for (Bug b : dependencies) {
+            if (b.getId().equals(bug_id)) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Bug bug = (Bug) o;
+
+        if (!id.equals(bug.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Bug{");
@@ -144,6 +187,12 @@ public class Bug {
         sb.append(", responsibleId=").append(responsibleId);
         sb.append(", creatorId=").append(creatorId);
         sb.append(", status=").append(status);
+        if (!dependencies.isEmpty()) {
+            sb.append(", dependent bugs: ");
+            for (Bug b : dependencies) {
+                sb.append(b.toString() + ";");
+            }
+        }
         sb.append('}');
         return sb.toString();
     }
