@@ -29,12 +29,12 @@
                     <li><a href="#">Status</a></li>
                 </ul>
                 </div>
-                <button style="margin-left:40%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button>
+                <button style="margin-left:38.5%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button>
         </td>
     </tr>
     <tr>
-        <td >
-            <div style="margin-top: -6px;" class="panel panel-primary">
+        <td style=" width:20%;" >
+            <div margin-top: -6px;" class="panel panel-primary">
             <!-- Default panel contents -->
             <div class="panel-heading">Browse issues</div>
 
@@ -47,16 +47,14 @@
             </ul>
         </div>
         </td>
-        <td rowspan="2" style="vertical-align: top;">
-        <div style="margin-left:2%;margin-top: -6px;height: 97%;
-overflow-y: hidden;" class="panel panel-primary">
+        <td rowspan="2" style="vertical-align: top; width:80%;">
+        <div style="margin-left:2%;margin-top: -6px;  overflow-y:auto;" class="panel panel-primary">
             <div class="panel-heading">Issues</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>Name</th>
                     <th>Project</th>
-                    <th>Description</th>
                     <th>Priority</th>
                     <th>Status</th>
                     <th>Type</th>
@@ -66,13 +64,12 @@ overflow-y: hidden;" class="panel panel-primary">
                 <tbody>
                 <c:forEach items="${bugs}" var="bug">
                 <tr>
-                    <td><a href="#">${bug.title}</a></td>
-                    <td><a href="#">${bug.project.name}</a></td>
-                    <td>${bug.description}</td>
-                    <td>${bug.priority.name}</td>
-                    <td>${bug.status.name}</td>
-                    <td>${bug.type.name}</td>
-                    <td>${bug.assignee.username}</td>
+                    <td><a href="../bug/${bug.id}">${bug.title}</a></td>
+                    <td>${bug.project.name}</td>
+                    <td>${bug.priority}</td>
+                    <td>${bug.status}</td>
+                    <td>${bug.issueType}</td>
+                    <td>${bug.responsible.username}</td>
                 </tr>
                 </c:forEach>
                 </tbody>
@@ -81,7 +78,7 @@ overflow-y: hidden;" class="panel panel-primary">
 </td>
     </tr>
     <tr>
-        <td>
+        <td style=" width:20%;">
             <div class="panel panel-primary">
                 <!-- Default panel contents -->
                 <div class="panel-heading">Projects</div>
@@ -89,7 +86,7 @@ overflow-y: hidden;" class="panel panel-primary">
                 <!-- List group -->
                 <ul class="list-group">
                    <c:forEach items="${projects}" var="project">
-                    <li class="list-group-item"><a href="#">${project.name}</a></li>
+                    <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
                     </c:forEach>
                 </ul>
             </div>

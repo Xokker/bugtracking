@@ -122,7 +122,7 @@ public class BugController {
             return null;
         }
 
-        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority));
+        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority,null,null));
 
         return "redirect:/bugs";
     }
