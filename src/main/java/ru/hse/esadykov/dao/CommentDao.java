@@ -55,8 +55,8 @@ public class CommentDao {
     }
 
     public List<Comment> getComments(Integer userId, int limit) {
-        return template.query("select id, body, created, author_id, bug_id from comment c join bug b on b.id = c.bug_id " +
-                "order by created desc limit :limit", Collections.singletonMap("limit", limit), new ResultSetExtractor<List<Comment>>() {
+        return template.query("select c.id, body, c.created, author_id, bug_id from comment c join bug b on b.id = c.bug_id " +
+                "order by c.created desc limit :limit", Collections.singletonMap("limit", limit), new ResultSetExtractor<List<Comment>>() {
             @Override
             public List<Comment> extractData(ResultSet rs) throws SQLException, DataAccessException {
                 List<Comment> result = new ArrayList<>();

@@ -32,7 +32,7 @@
                 <input style="height:28px;" class="btn btn-default" type="submit" value="Log Out"/></form>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="margin-top:15px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
-                <li><a href="/users/update/">${pageContext.request.userPrincipal.name}</a></li>
+                <li><a href="/users/update/${pageContext.request.userPrincipal.name}">${pageContext.request.userPrincipal.name}</a></li>
             </ul>
             </form>
 

@@ -46,12 +46,12 @@ public class BugDao {
     }
 
     public List<Bug> getBugs(Integer projectId, Boolean showClosed) {
-        // TODO: open tasks should be first
+        boolean projectPresented = projectId != null && projectId > 0;
         return template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
                         "from bug b join priority p on p.id = b.priority " +
-                        (projectId != null ? "where project_id = " + projectId : "") +
+                        (projectPresented ? "where project_id = " + projectId : "") +
                         (showClosed == null || !showClosed ?
-                                (projectId != null ? "," : "where ") + "status = '" + BugStatus.NEW + "'" : "") +
+                                (projectPresented ? "," : "where ") + "status = '" + BugStatus.NEW + "'" : "") +
                         " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
