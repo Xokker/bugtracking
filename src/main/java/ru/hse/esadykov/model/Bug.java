@@ -25,9 +25,11 @@ public class Bug {
     private transient User creator;
     private transient Project project;
     private List<Comment> comments;
+    private List<User> observers;
 
     public Bug() {
         dependencies = new ArrayList<>();
+        observers = new ArrayList<User>();
     }
 
     public Bug(Integer id, String title) {
@@ -47,6 +49,18 @@ public class Bug {
         this.priority = priority;
         this.issueType = issueType;
         this.projectId = projectId;
+    }
+
+    public List<User> getObservers() {
+        return observers;
+    }
+
+    public void addObserver(User user) {
+        observers.add(user);
+    }
+
+    public void removeObserver(User user) {
+        observers.remove(user);
     }
 
     public void addDependency(Bug bug) {
@@ -203,6 +217,12 @@ public class Bug {
             sb.append(", dependent bugs: ");
             for (Bug b : dependencies) {
                 sb.append(b.toString() + ";");
+            }
+        }
+        if (!observers.isEmpty()) {
+            sb.append(", observers: ");
+            for (User o : observers) {
+                sb.append(o.getUsername() + ";");
             }
         }
         sb.append('}');
