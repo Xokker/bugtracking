@@ -43,16 +43,17 @@ public class UserDao {
     }
 
     public User getUser(int userId) throws SQLException {
-        return template.query("select id, username, full_name, email from user", new ResultSetExtractor<User>() {
-            @Override
-            public User extractData(ResultSet rs) throws SQLException, DataAccessException {
-                if (!rs.next()) {
-                    return null;
-                }
+        return template.query("select id, username, full_name, email from user where id = :id",
+                Collections.singletonMap("id", userId), new ResultSetExtractor<User>() {
+                    @Override
+                    public User extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        if (!rs.next()) {
+                            return null;
+                        }
 
-                return extractUser(rs);
-            }
-        });
+                        return extractUser(rs);
+                    }
+                });
     }
 
     public boolean saveUser(User user) throws SQLException {
