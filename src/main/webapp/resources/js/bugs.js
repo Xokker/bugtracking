@@ -7,11 +7,14 @@ $(document).ready(function(){
         } else {
             var vars = query.split("&");
             for (var i = 0; i < vars.length; i++) {
+                if (i != 0) {
+                    url = url + "&";
+                }
                 var pair = vars[i].split("=");
                 if (pair[0] == "showclosed") {
                     pair[1] = $("#showclosed").prop("checked");
                 }
-                url = url + pair[0] + "=" + pair[1] + "&";
+                url = url + pair[0] + "=" + pair[1];
             }
         }
         location.href = url;
