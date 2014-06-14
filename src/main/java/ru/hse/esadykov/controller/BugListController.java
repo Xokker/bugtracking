@@ -72,6 +72,7 @@ public class BugListController {
         model.addAttribute("projects", projectDao.getProjects());
         model.addAttribute("priorities", BugPriority.values());
         model.addAttribute("types", IssueType.values());
+        model.addAttribute("statuses", BugStatus.values());
 
         return new ModelAndView("add_bug", model);
     }
