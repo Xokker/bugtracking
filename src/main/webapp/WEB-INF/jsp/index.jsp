@@ -8,7 +8,7 @@
     <title>Bug Tracking</title>
 </head>
 <body>
-<jsp:include page="WEB-INF/jsp/navigation.jsp"/>
+<jsp:include page="navigation.jsp"/>
 <table style="margin:1.5%; width:97%">
     <tr style="overflow:visible">
         <td style="width:50%;">
