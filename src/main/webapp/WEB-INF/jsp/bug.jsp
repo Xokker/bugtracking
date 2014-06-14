@@ -6,21 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
-    <title>Bug #${bug.id}. ${bug.title}</title>
+    <title>Bug ${bug.title}</title>
 </head>
 <body>
     <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
+<div style="width:98%;margin:1%">
 
     <h3><span class="label label-default">#${bug.title}</span></h3>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
     <div class="input-group">
-        <span class="input-group-addon">Type</span>
-        <input type="text" disabled class="form-control" value="${bug.type}">
+        <label>
+            Type:
+            <select name="type">
+                <c:forEach items="${types}" var="type">
+                    <option selected="${type.id eq bug.type.id}" value="${type}">${type}</option>
+                </c:forEach>
+            </select>
+        </label>
     </div>
 
     <div class="input-group">
         <span class="input-group-addon">Name</span>
-        <input type="text" disabled class="form-control" value="${bug.name}">
+        <input type="text" disabled class="form-control" value="${bug.title}">
     </div>
 
     <div class="input-group">
@@ -31,9 +38,9 @@
         <div class="input-group">
             <label>
                 Status:
-                <select name="status_id">
+                <select name="status">
                     <c:forEach items="${statuses}" var="status">
-                        <option selected="${status.id==bug.status}" value="${status.id}">${status.name}</option>
+                        <option selected="${status.id eq bug.status.id}" value="${status}">${status}</option>
                     </c:forEach>
                 </select>
             </label>
@@ -41,23 +48,12 @@
         <div class="input-group">
             <label>
                 Priority:
-                <select name="priority_id">
+                <select name="priority">
                     <c:forEach items="${priorities}" var="priority">
-                        <option selected="${priority.id==bug.priority}" value="${priority.id}">${priority.name}</option>
+                        <option selected="${priority.id eq bug.priority.id}" value="${priority}">${priority}</option>
                     </c:forEach>
                 </select>
             </label>
-        </div>
-        <div class="input-group">
-            <label>
-                Related bugs:
-                <select name="bugs" size="5">
-                    <c:forEach items="${bugs}" var="dep_bug">
-                        <option value="${dep_bug.id}">${dep_bug.name}</option>
-                    </c:forEach>
-                </select>
-            </label>
-
         </div>
     <p>
         <strong>Created:</strong> <fmt:formatDate type="both"
@@ -65,7 +61,7 @@
                                 pattern="dd.MM.yyyy HH:mm"
                                 value="${bug.created}"/>
     </p>
-    <c:if test="${bug.status ne 'NEW'}">
+    <c:if test="${bug.status ne 'NEW' }">
         <p>
             <strong>Closed:</strong> <fmt:formatDate type="both"
                                                       dateStyle="short"
@@ -76,9 +72,16 @@
     <p>
         <strong>Created by:</strong> ${bug.creator.username}
     </p>
-    <p>
-         <strong>Responsible:</strong> ${bug.responsible.username}
-    </p>
+        <div class="input-group">
+            <label>
+                Assignee:
+                <select name="responsible_id">
+                    <c:forEach items="${users}" var="user">
+                        <option selected="${bug.responsibleId eq user.id}" value="${user.id}">${user.username}</option>
+                    </c:forEach>
+                </select>
+            </label>
+        </div>
     <hr>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -111,5 +114,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/resources/js/bootstrap.min.js"></script>
+</div>
 </body>
 </html>
