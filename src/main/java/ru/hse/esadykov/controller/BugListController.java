@@ -1,22 +1,19 @@
 package ru.hse.esadykov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ru.hse.esadykov.dao.BugDao;
+import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
-import ru.hse.esadykov.model.Bug;
-import ru.hse.esadykov.model.BugPriority;
-import ru.hse.esadykov.model.BugStatus;
-import ru.hse.esadykov.model.User;
+import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,36 +33,53 @@ public class BugListController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProjectDao projectDao;
+
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
-    protected String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected ModelAndView doGet(@RequestParam(value = "project_id", required = false) Integer projectId) {
         List<Bug> bugs = null;
         List<User> users = null;
+        List<Project> projects = null;
         try {
-            bugs = bugDao.getBugs();
+            if (projectId != null) {
+                bugs = bugDao.getBugs(projectId);
+            } else {
+                bugs = bugDao.getBugs();
+            }
             users = userDao.getUsers();
+            projects = projectDao.getProjects();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        req.setAttribute("bugs", bugs);
-        req.setAttribute("users", users);
-        req.setAttribute("priorities", BugPriority.values());
 
-        return "bugs";
+        ModelMap model = new ModelMap();
+        model.addAttribute("bugs", bugs);
+        model.addAttribute("users", users);
+        model.addAttribute("priorities", BugPriority.values());
+        model.addAttribute("projects", projects);
+        model.addAttribute("types", IssueType.values());
+
+        return new ModelAndView("bugs", model);
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
     protected String doPut(@RequestParam(value = "priority_id", defaultValue = "4") Integer priority,
-                                 @RequestParam(value = "title") String title,
-                                 @RequestParam(value = "description") String description,
-                                 @RequestParam(value = "responsible_id") Integer responsibleId,
-                                 ModelMap model) throws IOException {
+                           @RequestParam(value = "title") String title,
+                           @RequestParam(value = "description") String description,
+                           @RequestParam(value = "responsible_id") Integer responsibleId,
+                           @RequestParam(value = "project_id") Integer projectId,
+                           @RequestParam(value = "issue_type", required = false, defaultValue = "BUG") IssueType issueType,
+                           ModelMap model) throws IOException {
         int creatorId = userService.getCurrentUserId().getId();
         BugPriority bugPriority = BugPriority.values()[priority - 1];
         String message;
         try {
-            bugDao.addBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, bugPriority));
+            Bug bug = new Bug(null, null, null, title, description, responsibleId,
+                    creatorId, BugStatus.NEW, bugPriority, issueType, projectId);
+            bugDao.saveBug(bug);
             message = "Bug '" + title + "' was successfully added";
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             message = "Error during saving the bug";
             e.printStackTrace();
         }

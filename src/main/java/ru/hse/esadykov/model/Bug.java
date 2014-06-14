@@ -17,32 +17,36 @@ public class Bug {
     private String description;
     private Integer responsibleId;
     private Integer creatorId;
+    private Integer projectId;
     private BugStatus status;
     private BugPriority priority;
+    private IssueType issueType;
     private transient User responsible;
     private transient User creator;
+    private transient Project project;
     private List<Comment> comments;
 
     public Bug() {
-        dependencies = new ArrayList<Bug>();
+        dependencies = new ArrayList<>();
     }
+
     public Bug(Integer id, String title) {
         this();
         this.id = id;
         this.title = title;
     }
     
-    public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority) {
-        this();
-        this.id = id;
+    public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority, IssueType issueType, Integer projectId) {
+        this(id, title);
         this.created = created;
         this.closed = closed;
-        this.title = title;
         this.description = description;
         this.responsibleId = responsibleId;
         this.creatorId = creatorId;
         this.status = status;
         this.priority = priority;
+        this.issueType = issueType;
+        this.projectId = projectId;
     }
 
     public void addDependency(Bug bug) {
@@ -125,6 +129,14 @@ public class Bug {
         this.status = status;
     }
 
+    public IssueType getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(IssueType issueType) {
+        this.issueType = issueType;
+    }
+
     public User getResponsible() {
         return responsible;
     }
@@ -195,5 +207,21 @@ public class Bug {
         }
         sb.append('}');
         return sb.toString();
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

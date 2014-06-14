@@ -7,9 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
-    <title>Bug Tracking</title>
 </head>
-<title>Issues</title>
+<title>Projects</title>
 </head>
 <body>
 <jsp:include page="navigation.jsp"/>
@@ -24,22 +23,11 @@
     </tr>
     </thead>
     <tbody>
+    <c:forEach items="${bugs}" var="bug">
     <tr>
         <td><a href="#">Bugtracker</a></td>
         <td>Создание багтрекера</td>
         <td>esadykov</td>
-        <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-delete"/></button></td>
-    </tr>
-    <tr>
-        <td><a href="#">LPF</a></td>
-        <td>Поездка на ЛПФ</td>
-        <td>gkozhukhantsev</td>
-        <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-delete"/></button></td>
-    </tr>
-    <tr>
-        <td><a href="#">Exams</a></td>
-        <td>Подготовка к сессии</td>
-        <td>agalaev</td>
         <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-delete"/></button></td>
     </tr>
     <tr>

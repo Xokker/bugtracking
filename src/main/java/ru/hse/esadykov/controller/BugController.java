@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
+import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.*;
 
@@ -33,6 +34,9 @@ public class BugController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private ProjectDao projectDao;
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
     protected ModelAndView doPost(@PathVariable("id") String id,
@@ -89,7 +93,8 @@ public class BugController {
             model.addAttribute("statuses", BugStatus.values());
             model.addAttribute("priorities", BugPriority.values());
             model.addAttribute("users", userDao.getUsers());
-
+            Project project = projectDao.getProject(bug.getProjectId());
+            bug.setProject(project);
 
             List<Comment> comments = commentDao.getComments(bugId, true);
             model.addAttribute("comments", comments);
