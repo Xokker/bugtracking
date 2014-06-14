@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <security:http auto-config="true">
+        <!-- TODO: update to meet real resources paths -->
+        <security:intercept-url pattern="/resources/**/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/**/*" access="ROLE_USER" />
+        <security:form-login
+            login-page="/login"
+            default-target-url="/bugs"
+            authentication-failure-url="/login?error"
+            username-parameter="username"
+            password-parameter="password" />
+        <security:logout
+            logout-url="/logout"
+            logout-success-url="/login?logout" />
+        <security:csrf/>
+    </security:http>
+
+    <security:authentication-manager>
+
+        <security:authentication-provider>
+            <security:password-encoder ref="passwordEncoder"/>
+            <security:jdbc-user-service data-source-ref="dataSource"
+                users-by-username-query="select username, password, 1 from user where username = ?"
+                authorities-by-username-query="select username, role_name from user_roles ur join roles r on r.id = ur.role_id join user u on u.id = ur.user_id where username = ?" />
+        </security:authentication-provider>
+
+        <security:authentication-provider>
+            <security:user-service>
+                <security:user name="test" password="123456" authorities="ROLE_USER" />
+            </security:user-service>
+
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+</beans>
+
+<!-- tutorial: http://www.mkyong.com/tutorials/spring-security-tutorials/ -->
