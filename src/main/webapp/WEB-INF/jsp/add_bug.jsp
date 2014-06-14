@@ -11,16 +11,14 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 
-<form style="width:50%;margin:1%" action="${requestScope['javax.servlet.forward.request_uri']}/add" method="post">
-    <div class="input-group">
-        <label>
-            Status:
-            <select name="issue_type">
+<form style="width:50%;margin:1%" action="/bugs/add" method="post">
+    <div class="input-group" style="margin-bottom:10px">
+        <span class="input-group-addon">Type</span>
+            <select class="form-control" name="issue_type">
                 <c:forEach items="${types}" var="type">
                     <option value="${type}">${type}</option>
                 </c:forEach>
             </select>
-        </label>
     </div>
 
     <div class="input-group" style="margin-bottom:10px;">
@@ -34,6 +32,15 @@
     </div>
 
     <div class="input-group" style="margin-bottom:10px;">
+        <span class="input-group-addon">Project</span>
+        <select class="form-control" name="project_id">
+            <c:forEach items="${projects}" var="project">
+                <option value="${project.id}">${project.name}</option>
+            </c:forEach>
+        </select>
+    </div>
+
+    <div class="input-group" style="margin-bottom:10px;">
         <span class="input-group-addon">Status</span>
             <select class="form-control" name="status">
                 <c:forEach items="${statuses}" var="status">
@@ -43,7 +50,7 @@
     </div>
     <div class="input-group" style="margin-bottom:10px;">
         <span class="input-group-addon">Priority</span>
-            <select name="priority">
+            <select class="form-control" name="priority">
                 <c:forEach items="${priorities}" var="priority">
                     <option value="${priority}">${priority}</option>
                 </c:forEach>
@@ -51,9 +58,9 @@
     </div>
     <div class="input-group" style="margin-bottom:10px;">
         <span class="input-group-addon">Assignee</span>
-            <select name="responsible_id">
+            <select class="form-control" name="responsible_id">
                 <c:forEach items="${users}" var="assignee">
-                    <option value="${assignee.id}">${assignee.name}</option>
+                    <option value="${assignee.id}">${assignee.username}</option>
                 </c:forEach>
                 <option value="0">&lt;&lt;me&gt;&gt;</option>
             </select>

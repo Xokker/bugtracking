@@ -37,7 +37,7 @@
 
         <div class="input-group" style="margin-bottom: 10px">
             <span class="input-group-addon">Status</span>
-                <select name="status">
+                <select class="form-control" name="status">
                     <c:forEach items="${statuses}" var="status">
                         <option ${status.id eq bug.status.id?"selected":""} value="${status}">${status}</option>
                     </c:forEach>
@@ -45,7 +45,7 @@
         </div>
         <div class="input-group" style="margin-bottom: 10px">
             <span class="input-group-addon">Priority</span>
-                <select name="priority">
+                <select class="form-control" name="priority">
                     <c:forEach items="${priorities}" var="priority">
                         <option ${priority.id eq bug.priority.id?"selected":""} value="${priority}">${priority}</option>
                     </c:forEach>
@@ -53,7 +53,7 @@
         </div>
         <div class="input-group" style="margin-bottom: 10px">
             <span class="input-group-addon">Assignee</span>
-                <select name="responsible_id">
+                <select class="form-control" name="responsible_id">
                     <c:forEach items="${users}" var="user">
                         <option ${user.id eq bug.responsibleId?"selected":""} value="${user.id}">${user.username}</option>
                     </c:forEach>

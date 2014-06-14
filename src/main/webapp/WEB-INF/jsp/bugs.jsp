@@ -88,6 +88,8 @@
                    <c:forEach items="${projects}" var="project">
                     <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
                     </c:forEach>
+                    <li class="divider"/>
+                    <li class="list-group-item"><a href="?project_id=-1">All Projects</a></li>
                 </ul>
             </div>
         </td>
