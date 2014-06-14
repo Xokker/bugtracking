@@ -40,10 +40,10 @@ public class BugDao {
 
     public List<Bug> getBugs() {
         // TODO: [FIXME] rewrite - http://stackoverflow.com/a/12268963/1970544
-        return template.query("(select id, created, closed, priority, title, description, responsible_id, creator_id, status " +
+        return template.query("(select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
                 "from bug where status = 'NEW' order by priority desc)" +
                 " union " +
-                "(select id, created, closed, priority, title, description, responsible_id, creator_id, status " +
+                "(select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
                 "from bug where status <> 'NEW' order by priority desc)", new ResultSetExtractor<List<Bug>>() {
             @Override
             public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -91,7 +91,7 @@ public class BugDao {
         params.put("description", bug.getDescription());
         params.put("responsibleId", bug.getResponsibleId());
         params.put("creatorId", bug.getCreatorId());
-        params.put("projectId", bug.getCreatorId());
+        params.put("projectId", bug.getProjectId());
 
         return template.update("insert into bug (priority, title, description, responsible_id, creator_id, project_id) values " +
                 "(:priority, :title, :description, :responsibleId, :creatorId, :projectId)", params) > 0;
