@@ -30,6 +30,7 @@
         <td>esadykov</td>
         <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-delete"/></button></td>
     </tr>
+    </c:forEach>
     <tr>
         <td>
             <input type="text" class="form-control" placeholder="Name">
