@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 
-<form style="width:50%" action="${requestScope['javax.servlet.forward.request_uri']}/add" method="post">
+<form style="width:50%;margin:1%" action="${requestScope['javax.servlet.forward.request_uri']}/add" method="post">
     <div class="input-group">
         <label>
             Status:
