@@ -16,7 +16,6 @@ import ru.hse.esadykov.model.User;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class ProjectsController {
                     project.setManager(manager);
                 }
             }
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 

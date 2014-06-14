@@ -1,6 +1,7 @@
 package ru.hse.esadykov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import ru.hse.esadykov.model.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -60,24 +60,17 @@ public class BugController {
         comment.setBugId(bugId);
         try {
             commentDao.saveComment(comment);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
-        return doGet(model, response, id);
+        return doGet(model, response, bugId);
     }
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.GET)
     protected ModelAndView doGet(ModelMap model,
                                  HttpServletResponse response,
-                                 @PathVariable("id") String id) throws IOException {
-        int bugId;
-        try {
-            bugId = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
+                                 @PathVariable("id") Integer bugId) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
@@ -98,7 +91,7 @@ public class BugController {
 
             List<Comment> comments = commentDao.getComments(bugId, true);
             model.addAttribute("comments", comments);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
@@ -110,8 +103,7 @@ public class BugController {
                              @PathVariable("id") String id,
                              @RequestParam(value = "status") BugStatus status,
                              @RequestParam(value = "priority") BugPriority priority,
-                             @RequestParam(value = "responsible_id") String responsible
-                             ) throws IOException {
+                             @RequestParam(value = "responsible_id") String responsible) throws IOException {
         int bugId;
         int responsibleId;
         try {
@@ -122,26 +114,16 @@ public class BugController {
             return null;
         }
 
-        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority,null,null));
+        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null));
 
         return "redirect:/bugs";
     }
 
-    // TODO: rewrite that method (use redirect:)
+    // TODO: change to POST
     @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
-    protected ModelAndView addDependency(HttpServletResponse response,
-                                         @PathVariable("id") String id,
-                                         @PathVariable("id1") String id1) throws IOException {
-        int bugId;
-        int bug1Id;
-        ModelMap model = new ModelMap();
-        try {
-            bugId = Integer.parseInt(id);
-            bug1Id = Integer.parseInt(id1);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
+    protected String addDependency(HttpServletResponse response,
+                                   @PathVariable("id") Integer bugId,
+                                   @PathVariable("id1") Integer bug1Id) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
@@ -154,14 +136,11 @@ public class BugController {
             bug.setResponsible(responsible);
             bug.addDependency(bug1);
             bugDao.addDependency(bug, bug1);
-            model.addAttribute("bug", bug);
-            List<Comment> comments = commentDao.getComments(bugId);
-            model.addAttribute("comments", comments);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
-        return new ModelAndView("bug", model);
+        return "redirect:/bug/" + bugId;
     }
 
     // TODO: rewrite that method (use redirect:)
@@ -194,7 +173,7 @@ public class BugController {
             model.addAttribute("bug", bug);
             List<Comment> comments = commentDao.getComments(bugId);
             model.addAttribute("comments", comments);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
