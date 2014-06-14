@@ -30,7 +30,7 @@ public class ProjectDao {
         return new Project(id, name, description, managerId);
     }
 
-    public List<Project> getProjects() throws SQLException {
+    public List<Project> getProjects() {
         return template.query("select id, name, description, manager_id from project",  new ResultSetExtractor<List<Project>>() {
             @Override
             public List<Project> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -43,7 +43,7 @@ public class ProjectDao {
         });
     }
 
-    public Project getProject(int projectId) throws SQLException {
+    public Project getProject(int projectId) {
         return template.query("select id, name, description, manager_id from project where id = :id",
                 Collections.singletonMap("id", projectId), new ResultSetExtractor<Project>() {
                     @Override

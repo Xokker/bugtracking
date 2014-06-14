@@ -18,7 +18,6 @@ import ru.hse.esadykov.model.User;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -71,7 +70,7 @@ public class UsersController {
         try {
             userDao.updateUser(user);
             user = userDao.getUser(userId);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
         mm.addAttribute("user", user);
@@ -125,7 +124,7 @@ public class UsersController {
         List<User> users = null;
         try {
             users = userDao.getUsers();
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 

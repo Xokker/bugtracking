@@ -26,7 +26,7 @@ public class UserDao {
     @Autowired
     private NamedParameterJdbcTemplate template;
 
-    public List<User> getUsers() throws SQLException {
+    public List<User> getUsers() {
         return template.query("select id, username, full_name, email from user", new UserMapper());
     }
 
@@ -82,7 +82,7 @@ public class UserDao {
         }
     }
 
-        public boolean updateUser(User user) throws SQLException {
+        public boolean updateUser(User user) {
             Map<String, Object> params = new HashMap<>();
             params.put("id", user.getId());
             params.put("fullName", user.getFullName());
