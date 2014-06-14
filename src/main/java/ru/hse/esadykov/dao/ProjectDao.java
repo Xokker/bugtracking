@@ -9,9 +9,7 @@ import ru.hse.esadykov.model.Project;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Anton Galaev
@@ -59,8 +57,21 @@ public class ProjectDao {
                 });
     }
 
-    public boolean deleteProject(int projectId) throws SQLException {
+    public boolean addProject(Project project) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", project.getName());
+        params.put("description", project.getDescription());
+        params.put("managerId", project.getManagerId());
+
+        return template.update("insert into project (name, description, manager_id) values " +
+                "(:name, :description, :managerId)", params) > 0;
+    }
+
+    public boolean deleteProject(int projectId) {
         return template.update("delete from project where id = :id", Collections.singletonMap("id", projectId)) > 0;
     }
 
+    public boolean deleteProject(String name) {
+        return template.update("delete from project where name = :name", Collections.singletonMap("name", name)) > 0;
+    }
 }
