@@ -26,22 +26,32 @@
     <hr/>
     <h2>Add bug</h2>
     <form name="input" action="/bugs/add" enctype="application/x-www-form-urlencoded; charset=utf-8" method="post">
-        Responsible: <select name="responsible_id">
+        Type:
+        <select name="issue_type">
+            <c:forEach items="${types}" var="type">
+                <option value="${type}">${type}</option>
+            </c:forEach>
+        </select>
+        Responsible:
+        <select name="responsible_id">
             <c:forEach items="${users}" var="user">
                 <option value="${user.id}">${user.username}</option>
             </c:forEach>
         </select> <br/>
         Title:        <input type="text" name="title"/>     <br/>
-        Project:  <select name="project_id">
-        <c:forEach items="${projects}" var="project">
-        <option value="${project.id}">${project.name}</option>
-        </c:forEach> </select> <br/>
+        Project:
+        <select name="project_id">
+            <c:forEach items="${projects}" var="project">
+                <option value="${project.id}">${project.name}</option>
+            </c:forEach>
+        </select> <br/>
         Description:  <textarea rows="5" cols="50" name="description"></textarea> <br/>
-        Priority: <select name="priority_id">
-        <c:forEach items="${priorities}" varStatus="status" var="priority">
-            <option value="${status.count}">${priority}</option>
-        </c:forEach>
-    </select>
+        Priority:
+        <select name="priority_id">
+            <c:forEach items="${priorities}" varStatus="status" var="priority">
+                <option value="${status.count}">${priority}</option>
+            </c:forEach>
+        </select>
 
         <input type="hidden" name="${_csrf.parameterName}"
                value="${_csrf.token}"/>

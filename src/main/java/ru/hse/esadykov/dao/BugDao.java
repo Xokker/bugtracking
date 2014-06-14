@@ -38,13 +38,18 @@ public class BugDao {
         BugStatus status = BugStatus.valueOf(rs.getString("status"));
         IssueType issueType = IssueType.valueOf(rs.getString("type"));
 
-        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority);
+        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority, issueType, projectId);
     }
 
     public List<Bug> getBugs() {
+        return getBugs(-1);
+    }
+
+    public List<Bug> getBugs(int projectId) {
         // TODO: open tasks should be first
         return template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
-                        "from bug b join priority p on p.id = b.priority order by p.id asc",
+                        "from bug b join priority p on p.id = b.priority " + (projectId > 0 ? "where project_id = " + projectId : "") +
+                        " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
                     public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -56,27 +61,6 @@ public class BugDao {
                         return result;
                     }
                 });
-    }
-
-    public List<Bug> getBugs(int projectId) {
-        // TODO: [FIXME] rewrite - http://stackoverflow.com/a/12268963/1970544
-        return template.query("(select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
-                "from bug where status = 'NEW' and project_id = :projectId order by priority desc)" +
-                " union " +
-                "(select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
-                "from bug where status <> 'NEW' and project_id = :projectId order by priority desc)",
-                Collections.singletonMap("projectId", projectId),
-                new ResultSetExtractor<List<Bug>>() {
-            @Override
-            public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                List<Bug> result = new ArrayList<>();
-                while (rs.next()) {
-                    result.add(extractBug(rs));
-                }
-
-                return result;
-            }
-        });
     }
 
     public Bug getBug(int bugId) throws SQLException {
@@ -106,7 +90,7 @@ public class BugDao {
                 });
     }
 
-    public boolean saveBug(Bug bug) throws SQLException {
+    public boolean saveBug(Bug bug) {
         Map<String, Object> params = new HashMap<>();
         params.put("priority", ObjectUtils.defaultIfNull(bug.getPriority(), BugPriority.MAJOR).getId());
         params.put("title", bug.getTitle());
@@ -117,7 +101,7 @@ public class BugDao {
         params.put("projectId", bug.getProjectId());
 
         return template.update("insert into bug (priority, title, description, responsible_id, creator_id, type, project_id) values " +
-                "(:priority, :title, :description, :responsibleId, :creatorId, :type, :project_id)", params) > 0;
+                "(:priority, :title, :description, :responsibleId, :creatorId, :type, :projectId)", params) > 0;
     }
 
     public boolean setStatus(int bugId, BugStatus status) {

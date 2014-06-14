@@ -27,8 +27,9 @@ public class Bug {
     private List<Comment> comments;
 
     public Bug() {
-        dependencies = new ArrayList<Bug>();
+        dependencies = new ArrayList<>();
     }
+
     public Bug(Integer id, String title) {
         this();
         this.id = id;
@@ -36,11 +37,9 @@ public class Bug {
     }
     
     public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority, IssueType issueType, Integer projectId) {
-        this();
-        this.id = id;
+        this(id, title);
         this.created = created;
         this.closed = closed;
-        this.title = title;
         this.description = description;
         this.responsibleId = responsibleId;
         this.creatorId = creatorId;
