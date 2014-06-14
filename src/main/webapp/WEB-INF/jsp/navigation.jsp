@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <img  src="resources/img/logo.png" width="50" height="50"/>
+            <img  src="/resources/img/logo.png" width="50" height="50"/>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -32,7 +32,7 @@
                 <input style="height:28px;" class="btn btn-default" type="submit" value="Log Out"/></form>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="margin-top:15px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
-                <!--TODO: insert variable with id for this link--><li><a href="/users/update/">Username</a></li>
+                <li><a href="/users/update/">${pageContext.request.userPrincipal.name}</a></li>
             </ul>
             </form>
 

@@ -29,12 +29,12 @@
                     <li><a href="#">Status</a></li>
                 </ul>
                 </div>
-                <button style="margin-left:38.5%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button>
+                <a href="/bugs/add"><button style="margin-left:38.5%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button></a>
         </td>
     </tr>
     <tr>
         <td style=" width:20%;" >
-            <div margin-top: -6px;" class="panel panel-primary">
+            <div style="margin-top: -6px;" class="panel panel-primary">
             <!-- Default panel contents -->
             <div class="panel-heading">Browse issues</div>
 
@@ -88,6 +88,8 @@
                    <c:forEach items="${projects}" var="project">
                     <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
                     </c:forEach>
+                    <li class="divider"/>
+                    <li class="list-group-item"><a href="?project_id=-1">All Projects</a></li>
                 </ul>
             </div>
         </td>
