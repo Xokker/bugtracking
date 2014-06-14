@@ -10,24 +10,29 @@ import java.util.List;
 public class Bug {
     private Integer id;
     private Date created;
+    private Date closed;
     private int priority;
     private String title;
     private String description;
     private Integer responsibleId;
+    private Integer creatorId;
     private BugStatus status;
     private transient User responsible;
+    private transient User creator;
     private List<Comment> comments;
 
     public Bug() {
     }
 
-    public Bug(Integer id, Date created, int priority, String title, String description, Integer responsibleId, BugStatus status) {
+    public Bug(Integer id, Date created, Date closed, int priority, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status) {
         this.id = id;
         this.created = created;
+        this.closed = closed;
         this.priority = priority;
         this.title = title;
         this.description = description;
         this.responsibleId = responsibleId;
+        this.creatorId = creatorId;
         this.status = status;
     }
 
@@ -45,6 +50,14 @@ public class Bug {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public Date getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Date closed) {
+        this.closed = closed;
     }
 
     public int getPriority() {
@@ -79,6 +92,14 @@ public class Bug {
         this.responsibleId = responsibleId;
     }
 
+    public Integer getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Integer creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public BugStatus getStatus() {
         return status;
     }
@@ -95,6 +116,14 @@ public class Bug {
         this.responsible = responsible;
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
     public List<Comment> getComments() {
         return comments;
     }
@@ -108,10 +137,12 @@ public class Bug {
         final StringBuilder sb = new StringBuilder("Bug{");
         sb.append("id=").append(id);
         sb.append(", created=").append(created);
+        sb.append(", closed=").append(closed);
         sb.append(", priority=").append(priority);
         sb.append(", title='").append(title).append('\'');
         sb.append(", description='").append(description).append('\'');
         sb.append(", responsibleId=").append(responsibleId);
+        sb.append(", creatorId=").append(creatorId);
         sb.append(", status=").append(status);
         sb.append('}');
         return sb.toString();

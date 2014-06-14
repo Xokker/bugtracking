@@ -25,21 +25,23 @@ public class BugDao {
     private Bug extractBug(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
         Date created = rs.getTimestamp("created");
+        Date closed = rs.getTimestamp("closed");
         int priority = rs.getInt("priority");
         String title = rs.getString("title");
         String description = rs.getString("description");
         Integer responsibleId = rs.getInt("responsible_id");
+        Integer creatorId = rs.getInt("creator_id");
         BugStatus status = BugStatus.valueOf(rs.getString("status"));
 
-        return new Bug(id, created, priority, title, description, responsibleId, status);
+        return new Bug(id, created, closed, priority, title, description, responsibleId, creatorId, status);
     }
 
     public List<Bug> getBugs() {
         // TODO: [FIXME] rewrite - http://stackoverflow.com/a/12268963/1970544
-        return template.query("(select id, created, priority, title, description, responsible_id, status " +
+        return template.query("(select id, created, closed, priority, title, description, responsible_id, creator_id, status " +
                 "from bug where status = 'NEW' order by priority desc)" +
                 " union " +
-                "(select id, created, priority, title, description, responsible_id, status " +
+                "(select id, created, closed, priority, title, description, responsible_id, creator_id, status " +
                 "from bug where status <> 'NEW' order by priority desc)", new ResultSetExtractor<List<Bug>>() {
             @Override
             public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -54,7 +56,7 @@ public class BugDao {
     }
 
     public Bug getBug(int bugId) throws SQLException {
-        return template.query("select id, created, priority, title, description, responsible_id, status " +
+        return template.query("select id, created, closed, priority, title, description, responsible_id, creator_id, status " +
                         "from bug where id = :bugId",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
@@ -74,8 +76,18 @@ public class BugDao {
         params.put("title", bug.getTitle());
         params.put("description", bug.getDescription());
         params.put("responsibleId", bug.getResponsibleId());
+        params.put("creatorId", bug.getCreatorId());
 
-        return template.update("insert into bug (priority, title, description, responsible_id) values " +
-                "(:priority, :title, :description, :responsibleId)", params) > 0;
+        return template.update("insert into bug (priority, title, description, responsible_id, creator_id) values " +
+                "(:priority, :title, :description, :responsibleId, :creatorId)", params) > 0;
+    }
+
+    public boolean setStatus(int bugId, BugStatus status) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bugId", bugId);
+        params.put("statusId", status.name());
+        params.put("closedDate", new Date());
+
+        return template.update("update bug set status = :statusId, closed = :closedDate where id = :bugId ", params) > 0;
     }
 }
