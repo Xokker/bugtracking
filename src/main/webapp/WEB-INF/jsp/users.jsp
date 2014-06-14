@@ -23,6 +23,8 @@
                 <c:if test="${not empty user.fullName}">
                     ${user.fullName}
                 </c:if>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <input type="hidden" value="${user.id}" name="user_id"></input>
                 <input type="submit" value="Delete user"></input>
             </form>
@@ -35,6 +37,9 @@
         Username:   <input type="text" name="username"/>     <br/>
         Full name:  <input type="text" name="full_name">     <br/>
         Email:      <input type="text" name="email">         <br/>
+        Password:   <input type="password" name="password">  <br/>
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}" />
         <input type="submit" value="Create user"/>
     </form>
 

@@ -34,6 +34,8 @@
         Title:        <input type="text" name="title"></input>     <br/>
         Description:  <textarea rows="5" cols="50" name="description"></textarea> <br/>
         Priority: <input type="text" name="priority" placeholder="100"></input>
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}"/>
         <input type="submit" value="Submit bug"/>
     </form>
 </body>

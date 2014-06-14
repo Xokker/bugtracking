@@ -57,6 +57,8 @@
     <form name="input" action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
         Username:   <input type="text" name="username"/>     <br/>
         Text:       <textarea rows="5" cols="50" name="body" placeholder="Enter your comment"></textarea>    <br/>
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}"/>
         <input type="submit" value="Submit"/>
     </form>
 </body>
