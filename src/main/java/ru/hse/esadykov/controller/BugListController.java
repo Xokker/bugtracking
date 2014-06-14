@@ -68,14 +68,13 @@ public class BugListController {
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
-    protected String doPut(@RequestParam(value = "priority_id", defaultValue = "4") Integer priority,
+    protected String doPut(@RequestParam(value = "priority", defaultValue = "MAJOR") BugPriority bugPriority,
                            @RequestParam(value = "title") String title,
                            @RequestParam(value = "description") String description,
                            @RequestParam(value = "responsible_id") Integer responsibleId,
                            @RequestParam(value = "project_id") Integer projectId,
                            @RequestParam(value = "issue_type", required = false, defaultValue = "BUG") IssueType issueType) {
         int creatorId = userService.getCurrentUserId().getId();
-        BugPriority bugPriority = BugPriority.values()[priority - 1];
         try {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
                     creatorId, BugStatus.NEW, bugPriority, issueType, projectId);
@@ -84,6 +83,6 @@ public class BugListController {
             e.printStackTrace();
         }
 
-        return "redirect:/bugs";
+        return "redirect:/bugs?project_id=" + projectId;
     }
 }

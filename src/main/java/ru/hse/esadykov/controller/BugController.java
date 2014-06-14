@@ -122,8 +122,8 @@ public class BugController {
     // TODO: change to POST
     @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
     protected String addDependency(HttpServletResponse response,
-                                         @PathVariable("id") Integer bugId,
-                                         @PathVariable("id1") Integer bug1Id) throws IOException {
+                                   @PathVariable("id") Integer bugId,
+                                   @PathVariable("id1") Integer bug1Id) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
