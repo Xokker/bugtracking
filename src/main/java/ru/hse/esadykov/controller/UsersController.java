@@ -78,20 +78,16 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/users/update/{id}", method = RequestMethod.GET)
-    protected ModelAndView showUser(HttpServletResponse resp, @PathVariable("id") String id) throws ServletException, IOException {
-        int userId;
+    protected ModelAndView showUser(HttpServletResponse resp,
+                                    @PathVariable("id") Integer userId) throws ServletException, IOException {
         ModelMap mm = new ModelMap();
-        try {
-            userId = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
         try {
             User user = userDao.getUser(userId);
             mm.addAttribute("user", user);
         } catch (DataAccessException e) {
             e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
         }
         return new ModelAndView("user", mm);
     }

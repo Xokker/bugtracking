@@ -32,7 +32,7 @@ public class ProjectsController {
     private UserDao userDao;
 
     @RequestMapping(value = "/projects")
-    protected ModelAndView doGet(ModelMap model) throws ServletException, IOException {
+    protected ModelAndView doGet() {
         List<Project> projects = null;
         List<User> users = null;
         try {
@@ -50,8 +50,10 @@ public class ProjectsController {
             e.printStackTrace();
         }
 
+        ModelMap model = new ModelMap();
         model.addAttribute("projects", projects);
         model.addAttribute("users", users);
+
         return new ModelAndView("projects", model);
     }
 
