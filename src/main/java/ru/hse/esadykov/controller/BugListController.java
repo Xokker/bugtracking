@@ -38,12 +38,17 @@ public class BugListController {
     private ProjectDao projectDao;
 
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
-    protected String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected String doGet(@RequestParam(value = "project_id", required = false) Integer projectId,
+                           HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Bug> bugs = null;
         List<User> users = null;
         List<Project> projects = null;
         try {
-            bugs = bugDao.getBugs();
+            if (projectId != null) {
+                bugs = bugDao.getBugs(projectId);
+            } else {
+                bugs = bugDao.getBugs();
+            }
             users = userDao.getUsers();
             projects = projectDao.getProjects();
         } catch (SQLException e) {

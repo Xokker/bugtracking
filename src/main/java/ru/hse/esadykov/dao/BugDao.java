@@ -57,6 +57,27 @@ public class BugDao {
         });
     }
 
+    public List<Bug> getBugs(int projectId) {
+        // TODO: [FIXME] rewrite - http://stackoverflow.com/a/12268963/1970544
+        return template.query("(select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
+                "from bug where status = 'NEW' and project_id = :projectId order by priority desc)" +
+                " union " +
+                "(select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
+                "from bug where status <> 'NEW' and project_id = :projectId order by priority desc)",
+                Collections.singletonMap("projectId", projectId),
+                new ResultSetExtractor<List<Bug>>() {
+            @Override
+            public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                List<Bug> result = new ArrayList<>();
+                while (rs.next()) {
+                    result.add(extractBug(rs));
+                }
+
+                return result;
+            }
+        });
+    }
+
     public Bug getBug(int bugId) throws SQLException {
         final Bug bug = template.query("select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
                         "from bug where id = :bugId",
