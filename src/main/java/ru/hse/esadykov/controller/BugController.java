@@ -12,6 +12,7 @@ import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Bug;
+import ru.hse.esadykov.model.BugStatus;
 import ru.hse.esadykov.model.Comment;
 import ru.hse.esadykov.model.User;
 
@@ -85,6 +86,8 @@ public class BugController {
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
+            User creator = userDao.getUser(bug.getCreatorId());
+            bug.setCreator(creator);
             model.addAttribute("bug", bug);
             List<Comment> comments = commentDao.getComments(bugId);
             model.addAttribute("comments", comments);
@@ -95,5 +98,18 @@ public class BugController {
         return new ModelAndView("bug", model);
     }
 
+    @RequestMapping(value = "/bug/{id}/close", method = RequestMethod.POST)
+    protected String doClose(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
+        int bugId;
+        try {
+            bugId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
 
+        bugDao.setStatus(bugId, BugStatus.CLOSED);
+
+        return "redirect:/bugs";
+    }
 }

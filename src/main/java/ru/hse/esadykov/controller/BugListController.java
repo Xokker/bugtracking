@@ -52,8 +52,8 @@ public class BugListController {
                                  @RequestParam(value = "title") String title,
                                  @RequestParam(value = "description") String description,
                                  @RequestParam(value = "responsible_id") Integer responsibleId,
-                                 @RequestParam(value = "creator_id") Integer creatorId,
                                  ModelMap model) throws IOException {
+        int creatorId = 1; //TODO: change to authorised user id
         String message;
         try {
             bugDao.addBug(new Bug(null, null, null, priority, title, description, responsibleId, creatorId, BugStatus.NEW));

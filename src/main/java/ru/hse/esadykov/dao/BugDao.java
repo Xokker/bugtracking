@@ -82,15 +82,11 @@ public class BugDao {
                 "(:priority, :title, :description, :responsibleId, :creatorId)", params) > 0;
     }
 
-    public boolean setStatus(Bug bug, BugStatus status) {
+    public boolean setStatus(int bugId, BugStatus status) {
         Map<String, Object> params = new HashMap<>();
-        params.put("bugId", bug.getId());
+        params.put("bugId", bugId);
         params.put("statusId", status.name());
-        if (status == BugStatus.CLOSED) {
-            params.put("closedDate", new Date());
-        } else {
-            params.put("closedDate", null);
-        }
+        params.put("closedDate", new Date());
 
         return template.update("update bug set status = :statusId, closed = :closedDate where id = :bugId ", params) > 0;
     }

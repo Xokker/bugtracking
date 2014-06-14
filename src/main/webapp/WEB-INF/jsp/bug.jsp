@@ -9,6 +9,8 @@
     <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 
     <h1>Bug #${bug.id}. ${bug.title}</h1>
+    <p> <strong>Status:</strong> ${bug.status}</p>
+
     <p>${bug.description}</p>
     <p>
         <strong>Created:</strong> <fmt:formatDate type="both"
@@ -17,9 +19,17 @@
                                 value="${bug.created}"/>
     </p>
     <p>
+        <strong>Created by: ${bug.creator.username}</strong>
+    </p>
+    <p>
          <strong>Responsible:</strong> ${bug.responsible.username}
     </p>
     <hr>
+    <form action="${requestScope['javax.servlet.forward.request_uri']}/close" method="post">
+        <input type="hidden" value="${bug.id}" name="id"></input>
+        <input type="submit" value="Close bug"></input>
+    </form>
+
     <hr>
     <h2>Comments</h2>
     <c:forEach items="${comments}" var="comment">
