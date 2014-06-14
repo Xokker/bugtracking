@@ -94,4 +94,6 @@ public class BugController {
 
         return new ModelAndView("bug", model);
     }
+
+
 }

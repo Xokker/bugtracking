@@ -52,10 +52,11 @@ public class BugListController {
                                  @RequestParam(value = "title") String title,
                                  @RequestParam(value = "description") String description,
                                  @RequestParam(value = "responsible_id") Integer responsibleId,
+                                 @RequestParam(value = "creator_id") Integer creatorId,
                                  ModelMap model) throws IOException {
         String message;
         try {
-            bugDao.addBug(new Bug(null, null, priority, title, description, responsibleId, BugStatus.NEW));
+            bugDao.addBug(new Bug(null, null, null, priority, title, description, responsibleId, creatorId, BugStatus.NEW));
             message = "Bug '" + title + "' was successfully added";
         } catch (SQLException e) {
             message = "Error during saving the bug";
