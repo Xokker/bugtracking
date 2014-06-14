@@ -33,6 +33,9 @@
     <p>
          <strong>Responsible:</strong> ${bug.responsible.username}
     </p>
+    <p>
+        <strong>Project:</strong> ${bug.project.name}
+    </p>
     <hr>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/close" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

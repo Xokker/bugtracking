@@ -15,8 +15,9 @@
 
 <c:forEach items="${projects}" var="project">
     <p>
-    <form action="/projects/delete" method="post">
-        <a href="/bugs/${project.id}">${project.name}</a>.
+
+    <form action="<c:url value='/projects/delete'/>" method="post">
+        <a href="<c:url value='/bugs'> <c:param name="project_id" value="${project.id}"/> </c:url>">${project.name}</a>.
         <c:if test="${not empty project.description}">
             ${project.description}
         </c:if>
