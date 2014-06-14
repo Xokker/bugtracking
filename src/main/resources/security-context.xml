@@ -7,8 +7,20 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
+
     <security:http auto-config="true">
+        <!-- TODO: update to meet real resources paths -->
+        <security:intercept-url pattern="/img/**/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**/*" access="ROLE_USER" />
+        <security:form-login
+            login-page="/login"
+            default-target-url="/bugs"
+            authentication-failure-url="/login?error"
+            username-parameter="username"
+            password-parameter="password" />
+        <security:logout logout-success-url="/login?logout" />
+        <security:csrf/>
     </security:http>
 
     <security:authentication-manager>
@@ -20,3 +32,5 @@
     </security:authentication-manager>
 
 </beans>
+
+<!-- tutorial: http://www.mkyong.com/tutorials/spring-security-tutorials/ -->
