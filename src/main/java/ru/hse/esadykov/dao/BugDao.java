@@ -32,9 +32,10 @@ public class BugDao {
         String description = rs.getString("description");
         Integer responsibleId = rs.getInt("responsible_id");
         Integer creatorId = rs.getInt("creator_id");
+        Integer projectId = rs.getInt("project_id");
         BugStatus status = BugStatus.valueOf(rs.getString("status"));
 
-        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority);
+        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority, projectId);
     }
 
     public List<Bug> getBugs() {
@@ -57,7 +58,7 @@ public class BugDao {
     }
 
     public Bug getBug(int bugId) throws SQLException {
-        final Bug bug = template.query("select id, created, closed, priority, title, description, responsible_id, creator_id, status " +
+        final Bug bug = template.query("select id, created, closed, priority, title, description, responsible_id, creator_id, status, project_id " +
                         "from bug where id = :bugId",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
@@ -90,9 +91,10 @@ public class BugDao {
         params.put("description", bug.getDescription());
         params.put("responsibleId", bug.getResponsibleId());
         params.put("creatorId", bug.getCreatorId());
+        params.put("projectId", bug.getCreatorId());
 
-        return template.update("insert into bug (priority, title, description, responsible_id, creator_id) values " +
-                "(:priority, :title, :description, :responsibleId, :creatorId)", params) > 0;
+        return template.update("insert into bug (priority, title, description, responsible_id, creator_id, project_id) values " +
+                "(:priority, :title, :description, :responsibleId, :creatorId, :projectId)", params) > 0;
     }
 
     public boolean setStatus(int bugId, BugStatus status) {

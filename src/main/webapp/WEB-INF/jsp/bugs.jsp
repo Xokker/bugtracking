@@ -33,6 +33,10 @@
         </select> <br/>
         Title:        <input type="text" name="title"/>     <br/>
         Description:  <textarea rows="5" cols="50" name="description"></textarea> <br/>
+        Project:  <select name="project_id">
+        <c:forEach items="${projects}" var="project">
+        <option value="${project.id}">${project}</option>
+        </c:forEach>         <br/>
         Priority: <select name="priority_id">
         <c:forEach items="${priorities}" varStatus="status" var="priority">
             <option value="${status.count}">${priority}</option>

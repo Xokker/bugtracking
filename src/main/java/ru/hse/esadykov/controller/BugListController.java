@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.hse.esadykov.dao.BugDao;
+import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
-import ru.hse.esadykov.model.Bug;
-import ru.hse.esadykov.model.BugPriority;
-import ru.hse.esadykov.model.BugStatus;
-import ru.hse.esadykov.model.User;
+import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.UserService;
 
 import javax.servlet.ServletException;
@@ -36,19 +34,25 @@ public class BugListController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProjectDao projectDao;
+
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
     protected String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Bug> bugs = null;
         List<User> users = null;
+        List<Project> projects = null;
         try {
             bugs = bugDao.getBugs();
             users = userDao.getUsers();
+            projects = projectDao.getProjects();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         req.setAttribute("bugs", bugs);
         req.setAttribute("users", users);
         req.setAttribute("priorities", BugPriority.values());
+        req.setAttribute("projects", projects);
 
         return "bugs";
     }
@@ -58,12 +62,13 @@ public class BugListController {
                                  @RequestParam(value = "title") String title,
                                  @RequestParam(value = "description") String description,
                                  @RequestParam(value = "responsible_id") Integer responsibleId,
+                                 @RequestParam(value = "project_id") Integer projectId,
                                  ModelMap model) throws IOException {
         int creatorId = userService.getCurrentUserId().getId();
         BugPriority bugPriority = BugPriority.values()[priority - 1];
         String message;
         try {
-            bugDao.addBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, bugPriority));
+            bugDao.addBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, bugPriority, projectId));
             message = "Bug '" + title + "' was successfully added";
         } catch (SQLException e) {
             message = "Error during saving the bug";
