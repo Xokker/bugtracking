@@ -13,10 +13,10 @@ import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
+import ru.hse.esadykov.exception.ResourceNotFoundException;
 import ru.hse.esadykov.model.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -61,13 +61,12 @@ public class BugController {
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.GET)
     protected ModelAndView doGet(ModelMap model,
                                  HttpServletResponse response,
-                                 @PathVariable("id") Integer bugId) throws IOException {
+                                 @PathVariable("id") Integer bugId) {
 
         try {
             Bug bug = bugDao.getBug(bugId);
             if (bug == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
+                throw new ResourceNotFoundException("No such bug");
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
@@ -90,19 +89,17 @@ public class BugController {
     }
 
     @RequestMapping(value = "/bug/{id}/edit", method = RequestMethod.POST)
-    protected String doClose(HttpServletResponse response,
-                             @PathVariable("id") String id,
+    protected String doClose(@PathVariable("id") String id,
                              @RequestParam(value = "status") BugStatus status,
                              @RequestParam(value = "priority") BugPriority priority,
-                             @RequestParam(value = "responsible_id") String responsible) throws IOException {
+                             @RequestParam(value = "responsible_id") String responsible) {
         int bugId;
         int responsibleId;
         try {
             bugId = Integer.parseInt(id);
             responsibleId = Integer.parseInt(responsible);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
+            throw new ResourceNotFoundException();
         }
 
         bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null));
@@ -114,14 +111,13 @@ public class BugController {
     @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
     protected String addDependency(HttpServletResponse response,
                                    @PathVariable("id") Integer bugId,
-                                   @PathVariable("id1") Integer bug1Id) throws IOException {
+                                   @PathVariable("id1") Integer bug1Id) {
 
         try {
             Bug bug = bugDao.getBug(bugId);
             Bug bug1 = bugDao.getBug(bug1Id);
             if (bug == null || bug1 == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
+                throw new ResourceNotFoundException("No such ids");
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
@@ -136,26 +132,14 @@ public class BugController {
 
     // TODO: rewrite that method (use redirect:)
     @RequestMapping(value = "/bug/{id}/remove/{id1}", method = RequestMethod.GET)
-    protected ModelAndView removeDependency(HttpServletResponse response,
-                                            @PathVariable("id") String id,
-                                            @PathVariable("id1") String id1) throws IOException {
-        int bugId;
-        int bug1Id;
+    protected ModelAndView removeDependency(@PathVariable("id") Integer bugId,
+                                            @PathVariable("id1") Integer bug1Id) {
         ModelMap model = new ModelMap();
-        try {
-            bugId = Integer.parseInt(id);
-            bug1Id = Integer.parseInt(id1);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
-
         try {
             Bug bug = bugDao.getBug(bugId);
             Bug bug1 = bugDao.getBug(bug1Id);
             if (bug == null || bug1 == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
+                throw new ResourceNotFoundException();
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
