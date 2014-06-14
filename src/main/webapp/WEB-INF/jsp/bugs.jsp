@@ -1,4 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
 <head>
@@ -42,35 +44,39 @@
                     <ul class="dropdown-menu">
                         <li><a href="#">Profile</a></li>
                         <li class="divider"></li>
-                        <li><a href="#">Logout</a></li>
+                        <li><form name='logout'
+                                  action="<c:url value='/logout'/>" method='POST'>
+                            <input type="hidden" name="${_csrf.parameterName}"
+                                   value="${_csrf.token}"/>
+                            <input type="submit" value="Log Out"/></form></li>
                     </ul>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<table>
+<table style="width:98%; margin:1%">
     <tr>
         <td></td>
-        <td>
-            <div class="btn-group">
-                <input type="checkbox" title="Show closed">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <td >
+            <input style="margin-left:2%" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
+            <div style="margin-left:25%;" class="btn-group">
+            <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Newest</a></li>
                     <li><a href="#">Priority</a></li>
                     <li><a href="#">Status</a></li>
                 </ul>
-                <button type="button" class="btn btn-default">New issue</button>
-            </div>
+                </div>
+                <button style="margin-left:30%;" type="button" class="btn btn-default">New issue</button>
         </td>
     </tr>
     <tr>
-        <td>
-            <div class="panel panel-default">
+        <td >
+            <div class="panel panel-primary">
             <!-- Default panel contents -->
             <div class="panel-heading">Browse issues</div>
 
@@ -84,7 +90,7 @@
         </div>
         </td>
         <td rowspan="2">
-        <div style="margin-left:2%;" class="panel panel-primary">
+        <div style="margin-left:2%" class="panel panel-primary">
             <div class="panel-heading">Issues</div>
             <table class="table table-hover">
                 <thead>
@@ -145,7 +151,7 @@
     </tr>
     <tr>
         <td>
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <!-- Default panel contents -->
                 <div class="panel-heading">Projects</div>
 

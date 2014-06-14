@@ -43,8 +43,7 @@
     <h2>Comments</h2>
     <c:forEach items="${comments}" var="comment">
         <p>
-            <%-- TODO: authorId -> username --%>
-            <strong>Author id:</strong> ${comment.authorId}.
+            <strong>Author id:</strong> ${comment.author.username}.
             Added: <fmt:formatDate type="both"
                                    dateStyle="short"
                                    pattern="dd.MM.yyyy HH:mm"

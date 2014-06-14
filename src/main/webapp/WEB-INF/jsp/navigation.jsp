@@ -6,7 +6,6 @@
 </ul>
 <form name='logout'
       action="<c:url value='/logout'/>" method='POST'>
-    <input type="hidden" name="${_csrf.parameterName}"
-           value="${_csrf.token}"/>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     <input type="submit" value="Log Out"/>
 </form>

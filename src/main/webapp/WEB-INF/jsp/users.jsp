@@ -16,7 +16,7 @@
     <c:forEach items="${users}" var="user">
         <p>
             <form action="/users/delete" method="post">
-                <strong>${user.username}</strong>.
+                <a href="/users/update/${user.id}">${user.username}</a>.
                 <c:if test="${not empty user.email}">
                     [${user.email}]
                 </c:if>
@@ -25,7 +25,7 @@
                 </c:if>
                 <input type="hidden" name="${_csrf.parameterName}"
                        value="${_csrf.token}"/>
-                <input type="hidden" value="${user.id}" name="user_id"></input>
+                <input type="hidden" value="${user.username}" name="username"></input>
                 <input type="submit" value="Delete user"></input>
             </form>
         </p>

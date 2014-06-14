@@ -10,7 +10,6 @@
     <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
 
     <security:http auto-config="true">
-        <!-- TODO: update to meet real resources paths -->
         <security:intercept-url pattern="/resources/**/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**/*" access="ROLE_USER" />
