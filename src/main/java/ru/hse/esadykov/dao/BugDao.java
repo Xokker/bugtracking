@@ -54,7 +54,7 @@ public class BugDao {
     }
 
     public Bug getBug(int bugId) throws SQLException {
-        return template.query("select id, created, priority, title, description, responsible_id, status " +
+        final Bug bug = template.query("select id, created, priority, title, description, responsible_id, status " +
                         "from bug where id = :bugId",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
@@ -64,6 +64,18 @@ public class BugDao {
                             return null;
                         }
                         return extractBug(rs);
+                    }
+                });
+        return template.query("select t1.id, title from bug join (select bug1_id as id from dependencies " +
+                        "where bug2_id = :bugId union select bug2_id as id from dependencies where bug1_id = :bugId) as t1",
+                Collections.singletonMap("bugId", bugId),
+                new ResultSetExtractor<Bug>() {
+                    @Override
+                    public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        if (rs.next()) {
+                            bug.addDependency(new Bug(rs.getInt("id"), rs.getString("title")));
+                        }
+                        return bug;
                     }
                 });
     }
@@ -77,5 +89,25 @@ public class BugDao {
 
         return template.update("insert into bug (priority, title, description, responsible_id) values " +
                 "(:priority, :title, :description, :responsibleId)", params) > 0;
+    }
+
+    public boolean addDependency(Bug bug1, Bug bug2) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug1_id", bug1.getId());
+        params.put("bug2_id", bug2.getId());
+
+        return template.update("insert into dependencies (bug1_id, bug2_id) select :bug1_id, :bug2_id from dual " +
+                "where not exists (select * from dependencies where (bug1_id = :bug1_id and bug2_id = :bug2_id)" +
+                "or (bug1_id = :bug2_id and bug2_id = :bug1_id))", params) > 0;
+    }
+
+    public boolean removeDependency(Bug bug1, Bug bug2) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug1_id", bug1.getId());
+        params.put("bug2_id", bug2.getId());
+
+        return template.update("delete from  dependencies " +
+                "where (bug1_id = :bug1_id and bug2_id = :bug2_id)" +
+                "or (bug1_id = :bug2_id and bug2_id = :bug1_id)", params) > 0;
     }
 }

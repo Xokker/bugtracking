@@ -16,9 +16,9 @@
     <!-- TODO: move db config to properties file -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/bugtracking"/>
+        <property name="url" value="jdbc:mysql://bugtracking.chmdnmjhrmil.us-west-2.rds.amazonaws.com/bugtracking"/>
         <property name="username" value="root"/>
-        <property name="password" value=""/>
+        <property name="password" value="12345678"/>
     </bean>
 
     <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
