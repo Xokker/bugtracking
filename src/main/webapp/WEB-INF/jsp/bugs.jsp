@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="/resources/js/jquery-2.1.1.js"></script>
+    <script src="/resources/js/bugs.js"></script>
     <title>Bug Tracking</title>
 </head>
 <title>Issues</title>
@@ -17,7 +19,9 @@
     <tr>
         <td></td>
         <td>
-            <input style="margin-left:2%" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
+            <input style="margin-left:2%" id="showclosed" type="checkbox" name="Show closed"
+                   <c:if test="${param.showclosed}">checked="true"</c:if>
+                   title="Show closed">Show closed</input>
             <div style="margin-left:32%;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
