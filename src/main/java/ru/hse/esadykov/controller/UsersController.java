@@ -1,12 +1,16 @@
 package ru.hse.esadykov.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.User;
 
@@ -45,6 +49,52 @@ public class UsersController {
         req.setAttribute("message", message);
 
         return "redirect:/users";
+    }
+
+    @RequestMapping(value = "/users/update/{id}", method = RequestMethod.POST)
+    protected ModelAndView updateUser(
+                                      @RequestParam(value = "fullName", required = false) String fullName,
+                                      @RequestParam(value = "email", required = false) String email,
+                                      @RequestParam(value = "password") String password,
+                                      @PathVariable("id") String id, HttpServletResponse resp) throws ServletException, IOException {
+        int userId;
+        ModelMap mm = new ModelMap();
+        try {
+            userId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+        String encodedPassword = StringUtils.isNotBlank(password) ? passwordEncoder.encode(password) : null;
+        User user = new User(userId, null, fullName, email, encodedPassword);
+
+        try {
+            userDao.updateUser(user);
+            user = userDao.getUser(userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        mm.addAttribute("user", user);
+        return new ModelAndView("user", mm);
+    }
+
+    @RequestMapping(value = "/users/update/{id}", method = RequestMethod.GET)
+    protected ModelAndView showUser(HttpServletResponse resp, @PathVariable("id") String id) throws ServletException, IOException {
+        int userId;
+        ModelMap mm = new ModelMap();
+        try {
+            userId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+        try {
+            User user = userDao.getUser(userId);
+            mm.addAttribute("user", user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ModelAndView("user", mm);
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
