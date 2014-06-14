@@ -80,6 +80,8 @@ public class UserDao {
 
             return new User(id, username, fullName, email, null);
         }
+    }
+
     public boolean updateUser(User user) throws SQLException {
         Map<String, Object> params = new HashMap<>();
         params.put("id", user.getId());
@@ -96,7 +98,4 @@ public class UserDao {
         return res != 0;
     }
 
-    public boolean deleteUser(int userId) throws SQLException {
-        return template.update("delete from user where id = :id", Collections.singletonMap("id", userId)) > 0;
-    }
 }
