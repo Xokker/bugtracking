@@ -21,7 +21,10 @@ public class CommentDao {
     @Autowired
     private NamedParameterJdbcTemplate template;
 
-    public List<Comment> getComments(int bugId) throws SQLException {
+    @Autowired
+    private UserDao userDao;
+
+    public List<Comment> getComments(int bugId) {
         return template.query(
                 "select id, body, created, author_id, bug_id from comment " +
                         "where bug_id = :bugId order by created desc",
@@ -38,14 +41,17 @@ public class CommentDao {
                 });
     }
 
-    private Comment extractComment(ResultSet resultSet) throws SQLException {
-        Integer id = resultSet.getInt("id");
-        String body = resultSet.getString("body");
-        Date created = resultSet.getTimestamp("created");
-        Integer authorId = resultSet.getInt("author_id");
-        Integer bugId = resultSet.getInt("bug_id");
+    public List<Comment> getComments(int bugId, boolean initUsers) {
+        List<Comment> comments = getComments(bugId);
+        if (!initUsers) {
+            return comments;
+        }
 
-        return new Comment(id, body, created, authorId, bugId);
+        for (Comment comment : comments) {
+            comment.setAuthor(userDao.getUser(comment.getAuthorId()));
+        }
+
+        return comments;
     }
 
     public boolean saveComment(Comment comment) throws SQLException {
@@ -66,5 +72,15 @@ public class CommentDao {
             }
 
             return template.update(sql, params) > 0;
+    }
+
+    private Comment extractComment(ResultSet resultSet) throws SQLException {
+        Integer id = resultSet.getInt("id");
+        String body = resultSet.getString("body");
+        Date created = resultSet.getTimestamp("created");
+        Integer authorId = resultSet.getInt("author_id");
+        Integer bugId = resultSet.getInt("bug_id");
+
+        return new Comment(id, body, created, authorId, bugId);
     }
 }

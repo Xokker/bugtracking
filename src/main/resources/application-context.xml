@@ -15,18 +15,19 @@
     <mvc:resources mapping="/img/**/*" location="/img/" />
     <mvc:annotation-driven/>
 
+    <context:property-placeholder file-encoding="utf-8" location="classpath:app.properties"/>
+
     <bean
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <!-- TODO: move db config to properties file -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://bugtracking.chmdnmjhrmil.us-west-2.rds.amazonaws.com:3306/bugtracking"/>
-        <property name="username" value="root"/>
-        <property name="password" value="12345678"/>
+        <property name="url" value="${db.connection.url}"/>
+        <property name="username" value="${db.connection.username}"/>
+        <property name="password" value="${db.connection.password}"/>
     </bean>
 
     <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">

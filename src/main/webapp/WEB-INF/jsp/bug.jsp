@@ -34,16 +34,16 @@
     </p>
     <hr>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/close" method="post">
-        <input type="hidden" value="${bug.id}" name="id"></input>
-        <input type="submit" value="Close bug"></input>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" value="${bug.id}" name="id"/>
+        <input type="submit" value="Close bug"/>
     </form>
 
     <hr>
     <h2>Comments</h2>
     <c:forEach items="${comments}" var="comment">
         <p>
-            <%-- TODO: authorId -> username --%>
-            <strong>Author id:</strong> ${comment.authorId}.
+            <strong>Author id:</strong> ${comment.author.username}.
             Added: <fmt:formatDate type="both"
                                    dateStyle="short"
                                    pattern="dd.MM.yyyy HH:mm"
