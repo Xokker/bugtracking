@@ -95,13 +95,16 @@ public class BugDao {
                 "(:priority, :title, :description, :responsibleId, :creatorId)", params) > 0;
     }
 
-    public boolean setStatus(int bugId, BugStatus status) {
+    public boolean updateBug(Bug bug) {
         Map<String, Object> params = new HashMap<>();
-        params.put("bugId", bugId);
-        params.put("statusId", status.name());
-        params.put("closedDate", new Date());
+        params.put("bugId", bug.getId());
+        params.put("statusId", bug.getStatus().getId());
+        params.put("priorityId", bug.getPriority().getId());
+        params.put("responsibleId", bug.getResponsible().getId());
+        params.put("closedDate", bug.getStatus().isClosed() ? new Date() : null);
 
-        return template.update("update bug set status = :statusId, closed = :closedDate where id = :bugId ", params) > 0;
+        return template.update("update bug set status = :statusId, closed = :closedDate, priority = :priorityId" +
+                " responsible_id = :responsibleId where id = :bugId", params) > 0;
     }
 
     public boolean addDependency(Bug bug1, Bug bug2) {
