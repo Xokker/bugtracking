@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hse.esadykov.dao.UserDao;
+import ru.hse.esadykov.exception.ResourceNotFoundException;
 import ru.hse.esadykov.model.User;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -50,19 +49,11 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/users/update/{id}", method = RequestMethod.POST)
-    protected ModelAndView updateUser(
-                                      @RequestParam(value = "fullName", required = false) String fullName,
+    protected ModelAndView updateUser(@RequestParam(value = "fullName", required = false) String fullName,
                                       @RequestParam(value = "email", required = false) String email,
                                       @RequestParam(value = "password") String password,
-                                      @PathVariable("id") String id, HttpServletResponse resp) throws IOException {
-        int userId;
+                                      @PathVariable("id") Integer userId) {
         ModelMap mm = new ModelMap();
-        try {
-            userId = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
         String encodedPassword = StringUtils.isNotBlank(password) ? passwordEncoder.encode(password) : null;
         User user = new User(userId, null, fullName, email, encodedPassword);
 
@@ -73,20 +64,19 @@ public class UsersController {
             e.printStackTrace();
         }
         mm.addAttribute("user", user);
+
         return new ModelAndView("user", mm);
     }
 
     @RequestMapping(value = "/users/update/{id}", method = RequestMethod.GET)
-    protected ModelAndView showUser(HttpServletResponse resp,
-                                    @PathVariable("id") Integer userId) throws IOException {
+    protected ModelAndView showUser(@PathVariable("id") Integer userId) {
         ModelMap mm = new ModelMap();
         try {
             User user = userDao.getUser(userId);
             mm.addAttribute("user", user);
         } catch (DataAccessException e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
+            throw new ResourceNotFoundException();
         }
         return new ModelAndView("user", mm);
     }
