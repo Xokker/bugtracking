@@ -19,8 +19,9 @@
             authentication-failure-url="/login?error"
             username-parameter="username"
             password-parameter="password" />
-        <security:logout logout-success-url="/login?logout" />
-        <security:csrf/>
+        <security:logout
+            logout-url="/logout"
+            logout-success-url="/login?logout" />
     </security:http>
 
     <security:authentication-manager>
