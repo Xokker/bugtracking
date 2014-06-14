@@ -3,7 +3,10 @@ package ru.hse.esadykov.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.hse.esadykov.model.User;
 
@@ -26,7 +29,7 @@ public class UserDao {
         String username = rs.getString("username");
         String fullName = rs.getString("full_name");
         String email = rs.getString("email");
-        return new User(id, username, fullName, email);
+        return new User(id, username, fullName, email, null);
     }
 
     public List<User> getUsers() throws SQLException {
@@ -61,20 +64,21 @@ public class UserDao {
         params.put("username", user.getUsername());
         params.put("fullName", user.getFullName());
         params.put("email", user.getEmail());
+        params.put("password", user.getPassword());
 
-        return template.update("insert into user (username, full_name, email) values (:username, :fullName, :email)", params) > 0;
+        KeyHolder holder = new GeneratedKeyHolder();
+
+        int res = template.update("insert into user (username, full_name, email, password) " +
+                "values (:username, :fullName, :email, :password)", new MapSqlParameterSource(params), holder);
+        if (res == 0) {
+            return false;
+        }
+
+        template.update("insert into user_roles value (:userId, 1)", Collections.singletonMap("userId", holder.getKey().intValue()));
+        return true;
     }
 
     public boolean deleteUser(int userId) throws SQLException {
         return template.update("delete from user where id = :id", Collections.singletonMap("id", userId)) > 0;
-    }
-
-    public boolean addUser(User user) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
-        params.put("username", user.getUsername());
-        params.put("fullName", user.getFullName());
-        params.put("email", user.getEmail());
-
-        return template.update("insert into user (username, full_name, email) values (:username, :fullName, :email)", params) > 0;
     }
 }

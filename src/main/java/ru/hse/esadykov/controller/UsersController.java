@@ -1,9 +1,12 @@
 package ru.hse.esadykov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.User;
 
@@ -20,8 +23,12 @@ import java.util.List;
  */
 @Controller
 public class UsersController {
+
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/users/delete", method = RequestMethod.POST)
     protected String doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,22 +48,24 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
-    protected String doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected String doPut(@RequestParam(value = "username") String username,
+                           @RequestParam(value = "full_name", required = false) String fullName,
+                           @RequestParam(value = "email", required = false) String email,
+                           @RequestParam(value = "password") String password,
+                           Model model) throws ServletException, IOException {
         String message;
 
-        String username = req.getParameter("username");
-        String fullName = req.getParameter("full_name");
-        String email = req.getParameter("email");
-        User user = new User(null, username, fullName, email);
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(null, username, fullName, email, encodedPassword);
 
         try {
-            userDao.addUser(user);
+            userDao.saveUser(user);
             message = "User " + username + " successfully created";
         } catch (SQLException e) {
             message = "Error creating user " + username;
             e.printStackTrace();
         }
-        req.setAttribute("message", message);
+        model.addAttribute("message", message);
 
         return "redirect:/users";
     }

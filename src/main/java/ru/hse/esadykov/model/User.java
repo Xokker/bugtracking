@@ -9,15 +9,17 @@ public class User {
     private String username;
     private String fullName;
     private String email;
+    private String password;
 
     public User() {
     }
 
-    public User(Integer id, String username, String fullName, String email) {
+    public User(Integer id, String username, String fullName, String email, String password) {
         this.id = id;
         this.username = username;
         this.fullName = fullName;
         this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {
@@ -50,6 +52,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
