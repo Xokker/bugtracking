@@ -82,20 +82,20 @@ public class UserDao {
         }
     }
 
-    public boolean updateUser(User user) throws SQLException {
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", user.getId());
-        params.put("fullName", user.getFullName());
-        params.put("email", user.getEmail());
-        params.put("password", user.getPassword());
+        public boolean updateUser(User user) throws SQLException {
+            Map<String, Object> params = new HashMap<>();
+            params.put("id", user.getId());
+            params.put("fullName", user.getFullName());
+            params.put("email", user.getEmail());
+            params.put("password", user.getPassword());
 
-        int res = template.update("update user set " +
-                "full_name = :fullName, email = :email where id = :id"
-                , new MapSqlParameterSource(params));
-        if (user.getPassword() != null) {
-            res *= template.update("update user set password = :password where id=:id", params);
+            int res = template.update("update user set " +
+                    "full_name = :fullName, email = :email where id = :id"
+                    , new MapSqlParameterSource(params));
+            if (user.getPassword() != null) {
+                res *= template.update("update user set password = :password where id=:id", params);
+            }
+            return res != 0;
         }
-        return res != 0;
-    }
 
 }

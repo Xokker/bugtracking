@@ -90,6 +90,9 @@ public class BugController {
             User creator = userDao.getUser(bug.getCreatorId());
             bug.setCreator(creator);
             model.addAttribute("bug", bug);
+            model.addAttribute("statuses", BugStatus.values());
+            model.addAttribute("priorities", BugPriority.values());
+            model.addAttribute("users", userDao.getUsers());
             Project project = projectDao.getProject(bug.getProjectId());
             bug.setProject(project);
 
@@ -102,17 +105,24 @@ public class BugController {
         return new ModelAndView("bug", model);
     }
 
-    @RequestMapping(value = "/bug/{id}/close", method = RequestMethod.POST)
-    protected String doClose(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
+    @RequestMapping(value = "/bug/{id}/edit", method = RequestMethod.POST)
+    protected String doClose(HttpServletResponse response,
+                             @PathVariable("id") String id,
+                             @RequestParam(value = "status") BugStatus status,
+                             @RequestParam(value = "priority") BugPriority priority,
+                             @RequestParam(value = "responsible_id") String responsible
+                             ) throws IOException {
         int bugId;
+        int responsibleId;
         try {
             bugId = Integer.parseInt(id);
+            responsibleId = Integer.parseInt(responsible);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
 
-        bugDao.setStatus(bugId, BugStatus.CLOSED);
+        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority));
 
         return "redirect:/bugs";
     }

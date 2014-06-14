@@ -3,59 +3,101 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Bugs</title>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <title>Bug Tracking</title>
+</head>
+<title>Issues</title>
 </head>
 <body>
-    <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
+<jsp:include page="navigation.jsp"/>
+<table style="width:98%; margin:1%">
+    <tr>
+        <td></td>
+        <td>
+            <input style="margin-left:2%" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
+            <div style="margin-left:32%;" class="btn-group">
+            <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Sort by:
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Newest</a></li>
+                    <li><a href="#">Priority</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+                </div>
+                <button style="margin-left:40%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button>
+        </td>
+    </tr>
+    <tr>
+        <td >
+            <div style="margin-top: -6px;" class="panel panel-primary">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Browse issues</div>
 
-    <c:if test="${not empty message}">
-        <p><strong>${message}</strong></p>
-    </c:if>
+            <!-- List group -->
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#">Everyone's Issues</a></li>
+                <li class="list-group-item"><a href="#">Assigned to me</a></li>
+                <li class="list-group-item"><a href="#">Created by me</a></li>
+                <li class="list-group-item"><a href="#">Viewed by me</a></li>
+            </ul>
+        </div>
+        </td>
+        <td rowspan="2" style="vertical-align: top;">
+        <div style="margin-left:2%;margin-top: -6px;height: 97%;
+overflow-y: hidden;" class="panel panel-primary">
+            <div class="panel-heading">Issues</div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Project</th>
+                    <th>Description</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Assignee</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${bugs}" var="bug">
+                <tr>
+                    <td><a href="#">${bug.title}</a></td>
+                    <td><a href="#">${bug.project.name}</a></td>
+                    <td>${bug.description}</td>
+                    <td>${bug.priority.name}</td>
+                    <td>${bug.status.name}</td>
+                    <td>${bug.type.name}</td>
+                    <td>${bug.assignee.username}</td>
+                </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+</td>
+    </tr>
+    <tr>
+        <td>
+            <div class="panel panel-primary">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Projects</div>
 
-    <h1>Bug List</h1>
-
-    <c:forEach items="${bugs}" var="bug">
-        <p>
-            <a href="/bug/${bug.id}">Bug #${bug.id}</a>. ${bug.title}. Priority: ${bug.priority}
-            Added: <fmt:formatDate type="both"
-                                   dateStyle="short"
-                                   pattern="dd.MM.yyyy HH:mm"
-                                   value="${bug.created}"/>
-        </p>
-    </c:forEach>
-    <hr/>
-    <h2>Add bug</h2>
-    <form name="input" action="/bugs/add" enctype="application/x-www-form-urlencoded; charset=utf-8" method="post">
-        Type:
-        <select name="issue_type">
-            <c:forEach items="${types}" var="type">
-                <option value="${type}">${type}</option>
-            </c:forEach>
-        </select>
-        Responsible:
-        <select name="responsible_id">
-            <c:forEach items="${users}" var="user">
-                <option value="${user.id}">${user.username}</option>
-            </c:forEach>
-        </select> <br/>
-        Title:        <input type="text" name="title"/>     <br/>
-        Project:
-        <select name="project_id">
-            <c:forEach items="${projects}" var="project">
-                <option value="${project.id}">${project.name}</option>
-            </c:forEach>
-        </select> <br/>
-        Description:  <textarea rows="5" cols="50" name="description"></textarea> <br/>
-        Priority:
-        <select name="priority_id">
-            <c:forEach items="${priorities}" varStatus="status" var="priority">
-                <option value="${status.count}">${priority}</option>
-            </c:forEach>
-        </select>
-
-        <input type="hidden" name="${_csrf.parameterName}"
-               value="${_csrf.token}"/>
-        <input type="submit" value="Submit bug"/>
-    </form>
+                <!-- List group -->
+                <ul class="list-group">
+                   <c:forEach items="${projects}" var="project">
+                    <li class="list-group-item"><a href="#">${project.name}</a></li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </td>
+    </tr>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

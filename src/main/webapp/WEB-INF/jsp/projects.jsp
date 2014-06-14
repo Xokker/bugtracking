@@ -1,50 +1,56 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" session="true" isELIgnored="false" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Projects</title>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+</head>
+<title>Projects</title>
 </head>
 <body>
-<jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
-
-<c:if test="${not empty message}">
-    <p><strong>${message}</strong></p>
-</c:if>
-
-<h1>Projects List</h1>
-
-<c:forEach items="${projects}" var="project">
-    <p>
-
-    <form action="<c:url value='/projects/delete'/>" method="post">
-        <a href="<c:url value='/bugs'> <c:param name="project_id" value="${project.id}"/> </c:url>">${project.name}</a>.
-        <c:if test="${not empty project.description}">
-            ${project.description}
-        </c:if>
-        <c:if test="${not empty project.managerId}">
-            ${project.manager.username}
-        </c:if>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <input type="hidden" value="${project.name}" name="name"/>
-        <input type="submit" value="Delete"/>
+<jsp:include page="navigation.jsp"/>
+<form name="input" action="/projects/add" enctype="application/x-www-form-urlencoded; charset=utf-8" method="post">
+<table class="table table-hover" style="width:98%; margin:1%">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Manager</th>
+        <th>Operation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${bugs}" var="bug">
+    <tr>
+        <td><a href="#">Bugtracker</a></td>
+        <td>Создание багтрекера</td>
+        <td>esadykov</td>
+        <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-delete"/></button></td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" class="form-control" placeholder="Name">
+        </td>
+        <td>
+            <input type="text" class="form-control" placeholder="Description">
+        </td>
+        <td>
+                <select name="responsible_id">
+                    <c:forEach items="${users}" var="user">
+                        <option value="${user.id}">${user.username}</option>
+                    </c:forEach>
+                </select>
+        </td>
+        <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-add"/></button></td>
+    </tr>
+    </tbody>
+</table>
     </form>
-    </p>
-</c:forEach>
-
-<hr/>
-<h2>Add project</h2>
-<form name="input" action="/projects/add" method="post">
-    Name:   <input type="text" name="name"/>     <br/>
-    Description:  <input type="text" name="description">     <br/>
-    Manager:     <select name="manager_id">
-    <c:forEach items="${users}" var="user">
-        <option value="${user.id}">${user.username}</option>
-    </c:forEach>
-</select> <br/>
-    <input type="hidden" name="${_csrf.parameterName}"
-           value="${_csrf.token}" />
-    <input type="submit" value="Add"/>
-</form>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

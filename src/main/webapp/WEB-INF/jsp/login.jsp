@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-    <title>Login Page</title>
+
+    <title>Bugs Bunny</title>
     <style>
         .error {
             padding: 15px;
@@ -24,55 +25,49 @@
             border-color: #bce8f1;
         }
 
-        #login-box {
-            width: 300px;
-            padding: 20px;
-            margin: 100px auto;
-            background: #fff;
-            -webkit-border-radius: 2px;
-            -moz-border-radius: 2px;
-            border: 1px solid #000;
-        }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
 </head>
-<body onload='document.loginForm.username.focus();'>
+<body style=" overflow-y:visible;margin-left:37%;margin-top:10%" onload='document.loginForm.username.focus();'>
 
-<h1>Spring Security Custom Login Form (XML)</h1>
+<h3><span class="label label-default">Please, Login BugsBunny.  </span></h3>
+<c:if test="${not empty error}">
+    <div style="width:346px;" class="error">${error}</div>
+</c:if>
+<c:if test="${not empty msg}">
+    <div style="width:346px;" class="msg">${msg}</div>
+</c:if>
+<div style="width:346px; height:307px;background-image: url('/resources/img/logo.png') " class="panel panel-default">
+    <div class="panel-body">
 
-<div id="login-box">
 
-    <h3>Login with Username and Password</h3>
 
-    <c:if test="${not empty error}">
-        <div class="error">${error}</div>
-    </c:if>
-    <c:if test="${not empty msg}">
-        <div class="msg">${msg}</div>
-    </c:if>
 
     <form name='loginForm'
           action="<c:url value='j_spring_security_check'/>" method='POST'>
 
-        <table>
-            <tr>
-                <td>User:</td>
-                <td><input type='text' name='username' value=''></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><input type='password' name='password' /></td>
-            </tr>
-            <tr>
-                <td colspan='2'><input name="submit" type="submit"
-                                       value="submit" /></td>
-            </tr>
-        </table>
+
+        <div style="margin-top:-5px;" class="input-group">
+            <span class="input-group-addon">Username:</span>
+            <input type="text" name='username' value='' class="form-control" placeholder="Username">
+        </div>
+        <div style="margin-top:10px" class="input-group">
+            <span class="input-group-addon">Password:</span>
+            <input type="password" name='password' value='' class="form-control" placeholder="Password">
+        </div>
+        <input class="btn btn-default"  style=" margin-top:170px ;margin-left:40%" name="submit" type="submit" value="submit"/>
 
         <input type="hidden" name="${_csrf.parameterName}"
                value="${_csrf.token}" />
-
+        </form>
+</div>
+</div>
     </form>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
