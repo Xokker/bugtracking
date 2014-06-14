@@ -74,7 +74,10 @@ public class BugListController {
                            @RequestParam(value = "responsible_id") Integer responsibleId,
                            @RequestParam(value = "project_id") Integer projectId,
                            @RequestParam(value = "issue_type", required = false, defaultValue = "BUG") IssueType issueType) {
-        int creatorId = userService.getCurrentUserId().getId();
+        int creatorId = userService.getCurrentUser().getId();
+        if (responsibleId == 0) {
+            responsibleId = userService.getCurrentUser().getId();
+        }
         try {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
                     creatorId, BugStatus.NEW, bugPriority, issueType, projectId);
