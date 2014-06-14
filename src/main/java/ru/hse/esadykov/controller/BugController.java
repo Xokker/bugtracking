@@ -39,18 +39,9 @@ public class BugController {
     private ProjectDao projectDao;
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
-    protected ModelAndView doPost(@PathVariable("id") String id,
-                                  @RequestParam(value = "username") String username,
-                                  @RequestParam(value = "body") String body,
-                                  ModelMap model,
-                                  HttpServletResponse response) throws IOException {
-        int bugId;
-        try {
-            bugId = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
+    protected String doPost(@PathVariable("id") Integer bugId,
+                            @RequestParam(value = "username") String username,
+                            @RequestParam(value = "body") String body) {
 
         Comment comment = new Comment();
         User user = new User();
@@ -64,7 +55,7 @@ public class BugController {
             e.printStackTrace();
         }
 
-        return doGet(model, response, bugId);
+        return "redirect:/big/" + bugId;
     }
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.GET)

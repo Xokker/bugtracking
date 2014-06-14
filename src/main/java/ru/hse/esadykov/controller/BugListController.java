@@ -60,16 +60,20 @@ public class BugListController {
         ModelMap model = new ModelMap();
         model.addAttribute("bugs", bugs);
         model.addAttribute("users", users);
-        model.addAttribute("priorities", BugPriority.values());
         model.addAttribute("projects", projects);
-        model.addAttribute("types", IssueType.values());
 
         return new ModelAndView("bugs", model);
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.GET)
-    public String addBugForm() {
-        return "add_bug";
+    public ModelAndView addBugForm() {
+        ModelMap model = new ModelMap();
+        model.addAttribute("users", userDao.getUsers());
+        model.addAttribute("projects", projectDao.getProjects());
+        model.addAttribute("priorities", BugPriority.values());
+        model.addAttribute("types", IssueType.values());
+
+        return new ModelAndView("add_bug", model);
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
