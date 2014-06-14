@@ -23,6 +23,8 @@
                 <c:if test="${not empty user.fullName}">
                     ${user.fullName}
                 </c:if>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
                 <input type="hidden" value="${user.id}" name="user_id"></input>
                 <input type="submit" value="Delete user"></input>
             </form>
