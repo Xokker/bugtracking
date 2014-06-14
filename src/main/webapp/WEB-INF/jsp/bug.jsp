@@ -14,16 +14,11 @@
 
     <h3><span class="label label-default">#${bug.title}</span></h3>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
-    <div class="input-group">
-        <label>
-            Type:
-            <select name="type">
-                <c:forEach items="${types}" var="type">
-                    <option selected="${type.id eq bug.type.id}" value="${type}">${type}</option>
-                </c:forEach>
-            </select>
-        </label>
-    </div>
+
+        <div class="input-group">
+            <span class="input-group-addon">Type</span>
+            <input type="text" disabled class="form-control" value="${bug.issueType}">
+        </div>
 
     <div class="input-group">
         <span class="input-group-addon">Name</span>
@@ -36,11 +31,16 @@
     </div>
 
         <div class="input-group">
+            <span class="input-group-addon">Project</span>
+            <input type="text" disabled value="${bug.project.name}" class="form-control">
+        </div>
+
+        <div class="input-group">
             <label>
                 Status:
                 <select name="status">
                     <c:forEach items="${statuses}" var="status">
-                        <option selected="${status.id eq bug.status.id}" value="${status}">${status}</option>
+                        <option ${status.id eq bug.status.id?"selected":""} value="${status}">${status}</option>
                     </c:forEach>
                 </select>
             </label>
@@ -50,7 +50,7 @@
                 Priority:
                 <select name="priority">
                     <c:forEach items="${priorities}" var="priority">
-                        <option selected="${priority.id eq bug.priority.id}" value="${priority}">${priority}</option>
+                        <option ${priority.id eq bug.priority.id?"selected":""} value="${priority}">${priority}</option>
                     </c:forEach>
                 </select>
             </label>
@@ -77,7 +77,7 @@
                 Assignee:
                 <select name="responsible_id">
                     <c:forEach items="${users}" var="user">
-                        <option selected="${bug.responsibleId eq user.id}" value="${user.id}">${user.username}</option>
+                        <option ${user.id eq bug.responsibleId?"selected":""} value="${user.id}">${user.username}</option>
                     </c:forEach>
                 </select>
             </label>

@@ -47,6 +47,12 @@ public class BugListController {
             } else {
                 bugs = bugDao.getBugs();
             }
+            for (Bug bug : bugs) {
+                Project project = projectDao.getProject(bug.getProjectId());
+                User responsible = userDao.getUser(bug.getResponsibleId());
+                bug.setProject(project);
+                bug.setResponsible(responsible);
+            }
             users = userDao.getUsers();
             projects = projectDao.getProjects();
         } catch (SQLException e) {
