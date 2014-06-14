@@ -35,7 +35,7 @@ public class UserDao {
                 Collections.singletonMap("id", userId), new UserMapper());
     }
 
-    public boolean saveUser(User user) throws SQLException {
+    public boolean saveUser(User user) {
         Map<String, Object> params = new HashMap<>();
         params.put("username", user.getUsername());
         params.put("fullName", user.getFullName());
@@ -50,12 +50,19 @@ public class UserDao {
             return false;
         }
 
-        template.update("insert into user_roles value (:userId, 1)", Collections.singletonMap("userId", holder.getKey().intValue()));
+        template.update("insert into user_roles value (:userId, 1)",
+                Collections.singletonMap("userId", holder.getKey().intValue()));
         return true;
     }
 
-    public boolean deleteUser(int userId) throws SQLException {
-        return template.update("delete from user where id = :id", Collections.singletonMap("id", userId)) > 0;
+    public boolean deleteUser(int userId) {
+        return template.update("delete from user where id = :id",
+                Collections.singletonMap("id", userId)) > 0;
+    }
+
+    public boolean deleteUser(String username) {
+        return template.update("delete from user where username = :username",
+                Collections.singletonMap("username", username)) > 0;
     }
 
     public User getUser(String username) {
