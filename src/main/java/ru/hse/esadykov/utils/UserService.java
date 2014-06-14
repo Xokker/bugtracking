@@ -16,7 +16,7 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public User getCurrentUserId() {
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new IllegalStateException("No authentication in current context");
