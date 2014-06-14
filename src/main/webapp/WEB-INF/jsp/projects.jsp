@@ -18,10 +18,10 @@
     <form action="/projects/delete" method="post">
         <a href="/bugs/${project.id}">${project.name}</a>.
         <c:if test="${not empty project.description}">
-            [${project.description}]
+            ${project.description}
         </c:if>
         <c:if test="${not empty project.managerId}">
-            ${project.managerId}
+            ${project.manager.username}
         </c:if>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" value="${project.name}" name="name"/>

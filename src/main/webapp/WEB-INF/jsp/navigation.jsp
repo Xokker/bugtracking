@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <ul>
     <li><a href="/bugs">Bugs list</a></li>
+    <li><a href="/projects">Projects list</a></li>
     <li><a href="/users">Manage users</a></li>
 </ul>
 <form name='logout'

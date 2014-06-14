@@ -39,9 +39,18 @@ public class ProjectsController {
         try {
             projects = projectDao.getProjects();
             users = userDao.getUsers();
+
+            for (Project project : projects) {
+                Integer managerId = project.getManagerId();
+                if (managerId != null) {
+                    User manager = userDao.getUser(managerId);
+                    project.setManager(manager);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         model.addAttribute("projects", projects);
         model.addAttribute("users", users);
         return new ModelAndView("projects", model);
