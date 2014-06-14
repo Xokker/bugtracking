@@ -18,8 +18,16 @@
                                 pattern="dd.MM.yyyy HH:mm"
                                 value="${bug.created}"/>
     </p>
+    <c:if test="${bug.status ne 'NEW'}">
+        <p>
+            <strong>Closed:</strong> <fmt:formatDate type="both"
+                                                      dateStyle="short"
+                                                      pattern="dd.MM.yyyy HH:mm"
+                                                      value="${bug.closed}"/>
+        </p>
+    </c:if>
     <p>
-        <strong>Created by: ${bug.creator.username}</strong>
+        <strong>Created by:</strong> ${bug.creator.username}
     </p>
     <p>
          <strong>Responsible:</strong> ${bug.responsible.username}
