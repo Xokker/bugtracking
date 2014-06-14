@@ -114,6 +114,7 @@ public class BugController {
         return "redirect:/bugs";
     }
 
+    // TODO: rewrite that method (use redirect:)
     @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
     protected ModelAndView addDependency(HttpServletResponse response,
                                          @PathVariable("id") String id,
@@ -150,6 +151,7 @@ public class BugController {
         return new ModelAndView("bug", model);
     }
 
+    // TODO: rewrite that method (use redirect:)
     @RequestMapping(value = "/bug/{id}/remove/{id1}", method = RequestMethod.GET)
     protected ModelAndView removeDependency(HttpServletResponse response,
                                             @PathVariable("id") String id,
