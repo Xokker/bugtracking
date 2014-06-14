@@ -67,6 +67,11 @@ public class BugListController {
         return new ModelAndView("bugs", model);
     }
 
+    @RequestMapping(value = "/bugs/add", method = RequestMethod.GET)
+    public String addBugForm() {
+        return "add_bug";
+    }
+
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
     protected String doPut(@RequestParam(value = "priority", defaultValue = "MAJOR") BugPriority bugPriority,
                            @RequestParam(value = "title") String title,
