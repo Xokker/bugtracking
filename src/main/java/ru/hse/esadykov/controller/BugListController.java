@@ -60,11 +60,21 @@ public class BugListController {
         ModelMap model = new ModelMap();
         model.addAttribute("bugs", bugs);
         model.addAttribute("users", users);
-        model.addAttribute("priorities", BugPriority.values());
         model.addAttribute("projects", projects);
-        model.addAttribute("types", IssueType.values());
 
         return new ModelAndView("bugs", model);
+    }
+
+    @RequestMapping(value = "/bugs/add", method = RequestMethod.GET)
+    public ModelAndView addBugForm() {
+        ModelMap model = new ModelMap();
+        model.addAttribute("users", userDao.getUsers());
+        model.addAttribute("projects", projectDao.getProjects());
+        model.addAttribute("priorities", BugPriority.values());
+        model.addAttribute("types", IssueType.values());
+        model.addAttribute("statuses", BugStatus.values());
+
+        return new ModelAndView("add_bug", model);
     }
 
     @RequestMapping(value = "/bugs/add", method = RequestMethod.POST)
@@ -74,7 +84,10 @@ public class BugListController {
                            @RequestParam(value = "responsible_id") Integer responsibleId,
                            @RequestParam(value = "project_id") Integer projectId,
                            @RequestParam(value = "issue_type", required = false, defaultValue = "BUG") IssueType issueType) {
-        int creatorId = userService.getCurrentUserId().getId();
+        int creatorId = userService.getCurrentUser().getId();
+        if (responsibleId == 0) {
+            responsibleId = userService.getCurrentUser().getId();
+        }
         try {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
                     creatorId, BugStatus.NEW, bugPriority, issueType, projectId);

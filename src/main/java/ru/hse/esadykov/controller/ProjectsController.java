@@ -14,8 +14,6 @@ import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Project;
 import ru.hse.esadykov.model.User;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -32,7 +30,7 @@ public class ProjectsController {
     private UserDao userDao;
 
     @RequestMapping(value = "/projects")
-    protected ModelAndView doGet(ModelMap model) throws ServletException, IOException {
+    protected ModelAndView doGet() {
         List<Project> projects = null;
         List<User> users = null;
         try {
@@ -50,8 +48,10 @@ public class ProjectsController {
             e.printStackTrace();
         }
 
+        ModelMap model = new ModelMap();
         model.addAttribute("projects", projects);
         model.addAttribute("users", users);
+
         return new ModelAndView("projects", model);
     }
 
@@ -59,7 +59,7 @@ public class ProjectsController {
     protected String doPut(@RequestParam(value = "name") String name,
                            @RequestParam(value = "description", required = false) String description,
                            @RequestParam(value = "manager_id", required = false) int managerId,
-                           RedirectAttributes attributes) throws ServletException, IOException {
+                           RedirectAttributes attributes) {
 
         Project project = new Project(null, name, description, managerId);
 
@@ -79,7 +79,7 @@ public class ProjectsController {
 
     @RequestMapping(value = "/projects/delete", method = RequestMethod.POST)
     protected String doDelete(@RequestParam(value = "name") String name,
-                              RedirectAttributes attributes) throws ServletException, IOException {
+                              RedirectAttributes attributes) {
         String message;
 
         try {

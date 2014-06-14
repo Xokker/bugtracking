@@ -29,7 +29,7 @@
                     <li><a href="#">Status</a></li>
                 </ul>
                 </div>
-                <button style="margin-left:38.5%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button>
+                <a href="/bugs/add"><button style="margin-left:38.5%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button></a>
         </td>
     </tr>
     <tr>
@@ -88,6 +88,8 @@
                    <c:forEach items="${projects}" var="project">
                     <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
                     </c:forEach>
+                    <li class="divider"/>
+                    <li class="list-group-item"><a href="?project_id=-1">All Projects</a></li>
                 </ul>
             </div>
         </td>

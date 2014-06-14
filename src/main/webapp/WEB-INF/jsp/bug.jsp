@@ -15,42 +15,47 @@
     <h3><span class="label label-default">#${bug.title}</span></h3>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
 
-        <div class="input-group">
+        <div class="input-group"style="margin-bottom: 10px">
             <span class="input-group-addon">Type</span>
             <input type="text" disabled class="form-control" value="${bug.issueType}">
         </div>
 
-    <div class="input-group">
+    <div class="input-group" style="margin-bottom: 10px">
         <span class="input-group-addon">Name</span>
         <input type="text" disabled class="form-control" value="${bug.title}">
     </div>
 
-    <div class="input-group">
+    <div class="input-group" style="margin-bottom: 10px">
         <span class="input-group-addon">Description</span>
         <input type="textarea" disabled value="${bug.description}" class="form-control">
     </div>
 
-        <div class="input-group">
+        <div class="input-group" style="margin-bottom: 10px">
             <span class="input-group-addon">Project</span>
             <input type="text" disabled value="${bug.project.name}" class="form-control">
         </div>
 
-        <div class="input-group">
-            <label>
-                Status:
-                <select name="status">
+        <div class="input-group" style="margin-bottom: 10px">
+            <span class="input-group-addon">Status</span>
+                <select class="form-control" name="status">
                     <c:forEach items="${statuses}" var="status">
                         <option ${status.id eq bug.status.id?"selected":""} value="${status}">${status}</option>
                     </c:forEach>
                 </select>
-            </label>
         </div>
-        <div class="input-group">
-            <label>
-                Priority:
-                <select name="priority">
+        <div class="input-group" style="margin-bottom: 10px">
+            <span class="input-group-addon">Priority</span>
+                <select class="form-control" name="priority">
                     <c:forEach items="${priorities}" var="priority">
                         <option ${priority.id eq bug.priority.id?"selected":""} value="${priority}">${priority}</option>
+                    </c:forEach>
+                </select>
+        </div>
+        <div class="input-group" style="margin-bottom: 10px">
+            <span class="input-group-addon">Assignee</span>
+                <select class="form-control" name="responsible_id">
+                    <c:forEach items="${users}" var="user">
+                        <option ${user.id eq bug.responsibleId?"selected":""} value="${user.id}">${user.username}</option>
                     </c:forEach>
                 </select>
             </label>
@@ -72,21 +77,11 @@
     <p>
         <strong>Created by:</strong> ${bug.creator.username}
     </p>
-        <div class="input-group">
-            <label>
-                Assignee:
-                <select name="responsible_id">
-                    <c:forEach items="${users}" var="user">
-                        <option ${user.id eq bug.responsibleId?"selected":""} value="${user.id}">${user.username}</option>
-                    </c:forEach>
-                </select>
-            </label>
-        </div>
     <hr>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" value="${bug.id}" name="id"/>
-        <input type="submit" value="Edit bug"/>
+        <input type="submit" value="Save changes"/>
     </form>
 
     <hr>
