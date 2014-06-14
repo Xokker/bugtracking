@@ -6,10 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hse.esadykov.model.Bug;
-import ru.hse.esadykov.model.BugPriority;
-import ru.hse.esadykov.model.BugStatus;
-import ru.hse.esadykov.model.IssueType;
+import ru.hse.esadykov.model.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +21,9 @@ public class BugDao {
 
     @Autowired
     private NamedParameterJdbcTemplate template;
+
+    @Autowired
+    private UserDao userDao;
     
     private Bug extractBug(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
@@ -76,7 +76,7 @@ public class BugDao {
                         return extractBug(rs);
                     }
                 });
-        return template.query("select t1.id, title from bug join (select bug1_id as id from dependencies " +
+        template.query("select t1.id, title from bug join (select bug1_id as id from dependencies " +
                         "where bug2_id = :bugId union select bug2_id as id from dependencies where bug1_id = :bugId) as t1",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
@@ -84,6 +84,19 @@ public class BugDao {
                     public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
                         if (rs.next()) {
                             bug.addDependency(new Bug(rs.getInt("id"), rs.getString("title")));
+                        }
+                        return bug;
+                    }
+                });
+
+        return template.query("select * from observers where bug_id = :bugId",
+                Collections.singletonMap("bugId", bugId),
+                new ResultSetExtractor<Bug>() {
+                    @Override
+                    public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        if (rs.next()) {
+                            User user = userDao.getUser(rs.getInt("observer_id"));
+                            bug.addObserver(new User(user.getId(), user.getUsername(), user.getFullName(), user.getEmail(), user.getPassword()));
                         }
                         return bug;
                     }
@@ -134,5 +147,21 @@ public class BugDao {
         return template.update("delete from  dependencies " +
                 "where (bug1_id = :bug1_id and bug2_id = :bug2_id)" +
                 "or (bug1_id = :bug2_id and bug2_id = :bug1_id)", params) > 0;
+    }
+
+    public boolean addObserver(Bug bug, User observer) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug_id", bug.getId());
+        params.put("observer_id", observer.getId());
+
+        return template.update("insert into observers(bug_id, observer_id) values (:bug_id, :observer_id)", params) > 0;
+    }
+
+    public boolean removeObserver(Bug bug, User observer) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug_id", bug.getId());
+        params.put("observer_id", observer.getId());
+
+        return template.update("delete from observers where bug_id = :bug_id and observer_id = :observer_id", params) > 0;
     }
 }

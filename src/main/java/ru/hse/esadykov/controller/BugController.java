@@ -13,10 +13,12 @@ import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
-import ru.hse.esadykov.exception.ResourceNotFoundException;
 import ru.hse.esadykov.model.*;
+import ru.hse.esadykov.utils.MailService;
+import ru.hse.esadykov.utils.Sender;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,6 +27,9 @@ import java.util.List;
  */
 @Controller
 public class BugController {
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private BugDao bugDao;
@@ -38,10 +43,22 @@ public class BugController {
     @Autowired
     private ProjectDao projectDao;
 
+    @Autowired
+    private Sender sender;
+
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
-    protected String doPost(@PathVariable("id") Integer bugId,
-                            @RequestParam(value = "username") String username,
-                            @RequestParam(value = "body") String body) {
+    protected ModelAndView doPost(@PathVariable("id") String id,
+                                  @RequestParam(value = "username") String username,
+                                  @RequestParam(value = "body") String body,
+                                  ModelMap model,
+                                  HttpServletResponse response) throws IOException {
+        int bugId;
+        try {
+            bugId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
 
         Comment comment = new Comment();
         User user = new User();
@@ -55,18 +72,19 @@ public class BugController {
             e.printStackTrace();
         }
 
-        return "redirect:/big/" + bugId;
+        return doGet(model, response, bugId);
     }
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.GET)
     protected ModelAndView doGet(ModelMap model,
                                  HttpServletResponse response,
-                                 @PathVariable("id") Integer bugId) {
+                                 @PathVariable("id") Integer bugId) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
             if (bug == null) {
-                throw new ResourceNotFoundException("No such bug");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
@@ -89,35 +107,41 @@ public class BugController {
     }
 
     @RequestMapping(value = "/bug/{id}/edit", method = RequestMethod.POST)
-    protected String doClose(@PathVariable("id") String id,
+    protected String doClose(HttpServletResponse response,
+                             @PathVariable("id") String id,
                              @RequestParam(value = "status") BugStatus status,
                              @RequestParam(value = "priority") BugPriority priority,
-                             @RequestParam(value = "responsible_id") String responsible) {
+                             @RequestParam(value = "responsible_id") String responsible) throws IOException {
         int bugId;
         int responsibleId;
         try {
             bugId = Integer.parseInt(id);
             responsibleId = Integer.parseInt(responsible);
         } catch (NumberFormatException e) {
-            throw new ResourceNotFoundException();
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return null;
         }
 
         bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null));
-
+        final Bug bug = bugDao.getBug(bugId);
+        for (final User u : bug.getObservers()) {
+            sender.doSend(mailService, bugId, u.getEmail());
+        }
         return "redirect:/bugs";
     }
 
     // TODO: change to POST
     @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
     protected String addDependency(HttpServletResponse response,
-                                   @PathVariable("id") Integer bugId,
-                                   @PathVariable("id1") Integer bug1Id) {
+                                         @PathVariable("id") Integer bugId,
+                                         @PathVariable("id1") Integer bug1Id) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
             Bug bug1 = bugDao.getBug(bug1Id);
             if (bug == null || bug1 == null) {
-                throw new ResourceNotFoundException("No such ids");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
@@ -130,28 +154,71 @@ public class BugController {
         return "redirect:/bug/" + bugId;
     }
 
-    // TODO: rewrite that method (use redirect:)
+    // TODO: change to post
     @RequestMapping(value = "/bug/{id}/remove/{id1}", method = RequestMethod.GET)
-    protected ModelAndView removeDependency(@PathVariable("id") Integer bugId,
-                                            @PathVariable("id1") Integer bug1Id) {
-        ModelMap model = new ModelMap();
+    protected String removeDependency(HttpServletResponse response,
+                                            @PathVariable("id") Integer id,
+                                            @PathVariable("id1") Integer id1) throws IOException {
+
         try {
-            Bug bug = bugDao.getBug(bugId);
-            Bug bug1 = bugDao.getBug(bug1Id);
+            Bug bug = bugDao.getBug(id);
+            Bug bug1 = bugDao.getBug(id1);
             if (bug == null || bug1 == null) {
-                throw new ResourceNotFoundException();
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
             bug.removeDependency(bug1);
             bugDao.removeDependency(bug, bug1);
-            model.addAttribute("bug", bug);
-            List<Comment> comments = commentDao.getComments(bugId);
-            model.addAttribute("comments", comments);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
-        return new ModelAndView("bug", model);
+        return "redirect:/bug/" + id;
+    }
+
+    // TODO: change to POST
+    @RequestMapping(value = "/bug/{id}/addobserver/{id1}", method = RequestMethod.GET)
+    protected String addObserver(HttpServletResponse response,
+                                   @PathVariable("id") Integer bugId,
+                                   @PathVariable("id1") Integer obsrverId) throws IOException {
+
+        try {
+            Bug bug = bugDao.getBug(bugId);
+            User observer = userDao.getUser(obsrverId);
+            if (bug == null || observer == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
+            }
+            bug.addObserver(observer);
+            bugDao.addObserver(bug, observer);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/bug/" + bugId;
+    }
+
+    // TODO: change to post
+    @RequestMapping(value = "/bug/{id}/removeobserver/{id1}", method = RequestMethod.GET)
+    protected String removeObserver(HttpServletResponse response,
+                                      @PathVariable("id") Integer bugId,
+                                      @PathVariable("id1") Integer observerId) throws IOException {
+
+        try {
+            Bug bug = bugDao.getBug(bugId);
+            User observer = userDao.getUser(observerId);
+            if (bug == null || observer == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return null;
+            }
+            bug.removeObserver(observer);
+            bugDao.removeObserver(bug, observer);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/bug/" + bugId;
     }
 }
