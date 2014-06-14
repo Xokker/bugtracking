@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.UserDao;
-import ru.hse.esadykov.model.Bug;
-import ru.hse.esadykov.model.BugPriority;
-import ru.hse.esadykov.model.BugStatus;
-import ru.hse.esadykov.model.User;
+import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.UserService;
 
 import javax.servlet.ServletException;
@@ -63,7 +60,7 @@ public class BugListController {
         BugPriority bugPriority = BugPriority.values()[priority - 1];
         String message;
         try {
-            bugDao.addBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, bugPriority));
+            bugDao.saveBug(new Bug(null, null, null, title, description, responsibleId, creatorId, BugStatus.NEW, bugPriority, IssueType.BUG));
             message = "Bug '" + title + "' was successfully added";
         } catch (SQLException e) {
             message = "Error during saving the bug";

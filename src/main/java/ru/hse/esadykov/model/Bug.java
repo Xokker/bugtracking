@@ -19,6 +19,7 @@ public class Bug {
     private Integer creatorId;
     private BugStatus status;
     private BugPriority priority;
+    private IssueType issueType;
     private transient User responsible;
     private transient User creator;
     private List<Comment> comments;
@@ -32,7 +33,7 @@ public class Bug {
         this.title = title;
     }
     
-    public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority) {
+    public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority, IssueType issueType) {
         this();
         this.id = id;
         this.created = created;
@@ -43,6 +44,7 @@ public class Bug {
         this.creatorId = creatorId;
         this.status = status;
         this.priority = priority;
+        this.issueType = issueType;
     }
 
     public void addDependency(Bug bug) {
@@ -123,6 +125,14 @@ public class Bug {
 
     public void setStatus(BugStatus status) {
         this.status = status;
+    }
+
+    public IssueType getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(IssueType issueType) {
+        this.issueType = issueType;
     }
 
     public User getResponsible() {
