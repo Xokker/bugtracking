@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <td style=" width:20%;" >
-            <div margin-top: -6px;" class="panel panel-primary">
+            <div style="margin-top: -6px;" class="panel panel-primary">
             <!-- Default panel contents -->
             <div class="panel-heading">Browse issues</div>
 

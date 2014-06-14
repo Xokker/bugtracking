@@ -12,7 +12,8 @@
 </head>
 <body>
 <jsp:include page="navigation.jsp"/>
-<form name="input" action="/projects/add" enctype="application/x-www-form-urlencoded; charset=utf-8" method="post">
+<div class="panel panel-primary" style="margin:1%">
+    <div class="panel-heading">Projects</div>
 <table class="table table-hover" style="width:98%; margin:1%">
     <thead>
     <tr>
@@ -23,33 +24,50 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${bugs}" var="bug">
+    <c:forEach items="${projects}" var="project">
+    <form action="<c:url value='/projects/delete'/>" method="post">
     <tr>
-        <td><a href="#">Bugtracker</a></td>
-        <td>Создание багтрекера</td>
-        <td>esadykov</td>
-        <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-delete"/></button></td>
+        <td><a href="<c:url value='/bugs'> <c:param name="project_id" value="${project.id}"/> </c:url>">${project.name}</a></td>
+        <td>${project.description}</td>
+        <td>${project.managerId ne null?project.manager.username:''}</td>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        <input type="hidden" value="${project.name}" name="name"/>
+        <td><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-remove"/></button></td>
     </tr>
+    </form>
     </c:forEach>
-    <tr>
-        <td>
-            <input type="text" class="form-control" placeholder="Name">
-        </td>
-        <td>
-            <input type="text" class="form-control" placeholder="Description">
-        </td>
-        <td>
-                <select name="responsible_id">
-                    <c:forEach items="${users}" var="user">
-                        <option value="${user.id}">${user.username}</option>
-                    </c:forEach>
-                </select>
-        </td>
-        <td><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-add"/></button></td>
-    </tr>
     </tbody>
 </table>
-    </form>
+    </div>
+
+<h3 style="margin: 40px 1% 1%;text-align:center;"><span class ="label label-default">Add project</span></h3>
+<div style="width:50%;margin-left:25%">
+<form name="input" action="/projects/add" method="post">
+    <div style="margin-bottom:10px" class="input-group">
+        <span class="input-group-addon">Name</span>
+        <input type="text" name="name" class="form-control">
+    </div>
+    <div style="margin-bottom:10px" class="input-group">
+        <span class="input-group-addon">Description</span>
+        <input type="textarea" rowcount="5" name="description" class="form-control">
+    </div>
+    <div style="margin-bottom:10px" class="input-group">
+        <span class="input-group-addon">Manager  </span>
+        <select class="form-control" name="manager_id">
+        <c:forEach items="${users}" var="user">
+            <option value="${user.id}">${user.username}</option>
+        </c:forEach>
+        </select>
+    </div>
+    <c:forEach items="${users}" var="user">
+        <option value="${user.id}">${user.username}</option>
+    </c:forEach>
+    </select>
+    <input type="hidden" name="${_csrf.parameterName}"
+           value="${_csrf.token}" />
+    <input style="margin-left:45%" type="submit" value="Add"/>
+</form>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/resources/js/bootstrap.min.js"></script>
