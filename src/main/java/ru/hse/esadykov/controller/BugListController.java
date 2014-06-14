@@ -14,8 +14,6 @@ import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.UserService;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -55,7 +53,7 @@ public class BugListController {
             }
             users = userDao.getUsers();
             projects = projectDao.getProjects();
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
@@ -75,22 +73,16 @@ public class BugListController {
                            @RequestParam(value = "description") String description,
                            @RequestParam(value = "responsible_id") Integer responsibleId,
                            @RequestParam(value = "project_id") Integer projectId,
-                           @RequestParam(value = "issue_type", required = false, defaultValue = "BUG") IssueType issueType,
-                           ModelMap model) throws IOException {
+                           @RequestParam(value = "issue_type", required = false, defaultValue = "BUG") IssueType issueType) {
         int creatorId = userService.getCurrentUserId().getId();
         BugPriority bugPriority = BugPriority.values()[priority - 1];
-        String message;
         try {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
                     creatorId, BugStatus.NEW, bugPriority, issueType, projectId);
             bugDao.saveBug(bug);
-            message = "Bug '" + title + "' was successfully added";
         } catch (DataAccessException e) {
-            message = "Error during saving the bug";
             e.printStackTrace();
         }
-
-        model.addAttribute("message", message);
 
         return "redirect:/bugs";
     }

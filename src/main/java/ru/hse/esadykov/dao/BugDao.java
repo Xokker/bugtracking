@@ -63,7 +63,7 @@ public class BugDao {
                 });
     }
 
-    public Bug getBug(int bugId) throws SQLException {
+    public Bug getBug(int bugId) {
         final Bug bug = template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
                         "from bug b join priority p on p.id = b.priority where b.id = :bugId",
                 Collections.singletonMap("bugId", bugId),

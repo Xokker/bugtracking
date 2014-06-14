@@ -54,7 +54,7 @@ public class CommentDao {
         return comments;
     }
 
-    public boolean saveComment(Comment comment) throws SQLException {
+    public boolean saveComment(Comment comment) {
             Map<String, Object> params = new HashMap<>();
             params.put("body", comment.getBody());
             params.put("bugId", comment.getBugId());

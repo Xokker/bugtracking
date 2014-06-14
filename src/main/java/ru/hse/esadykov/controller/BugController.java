@@ -1,6 +1,7 @@
 package ru.hse.esadykov.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import ru.hse.esadykov.model.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -60,7 +60,7 @@ public class BugController {
         comment.setBugId(bugId);
         try {
             commentDao.saveComment(comment);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
@@ -98,7 +98,7 @@ public class BugController {
 
             List<Comment> comments = commentDao.getComments(bugId, true);
             model.addAttribute("comments", comments);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
@@ -122,7 +122,7 @@ public class BugController {
             return null;
         }
 
-        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority,null,null));
+        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null));
 
         return "redirect:/bugs";
     }
@@ -157,7 +157,7 @@ public class BugController {
             model.addAttribute("bug", bug);
             List<Comment> comments = commentDao.getComments(bugId);
             model.addAttribute("comments", comments);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
@@ -194,7 +194,7 @@ public class BugController {
             model.addAttribute("bug", bug);
             List<Comment> comments = commentDao.getComments(bugId);
             model.addAttribute("comments", comments);
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
