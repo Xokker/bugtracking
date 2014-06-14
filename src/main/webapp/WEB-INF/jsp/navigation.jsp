@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <img  src="resources/img/logo.png" width="50" height="50"/>
+            <img  src="/resources/img/logo.png" width="50" height="50"/>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

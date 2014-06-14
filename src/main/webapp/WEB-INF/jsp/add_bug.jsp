@@ -11,68 +11,54 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 
-<form action="${requestScope['javax.servlet.forward.request_uri']}/add" method="post">
+<form style="width:50%" action="${requestScope['javax.servlet.forward.request_uri']}/add" method="post">
     <div class="input-group">
         <label>
             Status:
-            <select name="type_id">
+            <select name="issue_type">
                 <c:forEach items="${types}" var="type">
-                    <option selected="false" value="${type.name}">${type.name}</option>
+                    <option value="${type}">${type}</option>
                 </c:forEach>
             </select>
         </label>
     </div>
 
-    <div class="input-group">
-        <span class="input-group-addon">Name</span>
-        <input type="text" class="form-control" value="">
+    <div class="input-group" style="margin-bottom:10px;">
+        <span class="input-group-addon">Title</span>
+        <input type="text" class="form-control" name="title" value="">
     </div>
 
-    <div class="input-group">
+    <div class="input-group" style="margin-bottom:10px;">
         <span class="input-group-addon">Description</span>
-        <input type="textarea" value="" class="form-control">
+        <input type="textarea" value="" name="description" class="form-control">
     </div>
 
-    <div class="input-group">
-        <label>
-            Status:
-            <select name="status_id">
+    <div class="input-group" style="margin-bottom:10px;">
+        <span class="input-group-addon">Status</span>
+            <select class="form-control" name="status">
                 <c:forEach items="${statuses}" var="status">
-                    <option value="${status.name}">${status.name}</option>
+                    <option value="${status}">${status}</option>
                 </c:forEach>
             </select>
-        </label>
     </div>
-    <div class="input-group">
-        <label>
-            Priority:
-            <select name="priority_id">
+    <div class="input-group" style="margin-bottom:10px;">
+        <span class="input-group-addon">Priority</span>
+            <select name="priority">
                 <c:forEach items="${priorities}" var="priority">
-                    <option value="${priority.name}">${priority.name}</option>
+                    <option value="${priority}">${priority}</option>
                 </c:forEach>
             </select>
-        </label>
     </div>
-    <div class="input-group">
-        <label>
-            Assignee:
-            <select name="priority_id">
+    <div class="input-group" style="margin-bottom:10px;">
+        <span class="input-group-addon">Assignee</span>
+            <select name="responsible_id">
                 <c:forEach items="${users}" var="assignee">
                     <option value="${assignee.id}">${assignee.name}</option>
                 </c:forEach>
-                <option value="${user.id}">Assign on me</option>
+                <option value="0">&lt;&lt;me&gt;&gt;</option>
             </select>
         </label>
     </div>
-    <p>
-        <!--TODO: current time get--><strong>Created:</strong> <fmt:formatDate type="both"
-                                                  dateStyle="short"
-                                                  pattern="dd.MM.yyyy HH:mm"
-                                                  value="${bug.created}"/>
-    </p>
-    <p>
-        <strong>Created by:</strong> ${user.username}
-    </p>
     <hr>
 
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
