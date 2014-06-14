@@ -11,6 +11,7 @@ import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.BugStatus;
 import ru.hse.esadykov.model.User;
+import ru.hse.esadykov.utils.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,9 @@ public class BugListController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
     protected String doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -53,7 +57,7 @@ public class BugListController {
                                  @RequestParam(value = "description") String description,
                                  @RequestParam(value = "responsible_id") Integer responsibleId,
                                  ModelMap model) throws IOException {
-        int creatorId = 1; //TODO: change to authorised user id
+        int creatorId = userService.getCurrentUserId().getId();
         String message;
         try {
             bugDao.addBug(new Bug(null, null, null, priority, title, description, responsibleId, creatorId, BugStatus.NEW));
