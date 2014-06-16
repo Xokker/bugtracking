@@ -35,10 +35,11 @@ public class BugDao {
         Integer responsibleId = rs.getInt("responsible_id");
         Integer creatorId = rs.getInt("creator_id");
         Integer projectId = rs.getInt("project_id");
+        String projectName = rs.getString("project_name");
         BugStatus status = BugStatus.valueOf(rs.getString("status"));
         IssueType issueType = IssueType.valueOf(rs.getString("type"));
 
-        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority, issueType, projectId);
+        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority, issueType, projectId, projectName);
     }
 
     public List<Bug> getBugs() {
@@ -47,8 +48,8 @@ public class BugDao {
 
     public List<Bug> getBugs(Integer projectId, Boolean showClosed) {
         boolean projectPresented = projectId != null && projectId > 0;
-        return template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
-                        "from bug b join priority p on p.id = b.priority " +
+        return template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
+                        "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id " +
                         (projectPresented ? "where project_id = " + projectId : "") +
                         (showClosed == null || !showClosed ?
                                 (projectPresented ? "," : "where ") + "status = '" + BugStatus.NEW + "'" : "") +
@@ -67,8 +68,8 @@ public class BugDao {
     }
 
     public Bug getBug(int bugId) {
-        final Bug bug = template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
-                        "from bug b join priority p on p.id = b.priority where b.id = :bugId",
+        final Bug bug = template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
+                        "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id where b.id = :bugId",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
                     @Override

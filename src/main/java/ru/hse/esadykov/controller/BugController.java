@@ -15,7 +15,6 @@ import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.MailService;
-import ru.hse.esadykov.utils.Sender;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,9 +26,6 @@ import java.util.List;
  */
 @Controller
 public class BugController {
-
-    @Autowired
-    private MailService mailService;
 
     @Autowired
     private BugDao bugDao;
@@ -44,7 +40,8 @@ public class BugController {
     private ProjectDao projectDao;
 
     @Autowired
-    private Sender sender;
+    private MailService mailService;
+
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
     protected ModelAndView doPost(@PathVariable("id") String id,
@@ -68,6 +65,9 @@ public class BugController {
         comment.setBugId(bugId);
         try {
             commentDao.saveComment(comment);
+            Bug bug = bugDao.getBug(bugId);
+            bug.sendMessages(mailService, "Notification message: project " + bug.getProjectName(),
+                    "Added comment to bug #" + bug.getId() + " " + bug.getTitle());
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -122,11 +122,10 @@ public class BugController {
             return null;
         }
 
-        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null));
+        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null, null));
         final Bug bug = bugDao.getBug(bugId);
-        for (final User u : bug.getObservers()) {
-            sender.doSend(mailService, bugId, u.getEmail());
-        }
+        bug.sendMessages(mailService, "Notification message: project " + bug.getProjectName(),
+                "Bug #" + bug.getId() + " " + bug.getTitle() + " was modified");
         return "redirect:/bugs";
     }
 

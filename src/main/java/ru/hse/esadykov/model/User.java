@@ -1,5 +1,7 @@
 package ru.hse.esadykov.model;
 
+import ru.hse.esadykov.utils.MailService;
+
 /**
  * @author Ernest Sadykov
  * @since 31.05.2014
@@ -60,6 +62,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void sendMessage(MailService mailService, String title, String message) {
+        mailService.sendMail(MailService.SENDER_EMAIL, email, title, message);
     }
 
     @Override
