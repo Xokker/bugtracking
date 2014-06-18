@@ -38,7 +38,7 @@ public class IndexController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = {"/index", "/"})
     public ModelAndView getIndex() {
 
         ModelMap model = new ModelMap();
