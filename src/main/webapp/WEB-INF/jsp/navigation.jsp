@@ -10,7 +10,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <img  src="/resources/img/logo.png" width="50" height="50"/>
+            <a href="<c:url value='/index'/>">
+                <img src="/resources/img/logo.png" width="50" height="50"/>
+            </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -32,7 +34,12 @@
                 <input style="height:28px;line-height: 1.1" class="btn btn-default" type="submit" value="Log Out"/></form>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="margin-top:13px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
-                <li><a style="margin-top:-2px;" href="/users/update/${pageContext.request.userPrincipal.name}">${pageContext.request.userPrincipal.name}</a></li>
+                <li><a style="margin-top:-2px;" href="<c:url value="/users/update/${user.id}">
+                                <c:param name="backUrl" value="${requestScope['javax.servlet.forward.request_uri']}"/>
+                             </c:url>">
+                             ${user.username}
+                    </a>
+                </li>
             </ul>
             </form>
 

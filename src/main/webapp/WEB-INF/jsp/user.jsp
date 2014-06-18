@@ -18,6 +18,7 @@
     Password:   <input class="form-control" type="password" name="password" value="${user.password}"/>     <br/>
     <input type="hidden" name="${_csrf.parameterName}"
            value="${_csrf.token}"/>
+    <input type="hidden" name="backUrl" value="${backUrl}"/>
     <input type="submit" value="Submit"/>
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
