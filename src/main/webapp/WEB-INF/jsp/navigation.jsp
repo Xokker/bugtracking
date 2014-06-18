@@ -38,7 +38,6 @@
                              ${user.username}
                     </a>
                 </li>
-                <li><span style="margin-top:15px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
             </ul>
             </form>
 
