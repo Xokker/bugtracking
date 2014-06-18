@@ -49,7 +49,7 @@
     </div>
     <div style="margin-bottom:10px" class="input-group">
         <span class="input-group-addon">Description</span>
-        <input type="textarea" rowcount="5" name="description" class="form-control">
+        <input type="textarea" rows="5" name="description" class="form-control">
     </div>
     <div style="margin-bottom:10px" class="input-group">
         <span class="input-group-addon">Manager  </span>

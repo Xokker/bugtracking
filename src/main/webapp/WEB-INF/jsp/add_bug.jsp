@@ -28,7 +28,7 @@
 
     <div class="input-group" style="margin-bottom:10px;">
         <span class="input-group-addon">Description</span>
-        <input type="textarea" value="" name="description" class="form-control">
+        <input type="textarea" rows="5" value="" name="description" class="form-control">
     </div>
 
     <div class="input-group" style="margin-bottom:10px;">

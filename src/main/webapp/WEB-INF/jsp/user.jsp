@@ -12,10 +12,22 @@
 
 <h2><span class="label label-default">User ${user.username}.</span></h2>
 <form name="input" action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
-    Username:   <input type="text" class="form-control" name="username" value="${user.username}" disabled/>     <br/>
-    Full name:   <input type="text" class="form-control" name="fullName" value="${user.fullName}"/>     <br/>
-    E-mail:   <input type="text" class="form-control" name="email" value="${user.email}"/>     <br/>
-    Password:   <input class="form-control" type="password" name="password" value="${user.password}"/>     <br/>
+    <div class="input-group" style="margin-bottom: 10px">
+        <span class="input-group-addon">Username</span>
+        <input type="text" disabled class="form-control" value="${user.username}">
+    </div>
+    <div class="input-group" style="margin-bottom: 10px">
+        <span class="input-group-addon">Full name</span>
+        <input type="text" class="form-control" value="${user.fullName}">
+    </div>
+    <div class="input-group" style="margin-bottom: 10px">
+        <span class="input-group-addon">E-mail</span>
+        <input type="text" class="form-control" value="${user.email}">
+    </div>
+    <div class="input-group" style="margin-bottom: 10px">
+        <span class="input-group-addon">Password</span>
+        <input type="text" class="form-control" value="${user.password}">
+    </div>
     <input type="hidden" name="${_csrf.parameterName}"
            value="${_csrf.token}"/>
     <input type="hidden" name="backUrl" value="${backUrl}"/>

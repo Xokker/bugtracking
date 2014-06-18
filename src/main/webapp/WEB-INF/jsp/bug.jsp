@@ -13,8 +13,8 @@
 <div style="width:98%;margin:1%">
 <table>
     <tr>
-        <td style="vertical-align: top;"><h3><span class="label label-default">#${bug.title}</span></h3></td>
-        <td style="vertical-align: bottom;"><form action="bug/${bug.id}/observer" method="post">
+        <td style="vertical-align: top;"><h3><span class="label label-default">${bug.title}</span></h3></td>
+        <td style="vertical-align: bottom;"><form action="/bug/${bug.id}/observer" method="post">
             <input type="hidden" name="is_add" value="${not is_current_user_observer}"/>
             <input type="hidden" name="${_csrf.parameterName}"
                    value="${_csrf.token}"/>
@@ -38,7 +38,7 @@
 
     <div class="input-group" style="margin-bottom: 10px">
         <span class="input-group-addon">Description</span>
-        <input type="textarea" disabled value="${bug.description}" class="form-control">
+        <input type="textarea" rows="5" disabled value="${bug.description}" class="form-control">
     </div>
 
         <div class="input-group" style="margin-bottom: 10px">
