@@ -39,6 +39,7 @@
         Username:   <input type="text" name="username"/>     <br/>
         Full name:  <input type="text" name="full_name">     <br/>
         Email:      <input type="text" name="email">         <br/>
+        Admin:      <input type="checkbox" name="admin">     <br/>
         Password:   <input type="password" name="password">  <br/>
         <input type="hidden" name="${_csrf.parameterName}"
                value="${_csrf.token}" />

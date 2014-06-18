@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.exception.ResourceNotFoundException;
 import ru.hse.esadykov.model.User;
+import ru.hse.esadykov.utils.UserService;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class UsersController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/users/delete", method = RequestMethod.POST)
     protected String doDelete(@RequestParam(value = "username") String username,
@@ -85,15 +89,22 @@ public class UsersController {
         return new ModelAndView("user", mm);
     }
 
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    public ModelAndView me() {
+        return new ModelAndView("user", "user", userService.getCurrentUser());
+    }
+
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
     protected String doPut(@RequestParam(value = "username") String username,
                            @RequestParam(value = "full_name", required = false) String fullName,
                            @RequestParam(value = "email", required = false) String email,
+                           @RequestParam(value = "admin") Boolean isAdmin,
                            @RequestParam(value = "password") String password,
                            RedirectAttributes attributes) {
 
         String encodedPassword = passwordEncoder.encode(password);
         User user = new User(null, username, fullName, email, encodedPassword);
+        user.setAdmin(true);
 
         String message;
         try {

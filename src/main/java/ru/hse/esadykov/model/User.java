@@ -12,11 +12,14 @@ public class User {
     private String fullName;
     private String email;
     private String password;
+    private boolean admin;
 
     public User() {
+        admin = false;
     }
 
     public User(Integer id, String username, String fullName, String email, String password) {
+        this();
         this.id = id;
         this.username = username;
         this.fullName = fullName;
@@ -75,6 +78,7 @@ public class User {
         sb.append(", username='").append(username).append('\'');
         sb.append(", fullName='").append(fullName).append('\'');
         sb.append(", email='").append(email).append('\'');
+        sb.append(", isAdmin='").append(admin).append('\'');
         sb.append('}');
         return sb.toString();
     }
@@ -94,5 +98,13 @@ public class User {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    public boolean isAdmin() {
+        return admin;
     }
 }

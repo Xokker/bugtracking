@@ -34,10 +34,10 @@
                 <input style="height:28px;line-height: 1.1" class="btn btn-default" type="submit" value="Log Out"/></form>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="margin-top:13px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
-                <li><a style="margin-top:-2px;" href="<c:url value="/users/update/${user.id}">
+                <li><a style="margin-top:-2px;" href="<c:url value="/me">
                                 <c:param name="backUrl" value="${requestScope['javax.servlet.forward.request_uri']}"/>
                              </c:url>">
-                             ${user.username}
+                        ${pageContext.request.userPrincipal.name}
                     </a>
                 </li>
             </ul>

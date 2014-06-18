@@ -52,8 +52,11 @@ public class UserDao {
             return false;
         }
 
-        template.update("insert into user_roles value (:userId, 1)",
-                Collections.singletonMap("userId", holder.getKey().intValue()));
+        Map<String, Object> params2 = new HashMap<>();
+        params2.put("userId", holder.getKey().intValue());
+        params2.put("roleId", user.isAdmin() ? 2 : 1);
+
+        template.update("insert into user_roles value (:userId, :roleId)", params2);
         return true;
     }
 
