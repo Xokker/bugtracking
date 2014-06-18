@@ -32,14 +32,13 @@
                 <input style="height:28px;line-height: 1.1" class="btn btn-default" type="submit" value="Log Out"/></form>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="margin-top:13px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
-                <li><a style="margin-top:-2px;" href="/users/update/${pageContext.request.userPrincipal.name}">${pageContext.request.userPrincipal.name}</a></li>
-                <li><span style="margin-top:15px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
-                <li><a href="<c:url value="/users/update/${user.id}">
+                <li><a style="margin-top:-2px;" href="<c:url value="/users/update/${user.id}">
                                 <c:param name="backUrl" value="${requestScope['javax.servlet.forward.request_uri']}"/>
                              </c:url>">
                              ${user.username}
                     </a>
                 </li>
+                <li><span style="margin-top:15px; margin-left:30px" class="glyphicon glyphicon-user"></span></li>
             </ul>
             </form>
 
