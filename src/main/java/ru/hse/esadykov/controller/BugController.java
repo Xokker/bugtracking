@@ -115,6 +115,8 @@ public class BugController {
         }
 
         bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null, null));
+        bugDao.addObserver(bugId, responsibleId);
+
         final Bug bug = bugDao.getBug(bugId);
         bug.sendMessages(mailService, "Notification message: project " + bug.getProjectName(),
                 "Bug #" + bug.getId() + " " + bug.getTitle() + " was modified");

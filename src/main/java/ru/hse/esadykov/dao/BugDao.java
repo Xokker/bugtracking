@@ -161,6 +161,14 @@ public class BugDao {
         return template.update("insert into observers(bug_id, observer_id) values (:bug_id, :observer_id)", params) > 0;
     }
 
+    public boolean addObserver(Integer bugId, Integer observerId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug_id", bugId);
+        params.put("observer_id", observerId);
+
+        return template.update("insert into observers(bug_id, observer_id) values (:bug_id, :observer_id)", params) > 0;
+    }
+
     public boolean removeObserver(Bug bug, User observer) {
         Map<String, Object> params = new HashMap<>();
         params.put("bug_id", bug.getId());
