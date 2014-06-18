@@ -10,6 +10,7 @@ import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Bug;
+import ru.hse.esadykov.model.Comment;
 import ru.hse.esadykov.model.Project;
 import ru.hse.esadykov.model.User;
 import ru.hse.esadykov.utils.UserService;
@@ -42,7 +43,14 @@ public class IndexController {
     public ModelAndView getIndex() {
 
         ModelMap model = new ModelMap();
-        model.addAttribute("comments", commentDao.getComments(userService.getCurrentUser().getId(), 5));
+        List<Comment> comments = commentDao.getComments(userService.getCurrentUser().getId(), 5);
+        for (Comment comment : comments) {
+            User author = userDao.getUser(comment.getAuthorId());
+            Bug bug = bugDao.getBug(comment.getBugId());
+            comment.setAuthor(author);
+            comment.setBug(bug);
+        }
+        model.addAttribute("comments", comments);
         // TODO: [FIXME] don't fetch all bugs
         List<Bug> allBugs = bugDao.getBugs();
         for (Bug bug : allBugs) {

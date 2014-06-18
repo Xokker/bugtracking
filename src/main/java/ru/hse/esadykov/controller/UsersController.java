@@ -48,7 +48,7 @@ public class UsersController {
         return "redirect:/users";
     }
 
-    @RequestMapping(value = "/users/update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/update/{id}", method = RequestMethod.POST)
     protected ModelAndView updateUser(@RequestParam(value = "fullName", required = false) String fullName,
                                       @RequestParam(value = "email", required = false) String email,
                                       @RequestParam(value = "password") String password,
@@ -68,7 +68,7 @@ public class UsersController {
         return new ModelAndView("user", mm);
     }
 
-    @RequestMapping(value = "/users/update/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/update/{id}", method = RequestMethod.GET)
     protected ModelAndView showUser(@PathVariable("id") Integer userId) {
         ModelMap mm = new ModelMap();
         try {

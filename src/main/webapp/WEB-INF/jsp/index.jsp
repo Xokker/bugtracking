@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,48 +71,29 @@
                  <thead>
                  <tr>
                      <th>Author</th>
-                     <th>Project</th>
                      <th>Bug</th>
-                     <th>My role</th>
+                     <th>Date</th>
                      <th>Comment</th>
                  </tr>
                  </thead>
                  <tbody>
+                 <c:forEach items="${comments}" var="comment">
                  <tr>
-                     <td>deliseev</td>
-                     <td><a href="#">LPF</a></td>
-                     <td><a href="#">LPF-5</a></td>
-                     <td>Assigned on me</td>
-                     <td>Берем Зеленую Марку!</td>
+                     <td>${comment.author.username}</td>
+                     <td><a href="../bug/${comment.bug.id}">${comment.bug.title}</a></td>
+                     <td><fmt:formatDate type="both" dateStyle="short"
+                                                     pattern="dd.MM.yyyy HH:mm"
+                                                     value="${comment.bug.created}"/></td>
+                     <td>${comment.body}</td>
                  </tr>
-                 <tr>
-                     <td>gkozhukhantev</td>
-                     <td><a href="#">Exams</a></td>
-                     <td><a href="#">Exams-5</a></td>
-                     <td>Watched by me</td>
-                     <td>А я готов! Лалки!</td>
-                 </tr>
-                 <tr>
-                     <td>agalaev</td>
-                     <td><a href="#">LPF</a></td>
-                     <td><a href="#">LPF-5</a></td>
-                     <td>Assigned on me</td>
-                     <td>Какую брать будем?</td>
-                 </tr>
-                 <tr>
-                     <td>esadykov</td>
-                     <td><a href="#">Bugtracker</a></td>
-                     <td><a href="#">Btr-6</a></td>
-                     <td>Created by me</td>
-                     <td>Какие поля будут в таблице?</td>
-                 </tr>
+                 </c:forEach>
                  </tbody>
              </table>
          </div>
      </td>
     </tr>
 </table>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/resources/js/bootstrap.min.js"></script>
 </body>
