@@ -178,32 +178,11 @@ public class BugController {
     }
 
     // TODO: change to POST
-    @RequestMapping(value = "/bug/{id}/addobserver/{id1}", method = RequestMethod.GET)
+    @RequestMapping(value = "/bug/observer", method = RequestMethod.POST)
     protected String addObserver(HttpServletResponse response,
-                                   @PathVariable("id") Integer bugId,
-                                   @PathVariable("id1") Integer obsrverId) throws IOException {
-
-        try {
-            Bug bug = bugDao.getBug(bugId);
-            User observer = userDao.getUser(obsrverId);
-            if (bug == null || observer == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
-            }
-            bug.addObserver(observer);
-            bugDao.addObserver(bug, observer);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-        }
-
-        return "redirect:/bug/" + bugId;
-    }
-
-    // TODO: change to post
-    @RequestMapping(value = "/bug/{id}/removeobserver/{id1}", method = RequestMethod.GET)
-    protected String removeObserver(HttpServletResponse response,
-                                      @PathVariable("id") Integer bugId,
-                                      @PathVariable("id1") Integer observerId) throws IOException {
+                                   @RequestParam(value  = "bug_id") Integer bugId,
+                                   @RequestParam(value  = "observer_id") Integer observerId,
+                                   @RequestParam(value  = "is_add") Boolean isAdd) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
@@ -212,8 +191,13 @@ public class BugController {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return null;
             }
-            bug.removeObserver(observer);
-            bugDao.removeObserver(bug, observer);
+            if (isAdd) {
+                bug.addObserver(observer);
+                bugDao.addObserver(bug, observer);
+            } else {
+                bug.removeObserver(observer);
+                bugDao.removeObserver(bug, observer);
+            }
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
