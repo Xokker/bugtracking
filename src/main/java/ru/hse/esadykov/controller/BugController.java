@@ -13,6 +13,7 @@ import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
+import ru.hse.esadykov.exception.ResourceNotFoundException;
 import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.MailService;
 import ru.hse.esadykov.utils.UserService;
@@ -47,23 +48,12 @@ public class BugController {
     private UserService userService;
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
-    protected ModelAndView doPost(@PathVariable("id") String id,
-                                  @RequestParam(value = "username") String username,
+    protected ModelAndView doPost(@PathVariable("id") Integer bugId,
                                   @RequestParam(value = "body") String body,
-                                  ModelMap model,
-                                  HttpServletResponse response) throws IOException {
-        int bugId;
-        try {
-            bugId = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return null;
-        }
+                                  ModelMap model)  {
 
         Comment comment = new Comment();
-        User user = new User();
-        user.setUsername(username);
-        comment.setAuthor(user);
+        comment.setAuthor(userService.getCurrentUser());
         comment.setBody(body);
         comment.setBugId(bugId);
         try {
@@ -75,19 +65,17 @@ public class BugController {
             e.printStackTrace();
         }
 
-        return doGet(model, response, bugId);
+        return doGet(model, bugId);
     }
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.GET)
     protected ModelAndView doGet(ModelMap model,
-                                 HttpServletResponse response,
-                                 @PathVariable("id") Integer bugId) throws IOException {
+                                 @PathVariable("id") Integer bugId) {
 
         try {
             Bug bug = bugDao.getBug(bugId);
             if (bug == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
+                throw new ResourceNotFoundException();
             }
             User responsible = userDao.getUser(bug.getResponsibleId());
             bug.setResponsible(responsible);
