@@ -104,7 +104,7 @@ public class UsersController {
 
         String encodedPassword = passwordEncoder.encode(password);
         User user = new User(null, username, fullName, email, encodedPassword);
-        user.setAdmin(true);
+        user.setAdmin(isAdmin);
 
         String message;
         try {
