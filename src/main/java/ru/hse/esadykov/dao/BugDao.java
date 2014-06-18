@@ -4,7 +4,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.hse.esadykov.model.*;
 
@@ -115,9 +118,14 @@ public class BugDao {
         params.put("creatorId", bug.getCreatorId());
         params.put("type", ObjectUtils.defaultIfNull(bug.getIssueType(), IssueType.BUG).toString());
         params.put("projectId", bug.getProjectId());
-
-        return template.update("insert into bug (priority, title, description, responsible_id, creator_id, type, project_id) values " +
-                "(:priority, :title, :description, :responsibleId, :creatorId, :type, :projectId)", params) > 0;
+        KeyHolder holder = new GeneratedKeyHolder();
+        int res =  template.update("insert into bug (priority, title, description, responsible_id, creator_id, type, project_id) values " +
+                "(:priority, :title, :description, :responsibleId, :creatorId, :type, :projectId)", new MapSqlParameterSource(params), holder);
+        if (res == 0) {
+            return false;
+        }
+        bug.setId(holder.getKey().intValue());
+        return true;
     }
 
     public boolean updateBug(Bug bug) {
