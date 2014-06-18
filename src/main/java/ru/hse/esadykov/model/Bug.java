@@ -246,6 +246,15 @@ public class Bug {
         return sb.toString();
     }
 
+    public boolean isUserObserver(User user) {
+        for (User u : observers) {
+            if (u.equals(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Integer getProjectId() {
         return projectId;
     }

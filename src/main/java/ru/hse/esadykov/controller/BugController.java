@@ -15,6 +15,7 @@ import ru.hse.esadykov.dao.ProjectDao;
 import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.*;
 import ru.hse.esadykov.utils.MailService;
+import ru.hse.esadykov.utils.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -42,6 +43,8 @@ public class BugController {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/bug/{id}", method = RequestMethod.POST)
     protected ModelAndView doPost(@PathVariable("id") String id,
@@ -94,6 +97,7 @@ public class BugController {
             model.addAttribute("statuses", BugStatus.values());
             model.addAttribute("priorities", BugPriority.values());
             model.addAttribute("users", userDao.getUsers());
+            model.addAttribute("is_current_user_observer", bug.isUserObserver(userService.getCurrentUser()));
             Project project = projectDao.getProject(bug.getProjectId());
             bug.setProject(project);
 
@@ -177,7 +181,6 @@ public class BugController {
         return "redirect:/bug/" + id;
     }
 
-    // TODO: change to POST
     @RequestMapping(value = "/bug/{bug_id}/observer", method = RequestMethod.POST)
     protected String addObserver(HttpServletResponse response,
                                    @PathVariable("bug_id") Integer bugId,
