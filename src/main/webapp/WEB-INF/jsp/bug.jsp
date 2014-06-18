@@ -11,14 +11,19 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 <div style="width:98%;margin:1%">
+<table>
+    <tr>
+        <td style="vertical-align: top;"><h3><span class="label label-default">#${bug.title}</span></h3></td>
+        <td style="vertical-align: bottom;"><form action="bug/${bug.id}/observer" method="post">
+            <input type="hidden" name="is_add" value="${not is_current_user_observer}"/>
+            <input type="hidden" name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
+            <button  style="margin-top:15px; width:35px;height:29px;" type="submit" class=" label label-default btn"><span class="glyphicon glyphicon-eye-${is_current_user_observer?"close":"open"}"></span></button>
+        </form></td>
+    </tr>
+</table>
 
-    <h3><span class="label label-default">#${bug.title}</span></h3>
-    <form action="bug/${bug.id}/observer" method="post">
-        <input type="hidden" name="is_add" value="${not is_current_user_observer}"/>
-        <input type="hidden" name="${_csrf.parameterName}"
-               value="${_csrf.token}"/>
-        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-eye-${is_current_user_observer?"close":"open"}"></span></button>
-    </form>
+
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
 
         <div class="input-group"style="margin-bottom: 10px">
