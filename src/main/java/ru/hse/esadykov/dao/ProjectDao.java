@@ -33,7 +33,7 @@ public class ProjectDao {
 
     public List<Project> getProjects() {
         return template.query("select project.id, name, project.description, manager_id, count(bug.id) as bug_count " +
-                "from project join bug on project.id=bug.project_id group by project.id",
+                "from project join bug on project.id=bug.project_id where bug.status='NEW' group by project.id",
                 new ResultSetExtractor<List<Project>>() {
                     @Override
                     public List<Project> extractData(ResultSet rs) throws SQLException, DataAccessException {
