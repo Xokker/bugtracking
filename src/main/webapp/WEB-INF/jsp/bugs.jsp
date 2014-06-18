@@ -12,12 +12,12 @@
 
 <body>
 <jsp:include page="navigation.jsp"/>
-<table style="width:98%; margin:1%">
+<table class="table-responsive" style="width:98%; margin:1%">
     <tr>
         <td> <a href="/bugs/add"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
         <td>
-                <input style="margin-left:2%;margin-bottom:10px;" id="showclosed" type="checkbox" name="Show closed"
-                <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed"> Show closed</input>
+            <input style="margin-left:2%;margin-bottom: 10px;" id="showclosed" type="checkbox" name="Show closed"
+                   <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed">Show closed</input>
             <div style="margin-left:32%;margin-bottom: 10px;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
@@ -45,11 +45,24 @@
                 <li class="list-group-item"><a href="#">Viewed by me</a></li>
             </ul>
         </div>
+          <div style=" margin-top:20px;overflow-y:auto" class="panel panel-primary">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Projects</div>
+
+                <!-- List group -->
+                <ul class="list-group">
+                    <c:forEach items="${projects}" var="project">
+                        <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
+                    </c:forEach>
+                    <li class="divider"/>
+                    <li class="list-group-item"><a href="?project_id=-1">All Projects</a></li>
+                </ul>
+            </div>
         </td>
-        <td rowspan="2" style="vertical-align: top; width:80%;">
-        <div style="margin-left:2%; overflow-y:auto;" class="panel panel-primary">
+        <td style="vertical-align: top; width:80%;">
+        <div style="margin-left:2%; overflow-y:auto" class="panel panel-primary">
             <div class="panel-heading">Issues</div>
-            <table class="table table-hover">
+            <table class="table">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -76,25 +89,8 @@
         </div>
 </td>
     </tr>
-    <tr>
-        <td style=" width:20%;">
-            <div class="panel panel-primary">
-                <!-- Default panel contents -->
-                <div class="panel-heading">Projects</div>
-
-                <!-- List group -->
-                <ul class="list-group">
-                   <c:forEach items="${projects}" var="project">
-                    <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
-                    </c:forEach>
-                    <li class="divider"/>
-                    <li class="list-group-item"><a href="?project_id=-1">All Projects</a></li>
-                </ul>
-            </div>
-        </td>
-    </tr>
 </table>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/resources/js/bootstrap.min.js"></script>
 <script src="/resources/js/bugs.js"></script>
