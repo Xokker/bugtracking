@@ -50,9 +50,8 @@ public class BugDao {
         boolean projectPresented = projectId != null && projectId > 0;
         return template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
                         "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id " +
-                        (projectPresented ? "where project_id = " + projectId : "") +
-                        (showClosed == null || !showClosed ?
-                                (projectPresented ? "," : "where ") + "status = '" + BugStatus.NEW + "'" : "") +
+                        (projectPresented ? "and project_id = " + projectId : "") +
+                        (showClosed == null || !showClosed ? " where status = '" + BugStatus.NEW + "'" : "") +
                         " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
