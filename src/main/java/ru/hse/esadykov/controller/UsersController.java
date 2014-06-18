@@ -49,27 +49,27 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/users/update/{id}", method = RequestMethod.POST)
-    protected ModelAndView updateUser(@RequestParam(value = "fullName", required = false) String fullName,
-                                      @RequestParam(value = "email", required = false) String email,
-                                      @RequestParam(value = "password") String password,
-                                      @PathVariable("id") Integer userId) {
-        ModelMap mm = new ModelMap();
+    protected String updateUser(@RequestParam(value = "fullName", required = false) String fullName,
+                                @RequestParam(value = "email", required = false) String email,
+                                @RequestParam(value = "password") String password,
+                                @RequestParam(value = "backUrl", required = false, defaultValue = "/") String backUrl,
+                                @PathVariable("id") Integer userId) {
+
         String encodedPassword = StringUtils.isNotBlank(password) ? passwordEncoder.encode(password) : null;
         User user = new User(userId, null, fullName, email, encodedPassword);
 
         try {
             userDao.updateUser(user);
-            user = userDao.getUser(userId);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
-        mm.addAttribute("user", user);
 
-        return new ModelAndView("user", mm);
+        return "redirect:" + backUrl;
     }
 
     @RequestMapping(value = "/users/update/{id}", method = RequestMethod.GET)
-    protected ModelAndView showUser(@PathVariable("id") Integer userId) {
+    protected ModelAndView showUser(@PathVariable("id") Integer userId,
+                                    @RequestParam(value = "backUrl", required = false) String backUrl) {
         ModelMap mm = new ModelMap();
         try {
             User user = userDao.getUser(userId);
@@ -78,6 +78,10 @@ public class UsersController {
             e.printStackTrace();
             throw new ResourceNotFoundException();
         }
+        if (StringUtils.isNotBlank(backUrl)) {
+            mm.addAttribute("backUrl", backUrl);
+        }
+
         return new ModelAndView("user", mm);
     }
 
