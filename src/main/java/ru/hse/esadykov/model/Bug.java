@@ -1,5 +1,7 @@
 package ru.hse.esadykov.model;
 
+import ru.hse.esadykov.utils.MailService;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +20,7 @@ public class Bug {
     private Integer responsibleId;
     private Integer creatorId;
     private Integer projectId;
+    private String projectName;
     private BugStatus status;
     private BugPriority priority;
     private IssueType issueType;
@@ -25,9 +28,12 @@ public class Bug {
     private transient User creator;
     private transient Project project;
     private List<Comment> comments;
+    private List<User> observers;
+
 
     public Bug() {
         dependencies = new ArrayList<>();
+        observers = new ArrayList<User>();
     }
 
     public Bug(Integer id, String title) {
@@ -36,7 +42,9 @@ public class Bug {
         this.title = title;
     }
     
-    public Bug(Integer id, Date created, Date closed, String title, String description, Integer responsibleId, Integer creatorId, BugStatus status, BugPriority priority, IssueType issueType, Integer projectId) {
+    public Bug(Integer id, Date created, Date closed, String title,
+               String description, Integer responsibleId, Integer creatorId, BugStatus status,
+               BugPriority priority, IssueType issueType, Integer projectId, String projectName) {
         this(id, title);
         this.created = created;
         this.closed = closed;
@@ -47,6 +55,21 @@ public class Bug {
         this.priority = priority;
         this.issueType = issueType;
         this.projectId = projectId;
+        this.projectName = projectName;
+    }
+
+    public void sendMessages(MailService mailService, String title, String message) {
+        for (final User u : observers) {
+            u.sendMessage(mailService, title, message);
+        }
+    }
+
+    public void addObserver(User user) {
+        observers.add(user);
+    }
+
+    public void removeObserver(User user) {
+        observers.remove(user);
     }
 
     public void addDependency(Bug bug) {
@@ -91,6 +114,14 @@ public class Bug {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public void setTitle(String title) {
@@ -205,8 +236,23 @@ public class Bug {
                 sb.append(b.toString() + ";");
             }
         }
+        if (!observers.isEmpty()) {
+            sb.append(", observers: ");
+            for (User o : observers) {
+                sb.append(o.getUsername() + ";");
+            }
+        }
         sb.append('}');
         return sb.toString();
+    }
+
+    public boolean isUserObserver(User user) {
+        for (User u : observers) {
+            if (u.equals(user)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Integer getProjectId() {

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+
     <title>Issues</title>
 </head>
 
@@ -15,8 +16,10 @@
     <tr>
         <td> <a href="/bugs/add"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
         <td>
-            <input style="margin-left:2%;margin-bottom: 10px;" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
-            <div style="margin-left:32%;margin-bottom:10px;" class="btn-group">
+            <input style="margin-left:2%;margin-bottom: 10px;" id="showclosed" type="checkbox" name="Show closed"
+                   <c:if test="${param.showclosed}">checked="true"</c:if>
+                   title="Show closed">Show closed</input>
+            <div style="margin-left:32%;margin-bottom: 10px;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
                     <span class="caret"></span>
@@ -95,5 +98,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/resources/js/bootstrap.min.js"></script>
+<script src="/resources/js/bugs.js"></script>
 </body>
 </html>

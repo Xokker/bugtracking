@@ -6,10 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.hse.esadykov.model.Bug;
-import ru.hse.esadykov.model.BugPriority;
-import ru.hse.esadykov.model.BugStatus;
-import ru.hse.esadykov.model.IssueType;
+import ru.hse.esadykov.model.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +21,9 @@ public class BugDao {
 
     @Autowired
     private NamedParameterJdbcTemplate template;
+
+    @Autowired
+    private UserDao userDao;
     
     private Bug extractBug(ResultSet rs) throws SQLException {
         Integer id = rs.getInt("id");
@@ -35,20 +35,24 @@ public class BugDao {
         Integer responsibleId = rs.getInt("responsible_id");
         Integer creatorId = rs.getInt("creator_id");
         Integer projectId = rs.getInt("project_id");
+        String projectName = rs.getString("project_name");
         BugStatus status = BugStatus.valueOf(rs.getString("status"));
         IssueType issueType = IssueType.valueOf(rs.getString("type"));
 
-        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority, issueType, projectId);
+        return new Bug(id, created, closed, title, description, responsibleId, creatorId, status, priority, issueType, projectId, projectName);
     }
 
     public List<Bug> getBugs() {
-        return getBugs(-1);
+        return getBugs(-1, null);
     }
 
-    public List<Bug> getBugs(int projectId) {
-        // TODO: open tasks should be first
-        return template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
-                        "from bug b join priority p on p.id = b.priority " + (projectId > 0 ? "where project_id = " + projectId : "") +
+    public List<Bug> getBugs(Integer projectId, Boolean showClosed) {
+        boolean projectPresented = projectId != null && projectId > 0;
+        return template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
+                        "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id " +
+                        (projectPresented ? "where project_id = " + projectId : "") +
+                        (showClosed == null || !showClosed ?
+                                (projectPresented ? "," : "where ") + "status = '" + BugStatus.NEW + "'" : "") +
                         " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
@@ -64,8 +68,8 @@ public class BugDao {
     }
 
     public Bug getBug(int bugId) {
-        final Bug bug = template.query("select b.id, created, closed, p.title as priority, b.title, description, responsible_id, creator_id, status, type, project_id " +
-                        "from bug b join priority p on p.id = b.priority where b.id = :bugId",
+        final Bug bug = template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
+                        "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id where b.id = :bugId",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
                     @Override
@@ -76,7 +80,7 @@ public class BugDao {
                         return extractBug(rs);
                     }
                 });
-        return template.query("select t1.id, title from bug join (select bug1_id as id from dependencies " +
+        template.query("select t1.id, title from bug join (select bug1_id as id from dependencies " +
                         "where bug2_id = :bugId union select bug2_id as id from dependencies where bug1_id = :bugId) as t1",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
@@ -84,6 +88,19 @@ public class BugDao {
                     public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
                         if (rs.next()) {
                             bug.addDependency(new Bug(rs.getInt("id"), rs.getString("title")));
+                        }
+                        return bug;
+                    }
+                });
+
+        return template.query("select * from observers where bug_id = :bugId",
+                Collections.singletonMap("bugId", bugId),
+                new ResultSetExtractor<Bug>() {
+                    @Override
+                    public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        if (rs.next()) {
+                            User user = userDao.getUser(rs.getInt("observer_id"));
+                            bug.addObserver(new User(user.getId(), user.getUsername(), user.getFullName(), user.getEmail(), user.getPassword()));
                         }
                         return bug;
                     }
@@ -134,5 +151,21 @@ public class BugDao {
         return template.update("delete from  dependencies " +
                 "where (bug1_id = :bug1_id and bug2_id = :bug2_id)" +
                 "or (bug1_id = :bug2_id and bug2_id = :bug1_id)", params) > 0;
+    }
+
+    public boolean addObserver(Bug bug, User observer) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug_id", bug.getId());
+        params.put("observer_id", observer.getId());
+
+        return template.update("insert into observers(bug_id, observer_id) values (:bug_id, :observer_id)", params) > 0;
+    }
+
+    public boolean removeObserver(Bug bug, User observer) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug_id", bug.getId());
+        params.put("observer_id", observer.getId());
+
+        return template.update("delete from observers where bug_id = :bug_id and observer_id = :observer_id", params) > 0;
     }
 }
