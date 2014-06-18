@@ -89,8 +89,11 @@
     <h2><span class="label label-default">Comments</span></h2>
         <div class="list-group">
            <c:forEach items="${comments}" var="comment">
-            <div class="list-group-item active">
-                <h4 class="list-group-item-heading">${comment.author} -- ${comment.created}</h4>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">${comment.author.username} -- <fmt:formatDate type="both"
+                                                                                                  dateStyle="short"
+                                                                                                  pattern="dd.MM.yyyy HH:mm"
+                                                                                                  value="${comment.created}"/></h4>
                 <p class="list-group-item-text">${comment.body}</p>
             </div>
            </c:forEach>
