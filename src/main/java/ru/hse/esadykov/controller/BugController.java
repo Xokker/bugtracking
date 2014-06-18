@@ -157,12 +157,11 @@ public class BugController {
     @RequestMapping(value = "/bug/{bug_id}/observer", method = RequestMethod.POST)
     protected String changeObserver(HttpServletResponse response,
                                    @PathVariable("bug_id") Integer bugId,
-                                   @RequestParam(value  = "observer_id") Integer observerId,
                                    @RequestParam(value  = "is_add") Boolean isAdd) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
-            User observer = userDao.getUser(observerId);
+            User observer = userService.getCurrentUser();
             if (bug == null || observer == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return null;

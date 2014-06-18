@@ -10,7 +10,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <img  src="/resources/img/logo.png" width="50" height="50"/>
+            <a href="<c:url value='/index'/>">
+                <img src="/resources/img/logo.png" width="50" height="50"/>
+            </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
