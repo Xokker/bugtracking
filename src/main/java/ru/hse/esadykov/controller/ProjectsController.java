@@ -34,7 +34,7 @@ public class ProjectsController {
         List<Project> projects = null;
         List<User> users = null;
         try {
-            projects = projectDao.getProjects();
+            projects = projectDao.getProjects(true);
             users = userDao.getUsers();
 
             for (Project project : projects) {
@@ -61,7 +61,7 @@ public class ProjectsController {
                            @RequestParam(value = "manager_id", required = false) int managerId,
                            RedirectAttributes attributes) {
 
-        Project project = new Project(null, name, description, managerId);
+        Project project = new Project(null, name, description, managerId, null);
 
         String message;
         try {

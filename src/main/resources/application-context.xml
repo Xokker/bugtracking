@@ -11,17 +11,41 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
     <context:component-scan base-package="ru.hse.esadykov" />
-
     <mvc:resources mapping="/resources/**/*" location="/resources/" />
     <mvc:annotation-driven/>
 
     <context:property-placeholder file-encoding="utf-8" location="classpath:app.properties"/>
 
-    <bean
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="bugsmailbunny" />
+        <property name="password" value="bunnymailbugs" />
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--<bean id="mailService" class="ru.hse.esadykov.utils.MailService">-->
+        <!--<property name="mailSender" ref="mailSender" />-->
+        <!--<property name="taskExecutor" ref="taskExecutor" />-->
+    <!--</bean>-->
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
+
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>

@@ -35,16 +35,13 @@ public class BugListController {
     private ProjectDao projectDao;
 
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
-    protected ModelAndView doGet(@RequestParam(value = "project_id", required = false) Integer projectId) {
+    protected ModelAndView doGet(@RequestParam(value = "project_id", required = false) Integer projectId,
+                                 @RequestParam(value = "showclosed", required = false) Boolean showClosed) {
         List<Bug> bugs = null;
         List<User> users = null;
         List<Project> projects = null;
         try {
-            if (projectId != null) {
-                bugs = bugDao.getBugs(projectId);
-            } else {
-                bugs = bugDao.getBugs();
-            }
+            bugs = bugDao.getBugs(projectId, showClosed);
             for (Bug bug : bugs) {
                 Project project = projectDao.getProject(bug.getProjectId());
                 User responsible = userDao.getUser(bug.getResponsibleId());
@@ -52,7 +49,7 @@ public class BugListController {
                 bug.setResponsible(responsible);
             }
             users = userDao.getUsers();
-            projects = projectDao.getProjects();
+            projects = projectDao.getProjects(true);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -69,7 +66,7 @@ public class BugListController {
     public ModelAndView addBugForm() {
         ModelMap model = new ModelMap();
         model.addAttribute("users", userDao.getUsers());
-        model.addAttribute("projects", projectDao.getProjects());
+        model.addAttribute("projects", projectDao.getProjects(true));
         model.addAttribute("priorities", BugPriority.values());
         model.addAttribute("types", IssueType.values());
         model.addAttribute("statuses", BugStatus.values());
@@ -90,8 +87,9 @@ public class BugListController {
         }
         try {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
-                    creatorId, BugStatus.NEW, bugPriority, issueType, projectId);
+                    creatorId, BugStatus.NEW, bugPriority, issueType, projectId, null);
             bugDao.saveBug(bug);
+            bugDao.addObserver(bug, userService.getCurrentUser());
         } catch (DataAccessException e) {
             e.printStackTrace();
         }

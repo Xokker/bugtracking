@@ -1,5 +1,7 @@
 package ru.hse.esadykov.model;
 
+import ru.hse.esadykov.utils.MailService;
+
 /**
  * @author Ernest Sadykov
  * @since 31.05.2014
@@ -62,6 +64,10 @@ public class User {
         this.password = password;
     }
 
+    public void sendMessage(MailService mailService, String title, String message) {
+        mailService.sendMail(MailService.SENDER_EMAIL, email, title, message);
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
@@ -71,5 +77,22 @@ public class User {
         sb.append(", email='").append(email).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!id.equals(user.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
