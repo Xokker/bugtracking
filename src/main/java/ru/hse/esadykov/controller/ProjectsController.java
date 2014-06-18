@@ -61,7 +61,7 @@ public class ProjectsController {
                            @RequestParam(value = "manager_id", required = false) int managerId,
                            RedirectAttributes attributes) {
 
-        Project project = new Project(null, name, description, managerId);
+        Project project = new Project(null, name, description, managerId, null);
 
         String message;
         try {

@@ -42,7 +42,7 @@ public class IndexController {
         List<Bug> allBugs = bugDao.getBugs();
         model.addAttribute("bugs", allBugs.subList(0, allBugs.size() >= 5 ? 5 : allBugs.size()));
         List<Project> projects = projectDao.getProjects();
-        model.addAttribute("project", projects.subList(0, projects.size() >= 5 ? 5 : projects.size()));
+        model.addAttribute("projects", projects.subList(0, projects.size() >= 5 ? 5 : projects.size()));
 
         return new ModelAndView("index", model);
     }
