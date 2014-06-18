@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hse.esadykov.model.*;
 
 import java.sql.ResultSet;
@@ -66,6 +67,7 @@ public class BugDao {
                 });
     }
 
+    @Transactional
     public Bug getBug(int bugId) {
         final Bug bug = template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
                         "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id where b.id = :bugId",

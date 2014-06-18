@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hse.esadykov.model.User;
 
 import java.sql.ResultSet;
@@ -35,6 +36,7 @@ public class UserDao {
                 Collections.singletonMap("id", userId), new UserMapper());
     }
 
+    @Transactional
     public boolean saveUser(User user) {
         Map<String, Object> params = new HashMap<>();
         params.put("username", user.getUsername());
@@ -82,20 +84,21 @@ public class UserDao {
         }
     }
 
-        public boolean updateUser(User user) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("id", user.getId());
-            params.put("fullName", user.getFullName());
-            params.put("email", user.getEmail());
-            params.put("password", user.getPassword());
+    @Transactional
+    public boolean updateUser(User user) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", user.getId());
+        params.put("fullName", user.getFullName());
+        params.put("email", user.getEmail());
+        params.put("password", user.getPassword());
 
-            int res = template.update("update user set " +
-                    "full_name = :fullName, email = :email where id = :id"
-                    , new MapSqlParameterSource(params));
-            if (user.getPassword() != null) {
-                res *= template.update("update user set password = :password where id=:id", params);
-            }
-            return res != 0;
+        int res = template.update("UPDATE user SET " +
+                "full_name = :fullName, email = :email WHERE id = :id", new MapSqlParameterSource(params));
+        if (user.getPassword() != null) {
+            res *= template.update("UPDATE user SET password = :password WHERE id=:id", params);
         }
+
+        return res != 0;
+    }
 
 }
