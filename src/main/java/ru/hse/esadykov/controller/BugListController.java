@@ -89,6 +89,7 @@ public class BugListController {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
                     creatorId, BugStatus.NEW, bugPriority, issueType, projectId, null);
             bugDao.saveBug(bug);
+            bugDao.addObserver(bug, userService.getCurrentUser());
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
