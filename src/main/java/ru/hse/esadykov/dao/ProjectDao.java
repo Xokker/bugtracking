@@ -26,13 +26,16 @@ public class ProjectDao {
         String name = rs.getString("name");
         String description = rs.getString("description");
         Integer managerId = rs.getInt("manager_id");
-        Integer bugCount = rs.getInt(5);
+        Integer bugCount = null;
+        if (rs.getMetaData().getColumnCount() > 4) {
+            bugCount = rs.getInt("bug_count");
+        }
 
         return new Project(id, name, description, managerId, bugCount);
     }
 
     public List<Project> getProjects() {
-        return template.query("select project.id, name, project.description, manager_id, count(bug.id) as bug_count " +
+        return template.query("select project.id, name, project.description, manager_id, count(bug.id) as `bug_count` " +
                 "from project join bug on project.id=bug.project_id where bug.status='NEW' group by project.id",
                 new ResultSetExtractor<List<Project>>() {
                     @Override
