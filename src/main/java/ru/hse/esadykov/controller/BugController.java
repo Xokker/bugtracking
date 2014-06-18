@@ -178,9 +178,9 @@ public class BugController {
     }
 
     // TODO: change to POST
-    @RequestMapping(value = "/bug/observer", method = RequestMethod.POST)
+    @RequestMapping(value = "/bug/{bug_id}/observer", method = RequestMethod.POST)
     protected String addObserver(HttpServletResponse response,
-                                   @RequestParam(value  = "bug_id") Integer bugId,
+                                   @PathVariable("bug_id") Integer bugId,
                                    @RequestParam(value  = "observer_id") Integer observerId,
                                    @RequestParam(value  = "is_add") Boolean isAdd) throws IOException {
 
