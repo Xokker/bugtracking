@@ -49,7 +49,7 @@ public class BugListController {
                 bug.setResponsible(responsible);
             }
             users = userDao.getUsers();
-            projects = projectDao.getProjects();
+            projects = projectDao.getProjects(true);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -66,7 +66,7 @@ public class BugListController {
     public ModelAndView addBugForm() {
         ModelMap model = new ModelMap();
         model.addAttribute("users", userDao.getUsers());
-        model.addAttribute("projects", projectDao.getProjects());
+        model.addAttribute("projects", projectDao.getProjects(true));
         model.addAttribute("priorities", BugPriority.values());
         model.addAttribute("types", IssueType.values());
         model.addAttribute("statuses", BugStatus.values());
@@ -89,6 +89,7 @@ public class BugListController {
             Bug bug = new Bug(null, null, null, title, description, responsibleId,
                     creatorId, BugStatus.NEW, bugPriority, issueType, projectId, null);
             bugDao.saveBug(bug);
+            bugDao.addObserver(bug, userService.getCurrentUser());
         } catch (DataAccessException e) {
             e.printStackTrace();
         }

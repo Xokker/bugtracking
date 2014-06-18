@@ -8,8 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.hse.esadykov.dao.BugDao;
 import ru.hse.esadykov.dao.CommentDao;
 import ru.hse.esadykov.dao.ProjectDao;
+import ru.hse.esadykov.dao.UserDao;
 import ru.hse.esadykov.model.Bug;
 import ru.hse.esadykov.model.Project;
+import ru.hse.esadykov.model.User;
 import ru.hse.esadykov.utils.UserService;
 
 import java.util.List;
@@ -31,6 +33,9 @@ public class IndexController {
     private BugDao bugDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
     private UserService userService;
 
     @RequestMapping(value = {"/index", "/"})
@@ -40,8 +45,14 @@ public class IndexController {
         model.addAttribute("comments", commentDao.getComments(userService.getCurrentUser().getId(), 5));
         // TODO: [FIXME] don't fetch all bugs
         List<Bug> allBugs = bugDao.getBugs();
+        for (Bug bug : allBugs) {
+            Project project = projectDao.getProject(bug.getProjectId());
+            User responsible = userDao.getUser(bug.getResponsibleId());
+            bug.setProject(project);
+            bug.setResponsible(responsible);
+        }
         model.addAttribute("bugs", allBugs.subList(0, allBugs.size() >= 5 ? 5 : allBugs.size()));
-        List<Project> projects = projectDao.getProjects();
+        List<Project> projects = projectDao.getProjects(false);
         model.addAttribute("projects", projects.subList(0, projects.size() >= 5 ? 5 : projects.size()));
 
         return new ModelAndView("index", model);

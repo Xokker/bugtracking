@@ -42,47 +42,21 @@
              <tr>
                  <th>Name</th>
                  <th>Project</th>
-                 <th>Description</th>
                  <th>Priority</th>
-                 <th>Deadline</th>
+                 <th>Type</th>
+                 <th>Assignee</th>
              </tr>
              </thead>
              <tbody>
+             <c:forEach items="${bugs}" var="bug">
              <tr>
-                 <td><a href="#">LPF-5</a></td>
-                 <td><a href="#">LPF</a></td>
-                 <td>Водку не купили</td>
-                 <td>Critical</td>
-                 <td>26.06.2014</td>
+                 <td><a href="../bug/${bug.id}">${bug.title}</a></td>
+                 <td>${bug.project.name}</td>
+                 <td>${bug.priority}</td>
+                 <td>${bug.issueType}</td>
+                 <td>${bug.responsible.username}</td>
              </tr>
-             <tr>
-                 <td><a href="#">Exams-5</a></td>
-                 <td><a href="#">Exams</a></td>
-                 <td>Не готов к Гостеву</td>
-                 <td>Major</td>
-                 <td>25.06.2014</td>
-             </tr>
-             <tr>
-                 <td><a href="#">LPF-4</a></td>
-                 <td><a href="#">LPF</a></td>
-                 <td>Потеряли Эльдара и его гитару</td>
-                 <td>Major</td>
-                 <td>26.06.2014</td>
-             </tr>
-             <tr>
-                 <td><a href="#">Btr-6</a></td>
-                 <td><a href="#">Bugtracker</a></td>
-                 <td>Добавить таблицу с проектами </td>
-                 <td>Major</td>
-                 <td>15.06.2014</td>
-             </tr>
-             <tr>
-                 <td><a href="#">Exams-4</a></td>
-                 <td><a href="#">Exams</a></td>
-                 <td>Сдать Бреймана</td>
-                 <td>Minor</td>
-                 <td>23.06.2014</td>
-             </tr>
+             </c:forEach>
              </tbody>
          </table>
      </div>

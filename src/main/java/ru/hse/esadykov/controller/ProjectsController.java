@@ -34,7 +34,7 @@ public class ProjectsController {
         List<Project> projects = null;
         List<User> users = null;
         try {
-            projects = projectDao.getProjects();
+            projects = projectDao.getProjects(true);
             users = userDao.getUsers();
 
             for (Project project : projects) {

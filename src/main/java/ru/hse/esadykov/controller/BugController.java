@@ -122,10 +122,11 @@ public class BugController {
     }
 
     // TODO: change to POST
-    @RequestMapping(value = "/bug/{id}/add/{id1}", method = RequestMethod.GET)
-    protected String addDependency(HttpServletResponse response,
+    @RequestMapping(value = "/bug/{id}/dependency", method = RequestMethod.POST)
+    protected String changeDependency(HttpServletResponse response,
                                          @PathVariable("id") Integer bugId,
-                                         @PathVariable("id1") Integer bug1Id) throws IOException {
+                                         @RequestParam(value = "bug_id") Integer bug1Id,
+                                         @RequestParam(value = "is_add") Boolean isAdd) throws IOException {
 
         try {
             Bug bug = bugDao.getBug(bugId);
@@ -134,10 +135,11 @@ public class BugController {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return null;
             }
-            User responsible = userDao.getUser(bug.getResponsibleId());
-            bug.setResponsible(responsible);
-            bug.addDependency(bug1);
-            bugDao.addDependency(bug, bug1);
+            if (isAdd) {
+                bugDao.addDependency(bug, bug1);
+            } else {
+                bugDao.removeDependency(bug, bug1);
+            }
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -145,32 +147,8 @@ public class BugController {
         return "redirect:/bug/" + bugId;
     }
 
-    // TODO: change to post
-    @RequestMapping(value = "/bug/{id}/remove/{id1}", method = RequestMethod.GET)
-    protected String removeDependency(HttpServletResponse response,
-                                            @PathVariable("id") Integer id,
-                                            @PathVariable("id1") Integer id1) throws IOException {
-
-        try {
-            Bug bug = bugDao.getBug(id);
-            Bug bug1 = bugDao.getBug(id1);
-            if (bug == null || bug1 == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return null;
-            }
-            User responsible = userDao.getUser(bug.getResponsibleId());
-            bug.setResponsible(responsible);
-            bug.removeDependency(bug1);
-            bugDao.removeDependency(bug, bug1);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-        }
-
-        return "redirect:/bug/" + id;
-    }
-
     @RequestMapping(value = "/bug/{bug_id}/observer", method = RequestMethod.POST)
-    protected String addObserver(HttpServletResponse response,
+    protected String changeObserver(HttpServletResponse response,
                                    @PathVariable("bug_id") Integer bugId,
                                    @RequestParam(value  = "observer_id") Integer observerId,
                                    @RequestParam(value  = "is_add") Boolean isAdd) throws IOException {
@@ -183,10 +161,8 @@ public class BugController {
                 return null;
             }
             if (isAdd) {
-                bug.addObserver(observer);
                 bugDao.addObserver(bug, observer);
             } else {
-                bug.removeObserver(observer);
                 bugDao.removeObserver(bug, observer);
             }
         } catch (DataAccessException e) {
