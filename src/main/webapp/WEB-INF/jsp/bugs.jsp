@@ -16,8 +16,8 @@
     <tr>
         <td> <a href="/bugs/add"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
         <td>
-            <input style="margin-left:2%;margin-bottom: 10px;" id="showclosed" type="checkbox" name="Show closed"
-                   <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed">Show closed</input>
+                <input style="margin-left:2%;margin-bottom:10px;" id="showclosed" type="checkbox" name="Show closed"
+                <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed"> Show closed</input>
             <div style="margin-left:32%;margin-bottom: 10px;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
@@ -90,7 +90,7 @@
 </td>
     </tr>
 </table>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/resources/js/bootstrap.min.js"></script>
 <script src="/resources/js/bugs.js"></script>
