@@ -13,6 +13,12 @@
 <div style="width:98%;margin:1%">
 
     <h3><span class="label label-default">#${bug.title}</span></h3>
+    <form action="bug/${bug.id}/observer" method="post">
+        <input type="hidden" name="is_add" value="${not is_current_user_observer}"/>
+        <input type="hidden" name="${_csrf.parameterName}"
+               value="${_csrf.token}"/>
+        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-eye-${is_current_user_observer?"close":"open"}"></span></button>
+    </form>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
 
         <div class="input-group"style="margin-bottom: 10px">
