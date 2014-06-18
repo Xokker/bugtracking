@@ -22,7 +22,7 @@
         <security:logout
             logout-url="/logout"
             logout-success-url="/login?logout" />
-        <!--<security:csrf/>-->
+        <security:csrf/>
     </security:http>
 
     <security:authentication-manager>
