@@ -26,21 +26,24 @@ public class ProjectDao {
         String name = rs.getString("name");
         String description = rs.getString("description");
         Integer managerId = rs.getInt("manager_id");
+        Integer bugCount = rs.getInt(5);
 
-        return new Project(id, name, description, managerId);
+        return new Project(id, name, description, managerId, bugCount);
     }
 
     public List<Project> getProjects() {
-        return template.query("select id, name, description, manager_id from project",  new ResultSetExtractor<List<Project>>() {
-            @Override
-            public List<Project> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                List<Project> result = new ArrayList<>();
-                while (rs.next()) {
-                    result.add(extractProject(rs));
-                }
-                return result;
-            }
-        });
+        return template.query("select project.id, name, project.description, manager_id, count(bug.id) as bug_count " +
+                "from project join bug on project.id=bug.project_id group by project.id",
+                new ResultSetExtractor<List<Project>>() {
+                    @Override
+                    public List<Project> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                        List<Project> result = new ArrayList<>();
+                        while (rs.next()) {
+                            result.add(extractProject(rs));
+                        }
+                        return result;
+                    }
+                });
     }
 
     public Project getProject(int projectId) {

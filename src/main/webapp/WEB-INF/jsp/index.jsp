@@ -23,26 +23,13 @@
         </tr>
         </thead>
         <tbody>
+        <c:forEach items="${projects}" var="project">
         <tr>
-            <td><a href="#">Bugtracker</a></td>
-            <td>Создание багтрекера</td>
-            <td>6</td>
+            <td><a href="<c:url value='/bugs'><c:param name="project_id" value="${project.id}"/> </c:url>">${project.name}</a></td>
+            <td>${project.description}</td>
+            <td>${project.bugCount}</td>
         </tr>
-        <tr>
-            <td><a href="#">LPF</a></td>
-            <td>Поездка на ЛПФ</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td><a href="#">Exams</a></td>
-            <td>Подготовка к сессии</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        </c:forEach>
         </tbody>
     </table>
 </div>

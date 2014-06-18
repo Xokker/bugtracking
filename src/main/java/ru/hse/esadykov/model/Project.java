@@ -9,16 +9,18 @@ public class Project {
     private String name;
     private String description;
     private Integer managerId;
+    private Integer bugCount;
     private transient User manager;
 
     public Project() {
     }
 
-    public Project(Integer id, String name, String description, Integer managerId) {
+    public Project(Integer id, String name, String description, Integer managerId, Integer bugCount) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.managerId = managerId;
+        this.bugCount = bugCount;
     }
 
     public Integer getId() {
@@ -70,5 +72,13 @@ public class Project {
         sb.append(", managerId='").append(managerId).append('\'');
         sb.append('}');
         return sb.toString();
+    }
+
+    public Integer getBugCount() {
+        return bugCount;
+    }
+
+    public void setBugCount(Integer bugCount) {
+        this.bugCount = bugCount;
     }
 }
