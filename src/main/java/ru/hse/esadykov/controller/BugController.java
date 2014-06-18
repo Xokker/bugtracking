@@ -114,10 +114,17 @@ public class BugController {
             return null;
         }
 
-        bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null, null));
+        try {
+            bugDao.updateBug(new Bug(bugId, null, null, null, null, responsibleId, null, status, priority, null, null, null));
+            bugDao.addObserver(bugId, responsibleId);
+        } catch (DataAccessException dat) {
+            dat.printStackTrace();
+        }
+
         final Bug bug = bugDao.getBug(bugId);
         bug.sendMessages(mailService, "Notification message: project " + bug.getProjectName(),
                 "Bug #" + bug.getId() + " " + bug.getTitle() + " was modified");
+
         return "redirect:/bugs";
     }
 

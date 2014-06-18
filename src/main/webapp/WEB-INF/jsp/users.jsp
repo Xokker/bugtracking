@@ -16,7 +16,7 @@
     <c:forEach items="${users}" var="user">
         <p>
             <form action="/users/delete" method="post">
-                <a href="/users/update/${user.id}">${user.username}</a>.
+                <a href="/user/update/${user.id}">${user.username}</a>.
                 <c:if test="${not empty user.email}">
                     [${user.email}]
                 </c:if>

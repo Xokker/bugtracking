@@ -50,9 +50,8 @@ public class BugDao {
         boolean projectPresented = projectId != null && projectId > 0;
         return template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
                         "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id " +
-                        (projectPresented ? "where project_id = " + projectId : "") +
-                        (showClosed == null || !showClosed ?
-                                (projectPresented ? "," : "where ") + "status = '" + BugStatus.NEW + "'" : "") +
+                        (projectPresented ? "and project_id = " + projectId : "") +
+                        (showClosed == null || !showClosed ? " where status = '" + BugStatus.NEW + "'" : "") +
                         " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
@@ -157,6 +156,14 @@ public class BugDao {
         Map<String, Object> params = new HashMap<>();
         params.put("bug_id", bug.getId());
         params.put("observer_id", observer.getId());
+
+        return template.update("insert into observers(bug_id, observer_id) values (:bug_id, :observer_id)", params) > 0;
+    }
+
+    public boolean addObserver(Integer bugId, Integer observerId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("bug_id", bugId);
+        params.put("observer_id", observerId);
 
         return template.update("insert into observers(bug_id, observer_id) values (:bug_id, :observer_id)", params) > 0;
     }
