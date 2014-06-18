@@ -81,31 +81,35 @@
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="hidden" value="${bug.id}" name="id"/>
-        <input type="submit" value="Save changes"/>
+        <input type="submit" class="btn btn-default" value="Save changes"/>
     </form>
 
     <hr>
-    <h2>Comments</h2>
-    <c:forEach items="${comments}" var="comment">
-        <p>
-            <strong>Author id:</strong> ${comment.author.username}.
-            Added: <fmt:formatDate type="both"
-                                   dateStyle="short"
-                                   pattern="dd.MM.yyyy HH:mm"
-                                   value="${comment.created}"/>
-        </p>
-        <p><c:out value="${comment.body}" escapeXml="false"/></p>
-        <hr>
-    </c:forEach>
-
-    <h3>Add comment</h3>
-    <form name="input" action="${requestScope['javax.servlet.forward.request_uri']}" method="post">
-        Username:   <input type="text" name="username"/>     <br/>
-        Text:       <textarea rows="5" cols="50" name="body" placeholder="Enter your comment"></textarea>    <br/>
+    <div class="">
+    <h2><span class="label label-default">Comments</span></h2>
+        <div class="list-group">
+           <c:forEach items="${comments}" var="comment">
+            <div class="list-group-item active">
+                <h4 class="list-group-item-heading">${comment.author} -- ${comment.created}</h4>
+                <p class="list-group-item-text">${comment.body}</p>
+            </div>
+           </c:forEach>
+            <c:if test="${empty comments}">
+              <h5><br/>No comments yet.</h5>
+            </c:if>
+        </div>
+        <div style="margin-top: 10px;">
+    <h3><span class="label label-default">Add comment</span></h3>
+    <form name="input" action="/bug/${bug.id}" method="post">
+        <div class="input-group">
+            <span class="input-group-addon">Comment</span>
+            <textarea rows="5" cols="50" name="body" class="form-control" placeholder="Enter your comment"></textarea>
+        </div>
         <input type="hidden" name="${_csrf.parameterName}"
                value="${_csrf.token}"/>
-        <input type="submit" value="Submit"/>
+        <input style="margin-top:5px;" class="btn btn-default" type="submit" value="Submit"/>
     </form>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/resources/js/bootstrap.min.js"></script>

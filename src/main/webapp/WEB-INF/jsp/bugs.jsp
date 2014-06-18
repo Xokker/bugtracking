@@ -3,22 +3,20 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-<head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
-    <title>Bug Tracking</title>
+    <title>Issues</title>
 </head>
-<title>Issues</title>
-</head>
+
 <body>
 <jsp:include page="navigation.jsp"/>
 <table style="width:98%; margin:1%">
     <tr>
-        <td></td>
+        <td> <a href="/bugs/add"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
         <td>
-            <input style="margin-left:2%" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
-            <div style="margin-left:32%;" class="btn-group">
+            <input style="margin-left:2%;margin-bottom: 10px;" type="checkbox" name="Show closed" title="Show closed"> Show closed</input>
+            <div style="margin-left:32%;margin-bottom:10px;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
                     <span class="caret"></span>
@@ -29,12 +27,11 @@
                     <li><a href="#">Status</a></li>
                 </ul>
                 </div>
-                <a href="/bugs/add"><button style="margin-left:38.5%; margin-bottom:17px" type="button" class="btn btn-default">New issue</button></a>
         </td>
     </tr>
     <tr>
-        <td style=" width:20%;" >
-            <div style="margin-top: -6px;" class="panel panel-primary">
+        <td style=" width:20%; vertical-align: top;" >
+            <div class="panel panel-primary">
             <!-- Default panel contents -->
             <div class="panel-heading">Browse issues</div>
 
@@ -48,7 +45,7 @@
         </div>
         </td>
         <td rowspan="2" style="vertical-align: top; width:80%;">
-        <div style="margin-left:2%;margin-top: -6px;  overflow-y:auto;" class="panel panel-primary">
+        <div style="margin-left:2%; overflow-y:auto;" class="panel panel-primary">
             <div class="panel-heading">Issues</div>
             <table class="table table-hover">
                 <thead>
