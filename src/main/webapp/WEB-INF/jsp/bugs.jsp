@@ -17,7 +17,7 @@
         <td> <a href="/bugs/add"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
         <td>
             <input style="margin-left:2%;margin-bottom: 10px;" id="showclosed" type="checkbox" name="Show closed"
-                   checked="${param.showclosed}" title="Show closed">Show closed</input>
+                   <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed">Show closed</input>
             <div style="margin-left:32%;margin-bottom: 10px;" class="btn-group">
             <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
