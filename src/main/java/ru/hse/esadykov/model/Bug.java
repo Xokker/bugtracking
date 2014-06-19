@@ -33,7 +33,7 @@ public class Bug {
 
     public Bug() {
         dependencies = new ArrayList<>();
-        observers = new ArrayList<User>();
+        observers = new ArrayList<>();
     }
 
     public Bug(Integer id, String title) {
