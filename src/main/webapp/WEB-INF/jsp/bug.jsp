@@ -14,20 +14,21 @@
 
     <table>
         <tr>
-            <td style="vertical-align: top;"><h3><span class="label label-default">${bug.title}</span></h3></td>
-            <td style="vertical-align: bottom;">
-                <form action="/bug/${bug.id}/observer" method="post">
+            <td><h3><span class="label label-default">${bug.title}</span></h3></td>
+            <td>
+                <form action="/bug/${bug.id}/observer" method="post" style="height:3px;">
                     <input type="hidden" name="is_add" value="${not is_current_user_observer}"/>
                     <input type="hidden" name="${_csrf.parameterName}"
                            value="${_csrf.token}"/>
                     <button title="${is_current_user_observer?'stop watching this bug':'watch this bug'}"
-                            style="margin-top:15px; margin-left:-5px; width:35px;height:30px;" type="submit"
+                            style=" margin-left:-6px; width:35px;height:30px" type="submit"
                             class=" label label-default btn"><span
                             class="glyphicon glyphicon-eye-${is_current_user_observer?"close":"open"}"></span></button>
                 </form>
             </td>
         </tr>
     </table>
+    <br/>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
 
         <div class="input-group" style="margin-bottom: 10px;width:100%">
