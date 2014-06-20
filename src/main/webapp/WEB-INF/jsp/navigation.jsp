@@ -21,7 +21,7 @@
                 <li><a href="/projects">Projects</a></li>
                 <li><a href="/bugs">Issues</a></li>
             </ul>
-            <form style="margin-left: 45%" class="navbar-form navbar-left"  role="search">
+            <form style="margin-left: 17%" class="navbar-form navbar-left"  role="search">
                 <div class="form-group">
                     <input style="height:28px;" type="text" class="form-control" placeholder="Search">
                 </div>

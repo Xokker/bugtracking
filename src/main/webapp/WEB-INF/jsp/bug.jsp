@@ -15,50 +15,49 @@
     <h3><span class="label label-default">#${bug.title}</span></h3>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
 
-        <div class="input-group"style="margin-bottom: 10px">
-            <span class="input-group-addon">Type</span>
+        <div class="input-group"style="margin-bottom: 10px;width:100%">
+            <span style="width:8%;text-align: left;" class="input-group-addon">Type</span>
             <input type="text" disabled class="form-control" value="${bug.issueType}">
         </div>
 
-    <div class="input-group" style="margin-bottom: 10px">
-        <span class="input-group-addon">Name</span>
+    <div class="input-group" style="margin-bottom: 10px;width:100%">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Name</span>
         <input type="text" disabled class="form-control" value="${bug.title}">
     </div>
 
-    <div class="input-group" style="margin-bottom: 10px">
-        <span class="input-group-addon">Description</span>
-        <input type="textarea" disabled value="${bug.description}" class="form-control">
+    <div class="input-group" style="margin-bottom: 10px;width:100%">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Description</span>
+        <input type="textarea" rows="5" disabled value="${bug.description}" class="form-control">
     </div>
 
-        <div class="input-group" style="margin-bottom: 10px">
-            <span class="input-group-addon">Project</span>
+        <div class="input-group" style="margin-bottom: 10px;width:100%">
+            <span style="width:8%;text-align: left;" class="input-group-addon">Project</span>
             <input type="text" disabled value="${bug.project.name}" class="form-control">
         </div>
 
-        <div class="input-group" style="margin-bottom: 10px">
-            <span class="input-group-addon">Status</span>
+        <div class="input-group" style="margin-bottom: 10px;width:100%">
+            <span style="width:8%;text-align: left;" class="input-group-addon">Status</span>
                 <select class="form-control" name="status">
                     <c:forEach items="${statuses}" var="status">
                         <option ${status.id eq bug.status.id?"selected":""} value="${status}">${status}</option>
                     </c:forEach>
                 </select>
         </div>
-        <div class="input-group" style="margin-bottom: 10px">
-            <span class="input-group-addon">Priority</span>
+        <div class="input-group" style="margin-bottom: 10px;width:100%">
+            <span style="width:8%;text-align: left;" class="input-group-addon">Priority</span>
                 <select class="form-control" name="priority">
                     <c:forEach items="${priorities}" var="priority">
                         <option ${priority.id eq bug.priority.id?"selected":""} value="${priority}">${priority}</option>
                     </c:forEach>
                 </select>
         </div>
-        <div class="input-group" style="margin-bottom: 10px">
-            <span class="input-group-addon">Assignee</span>
+        <div class="input-group" style="margin-bottom: 10px;width:100%">
+            <span style="width:8%;text-align: left;" class="input-group-addon">Assignee</span>
                 <select class="form-control" name="responsible_id">
                     <c:forEach items="${users}" var="user">
                         <option ${user.id eq bug.responsibleId?"selected":""} value="${user.id}">${user.username}</option>
                     </c:forEach>
                 </select>
-            </label>
         </div>
     <p>
         <strong>Created:</strong> <fmt:formatDate type="both"

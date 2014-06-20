@@ -11,28 +11,28 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 
-<form style="width:50%;margin:1%" action="/bugs/add" method="post">
-    <div class="input-group" style="margin-bottom:10px">
-        <span class="input-group-addon">Type</span>
-            <select class="form-control" name="issue_type">
+<form style="width:98%;margin:1%" action="/bugs/add" method="post">
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Type</span>
+            <select class=" dropdown-toggle form-control" name="issue_type">
                 <c:forEach items="${types}" var="type">
                     <option value="${type}">${type}</option>
                 </c:forEach>
             </select>
     </div>
 
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon">Title</span>
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Title</span>
         <input type="text" class="form-control" name="title" value="">
     </div>
 
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon">Description</span>
-        <input type="textarea" value="" name="description" class="form-control">
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Description</span>
+        <input type="textarea" value="" rows="5" name="description" class="form-control">
     </div>
 
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon">Project</span>
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Project</span>
         <select class="form-control" name="project_id">
             <c:forEach items="${projects}" var="project">
                 <option value="${project.id}">${project.name}</option>
@@ -40,24 +40,24 @@
         </select>
     </div>
 
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon">Status</span>
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Status</span>
             <select class="form-control" name="status">
                 <c:forEach items="${statuses}" var="status">
                     <option value="${status}">${status}</option>
                 </c:forEach>
             </select>
     </div>
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon">Priority</span>
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Priority</span>
             <select class="form-control" name="priority">
                 <c:forEach items="${priorities}" var="priority">
                     <option value="${priority}">${priority}</option>
                 </c:forEach>
             </select>
     </div>
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon">Assignee</span>
+    <div class="input-group" style="margin-bottom:10px;width:100%;">
+        <span style="width:8%;text-align: left;" class="input-group-addon">Assignee</span>
             <select class="form-control" name="responsible_id">
                 <c:forEach items="${users}" var="assignee">
                     <option value="${assignee.id}">${assignee.username}</option>

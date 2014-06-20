@@ -43,29 +43,25 @@
 <h3 style="margin: 40px 1% 1%;text-align:center;"><span class ="label label-default">Add project</span></h3>
 <div style="width:50%;margin-left:25%">
 <form name="input" action="/projects/add" method="post">
-    <div style="margin-bottom:10px" class="input-group">
-        <span class="input-group-addon">Name</span>
+    <div style="margin-bottom:10px;width:100%" class="input-group">
+        <span style="width:16%;text-align: left;" class="input-group-addon">Name</span>
         <input type="text" name="name" class="form-control">
     </div>
-    <div style="margin-bottom:10px" class="input-group">
-        <span class="input-group-addon">Description</span>
-        <input type="textarea" rowcount="5" name="description" class="form-control">
+    <div style="margin-bottom:10px;width:100%" class="input-group">
+        <span style="width:16%;text-align: left;" class="input-group-addon">Description</span>
+        <input type="textarea" rows="5" name="description" class="form-control">
     </div>
-    <div style="margin-bottom:10px" class="input-group">
-        <span class="input-group-addon">Manager  </span>
+    <div style="margin-bottom:10px;width:100%" class="input-group">
+        <span style="width:16%;text-align: left;" class="input-group-addon">Manager</span>
         <select class="form-control" name="manager_id">
         <c:forEach items="${users}" var="user">
             <option value="${user.id}">${user.username}</option>
         </c:forEach>
         </select>
     </div>
-    <c:forEach items="${users}" var="user">
-        <option value="${user.id}">${user.username}</option>
-    </c:forEach>
-    </select>
     <input type="hidden" name="${_csrf.parameterName}"
            value="${_csrf.token}" />
-    <input style="margin-left:45%" type="submit" value="Add"/>
+    <input style="margin-left:45%" type="submit" class="btn btn-default" value="Add"/>
 </form>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
