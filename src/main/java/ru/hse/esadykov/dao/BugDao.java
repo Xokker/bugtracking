@@ -60,7 +60,11 @@ public class BugDao {
                         (onlyOpened || bugPresented ? " where " : " ") +
                         (onlyOpened ? " status = '" + BugStatus.NEW + "'" : " ") +
                         (onlyOpened && bugPresented ? " and " : " ") +
-                        (bugPresented ? " b.id <> " + currentBugId : " ") +
+                        (bugPresented ? " b.id <> " + currentBugId + " and b.id not in " +
+                                "(select bug1_id as id from dependencies where bug2_id = " +
+                                currentBugId + " union select bug2_id as id from dependencies where bug1_id = "
+                                + currentBugId + ")"
+                                : " ") +
                         " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
