@@ -97,36 +97,55 @@
     </form>
     <hr>
     <div class="">
-        <h2><span class="label label-default">Related bugs</span></h2>
-
+        <h2><span class="label label-default">Related issues</span></h2>
+        <br/>
         <form action="/bug/${bug.id}/dependency" method="post">
             <input type="hidden" name="is_add" value="" id="is_add">
             <table>
+                <thead>
+                <tr>
+                    <th>
+                        All issues
+                    </th>
+                    <th>
+
+                    </th>
+                    <th>
+                        Related issues
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
                 <tr>
                     <td>
-                        <div class="input-group" style="margin-bottom: 10px;width:40%">
-                            <select id="bugs" size="5" class="form-control" name="bug_id">
+                        <div class="input-group" style="margin-bottom: 10px;width:250px">
+                            <select id="bugs" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bugs}" var="bugg">
-                                    <option value="${bugg.id}">${bugg.title}</option>
+                                    <option value="${bugg.id}"><a href="/bug/${bugg.id}" target="_blank">${bugg.title}</a></option>
                                 </c:forEach>
                             </select>
                         </div>
                     </td>
                     <td>
-                        <button id="add" class="btn btn-default" type="submit"><span class="glyphicon glyphicon-arrow-right"></span> </button>
-                        <button id="delete" class="btn btn-default" type="submit"><span class="glyphicon glyphicon-arrow-left"></span> </button>
+                        <div class="btn-group-vertical" style="margin-left: 5px;margin-right: 5px;">
+                        <button id="add" class="btn btn-default" title="add issue" type="submit"><span class="glyphicon glyphicon-arrow-right"></span> </button>
+                        <button id="delete" class="btn btn-default" title="remove issue" type="submit"><span class="glyphicon glyphicon-arrow-left"></span> </button>
+                        </div>
                     </td>
                     <td>
-                        <div class="input-group" style="margin-bottom: 10px;width:40%">
-                            <select id="deps" size="5" class="form-control" name="bug_id">
+                        <div class="input-group" style="margin-bottom: 10px;width:250px">
+                            <select id="deps" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bug.dependencies}" var="dep">
-                                    <option value="${dep.id}">${dep.title}</option>
+                                    <option value="${dep.id}"><a href="/bug/${dep.id}" target="_blank">${dep.title}</a></option>
                                 </c:forEach>
                             </select>
                         </div>
                     </td>
                 </tr>
+                </tbody>
             </table>
+            <input type="hidden" name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
         </form>
 
     </div>
@@ -166,27 +185,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="/resources/js/bootstrap.min.js"></script>
-        <script type="javascript">
-            (document).ready(function(){
-                var is_add = $("#is_add");
-                var add = $("#add");
-                var del= $("#delete");
-                var deps=$("#deps");
-                var bugs=$("#bugs");
-                add.click(function(){
-                   is_add.setAttribute('value','True');
-                });
-                del.click(function(){
-                    is_add.setAttribute('value','False');
-                });
-                deps.click(function(){
-
-                });
-                bugs.click(function(){
-
-                });
-            });
-        </script>
+        <script src="/resources/js/bug.js"></script>
     </div>
 </div>
 </body>
