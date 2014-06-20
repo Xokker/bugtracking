@@ -86,6 +86,8 @@ public class BugController {
             model.addAttribute("priorities", BugPriority.values());
             model.addAttribute("users", userDao.getUsers());
             model.addAttribute("is_current_user_observer", bug.isUserObserver(userService.getCurrentUser()));
+            model.addAttribute("bugs", bugDao.getBugs());
+
             Project project = projectDao.getProject(bug.getProjectId());
             bug.setProject(project);
 
