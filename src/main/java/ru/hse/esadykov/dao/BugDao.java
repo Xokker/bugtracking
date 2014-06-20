@@ -47,15 +47,20 @@ public class BugDao {
     }
 
     public List<Bug> getBugs() {
-        return getBugs(-1, null);
+        return getBugs(-1, null, -1);
     }
 
-    public List<Bug> getBugs(Integer projectId, Boolean showClosed) {
+    public List<Bug> getBugs(Integer projectId, Boolean showClosed, Integer currentBugId) {
         boolean projectPresented = projectId != null && projectId > 0;
+        boolean bugPresented = currentBugId != null && currentBugId > 0;
+        boolean onlyOpened = showClosed == null || !showClosed;
         return template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
                         "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id " +
-                        (projectPresented ? "and project_id = " + projectId : "") +
-                        (showClosed == null || !showClosed ? " where status = '" + BugStatus.NEW + "'" : "") +
+                        (projectPresented ? "and project_id = " + projectId : " ") +
+                        (onlyOpened || bugPresented ? " where " : " ") +
+                        (onlyOpened ? " status = '" + BugStatus.NEW + "'" : " ") +
+                        (onlyOpened && bugPresented ? " and " : " ") +
+                        (bugPresented ? " b.id <> " + currentBugId : " ") +
                         " order by p.id asc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override

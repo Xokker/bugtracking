@@ -41,7 +41,7 @@ public class BugListController {
         List<User> users = null;
         List<Project> projects = null;
         try {
-            bugs = bugDao.getBugs(projectId, showClosed);
+            bugs = bugDao.getBugs(projectId, showClosed, null);
             for (Bug bug : bugs) {
                 Project project = projectDao.getProject(bug.getProjectId());
                 User responsible = userDao.getUser(bug.getResponsibleId());
