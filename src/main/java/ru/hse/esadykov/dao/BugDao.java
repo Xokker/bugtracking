@@ -93,13 +93,13 @@ public class BugDao {
                         return extractBug(rs);
                     }
                 });
-        template.query("select t1.id, title from bug join (select bug1_id as id from dependencies " +
-                        "where bug2_id = :bugId union select bug2_id as id from dependencies where bug1_id = :bugId) as t1",
+        template.query("select b.id, b.title from bug b join (select bug1_id as id from dependencies " +
+                        "where bug2_id = :bugId union select bug2_id as id from dependencies where bug1_id = :bugId) as t1 on t1.id = b.id",
                 Collections.singletonMap("bugId", bugId),
                 new ResultSetExtractor<Bug>() {
                     @Override
                     public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
-                        if (rs.next()) {
+                        while (rs.next()) {
                             bug.addDependency(new Bug(rs.getInt("id"), rs.getString("title")));
                         }
                         return bug;
@@ -111,7 +111,7 @@ public class BugDao {
                 new ResultSetExtractor<Bug>() {
                     @Override
                     public Bug extractData(ResultSet rs) throws SQLException, DataAccessException {
-                        if (rs.next()) {
+                        while (rs.next()) {
                             User user = userDao.getUser(rs.getInt("observer_id"));
                             bug.addObserver(new User(user.getId(), user.getUsername(), user.getFullName(), user.getEmail(), user.getPassword()));
                         }
