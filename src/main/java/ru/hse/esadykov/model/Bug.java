@@ -12,6 +12,11 @@ import java.util.List;
  */
 public class Bug {
     private Integer id;
+
+    public List<Bug> getDependencies() {
+        return dependencies;
+    }
+
     private List<Bug> dependencies;
     private Date created;
     private Date closed;

@@ -48,8 +48,8 @@
         <input type="text" name="name" class="form-control">
     </div>
     <div style="margin-bottom:10px;width:100%" class="input-group">
-        <span style="width:16%;text-align: left;" class="input-group-addon">Description</span>
-        <input type="textarea" rows="5" name="description" class="form-control">
+        <span style="width:16%;text-align: left;vertical-align: top" class="input-group-addon">Description</span>
+        <textarea rows="5" name="description" class="form-control"></textarea>
     </div>
     <div style="margin-bottom:10px;width:100%" class="input-group">
         <span style="width:16%;text-align: left;" class="input-group-addon">Manager</span>
