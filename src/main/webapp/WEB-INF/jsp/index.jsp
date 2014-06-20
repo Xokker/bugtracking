@@ -13,8 +13,8 @@
 <table style="margin:1.5%; width:97%">
     <tr style="overflow:visible">
         <td style="width:50%;">
-<div style="margin-right:5%; height:280px; overflow-y:auto" class="panel panel-primary">
-    <div class="panel-heading">Projects</div>
+<div style="margin-right:5%; height:285px; overflow-y:auto" class="panel panel-primary">
+    <div class="panel-heading">Open Projects</div>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -36,7 +36,7 @@
 </div>
     </td>
      <td style="width:50%;">
-         <div style="margin-left:5%; height:280px; overflow-y:auto" class="panel panel-primary">
+         <div style="margin-left:5%; height:285px; overflow-y:auto" class="panel panel-primary">
          <div class="panel-heading">Latest Issues</div>
          <table class="table table-hover">
              <thead>
