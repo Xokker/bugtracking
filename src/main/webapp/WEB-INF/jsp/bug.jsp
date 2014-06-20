@@ -105,7 +105,7 @@
                 <thead>
                 <tr>
                     <th>
-                        All issues
+                        Avaliable issues
                     </th>
                     <th>
 

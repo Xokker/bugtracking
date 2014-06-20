@@ -13,9 +13,19 @@ $(document).ready(function () {
         is_add.setAttribute("value", "False");
     });
     deps.click(function () {
-
+        var add=document.getElementById("add");
+        var del=document.getElementById("delete");
+        var bugs=document.getElementById("bugs");
+        add.disabled=true;
+        del.disabled=false;
+        bugs.selectedIndex=-1;
     });
     bugs.click(function () {
-
+        var add=document.getElementById("add");
+        var del=document.getElementById("delete");
+        var deps=document.getElementById("deps");
+        add.disabled=false;
+        del.disabled=true;
+        deps.selectedIndex=-1;
     });
 });
