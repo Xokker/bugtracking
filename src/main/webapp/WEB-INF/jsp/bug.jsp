@@ -12,7 +12,17 @@
     <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
 <div style="width:98%;margin:1%">
 
-    <h3><span class="label label-default">#${bug.title}</span></h3>
+    <table>
+        <tr>
+            <td style="vertical-align: top;"><h3><span class="label label-default">${bug.title}</span></h3></td>
+            <td style="vertical-align: bottom;"><form action="/bug/${bug.id}/observer" method="post">
+                <input type="hidden" name="is_add" value="${not is_current_user_observer}"/>
+                <input type="hidden" name="${_csrf.parameterName}"
+                       value="${_csrf.token}"/>
+                <button title="${is_current_user_observer?'stop watching this bug':'watch this bug'}" style="margin-top:15px; margin-left:-5px; width:35px;height:30px;" type="submit" class=" label label-default btn"><span class="glyphicon glyphicon-eye-${is_current_user_observer?"close":"open"}"></span></button>
+            </form></td>
+        </tr>
+    </table>
     <form action="${requestScope['javax.servlet.forward.request_uri']}/edit" method="post">
 
         <div class="input-group"style="margin-bottom: 10px;width:100%">
@@ -82,7 +92,10 @@
         <input type="hidden" value="${bug.id}" name="id"/>
         <input type="submit" class="btn btn-default" value="Save changes"/>
     </form>
-
+    <div class="">
+        <h2><span class="label label-default">Related bugs</span></h2>
+        <
+    </div>
     <hr>
     <div class="">
     <h2><span class="label label-default">Comments</span></h2>
@@ -115,6 +128,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/resources/js/bootstrap.min.js"></script>
+</div>
 </div>
 </body>
 </html>
