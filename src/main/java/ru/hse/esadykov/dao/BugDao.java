@@ -47,13 +47,14 @@ public class BugDao {
     }
 
     public List<Bug> getBugs() {
-        return getBugs(-1, null, -1);
+        return getBugs(-1, null, null, -1);
     }
 
-    public List<Bug> getBugs(Integer projectId, Boolean showClosed, Integer currentBugId) {
+    public List<Bug> getBugs(Integer projectId, Boolean showClosed, Boolean prioritySort, Integer currentBugId) {
         boolean projectPresented = projectId != null && projectId > 0;
         boolean bugPresented = currentBugId != null && currentBugId > 0;
         boolean onlyOpened = showClosed == null || !showClosed;
+        boolean priority = prioritySort != null && prioritySort;
         return template.query("select b.id, created, closed, p.title as priority, b.title, b.description, responsible_id, creator_id, status, type, project_id, pr.name as project_name " +
                         "from bug b join priority p on p.id = b.priority join project pr on project_id = pr.id " +
                         (projectPresented ? "and project_id = " + projectId : " ") +
@@ -65,7 +66,7 @@ public class BugDao {
                                 currentBugId + " union select bug2_id as id from dependencies where bug1_id = "
                                 + currentBugId + ")"
                                 : " ") +
-                        " order by p.id asc ",
+                        " order by" + (priority ? " p.id asc," : "") + " created desc ",
                 new ResultSetExtractor<List<Bug>>() {
                     @Override
                     public List<Bug> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -76,7 +77,8 @@ public class BugDao {
 
                         return result;
                     }
-                });
+                }
+        );
     }
 
     @Transactional
