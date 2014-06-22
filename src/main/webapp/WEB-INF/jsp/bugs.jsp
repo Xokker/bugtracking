@@ -19,14 +19,13 @@
                 <input style="margin-left:2%;margin-bottom:10px;" id="showclosed" type="checkbox" name="Show closed"
                 <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed"> Show closed</input>
             <div style="margin-left:32%;margin-bottom: 10px;" class="btn-group">
-            <button  type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button  type="button" id="sortby" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     Sort by:
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Newest</a></li>
                     <li><a href="#">Priority</a></li>
-                    <li><a href="#">Status</a></li>
                 </ul>
                 </div>
         </td>
