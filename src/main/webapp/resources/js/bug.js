@@ -29,3 +29,6 @@ $(document).ready(function () {
         deps.selectedIndex=-1;
     });
 });
+function link(id) {
+    location.href="/bug/"+id;
+}

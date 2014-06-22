@@ -122,22 +122,22 @@
                         <div class="input-group" style="margin-bottom: 10px;width:250px">
                             <select id="bugs" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bugs}" var="bugg">
-                                    <option value="${bugg.id}"><a href="/bug/${bugg.id}" target="_blank">${bugg.title}</a></option>
+                                    <option ondblclick="link(${bugg.id})" value="${bugg.id}">${bugg.title}</option>
                                 </c:forEach>
                             </select>
                         </div>
                     </td>
                     <td>
                         <div class="btn-group-vertical" style="margin-left: 5px;margin-right: 5px;">
-                        <button id="add" class="btn btn-default" title="add issue" type="submit"><span class="glyphicon glyphicon-arrow-right"></span> </button>
-                        <button id="delete" class="btn btn-default" title="remove issue" type="submit"><span class="glyphicon glyphicon-arrow-left"></span> </button>
+                        <button id="add" disabled class="btn btn-default" title="add issue" type="submit"><span class="glyphicon glyphicon-arrow-right"></span> </button>
+                        <button id="delete" disabled class="btn btn-default" title="remove issue" type="submit"><span class="glyphicon glyphicon-arrow-left"></span> </button>
                         </div>
                     </td>
                     <td>
                         <div class="input-group" style="margin-bottom: 10px;width:250px">
                             <select id="deps" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bug.dependencies}" var="dep">
-                                    <option value="${dep.id}"><a href="/bug/${dep.id}" target="_blank">${dep.title}</a></option>
+                                    <option value="${dep.id}" ondblclick="link(${dep.id})">${dep.title}</option>
                                 </c:forEach>
                             </select>
                         </div>
