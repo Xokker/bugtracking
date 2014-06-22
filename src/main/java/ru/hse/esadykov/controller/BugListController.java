@@ -36,12 +36,13 @@ public class BugListController {
 
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
     protected ModelAndView doGet(@RequestParam(value = "project_id", required = false) Integer projectId,
-                                 @RequestParam(value = "showclosed", required = false) Boolean showClosed) {
+                                 @RequestParam(value = "showclosed", required = false) Boolean showClosed,
+                                 @RequestParam(value = "priority", required = false) Boolean prioritySort) {
         List<Bug> bugs = null;
         List<User> users = null;
         List<Project> projects = null;
         try {
-            bugs = bugDao.getBugs(projectId, showClosed, null);
+            bugs = bugDao.getBugs(projectId, showClosed, prioritySort, null);
             for (Bug bug : bugs) {
                 Project project = projectDao.getProject(bug.getProjectId());
                 User responsible = userDao.getUser(bug.getResponsibleId());
