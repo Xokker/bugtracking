@@ -122,11 +122,7 @@
                         <div class="input-group" style="margin-bottom: 10px;width:250px">
                             <select id="bugs" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bugs}" var="bugg">
-<<<<<<< Updated upstream
                                     <option ondblclick="link(${bugg.id})" value="${bugg.id}">${bugg.title}</option>
-=======
-                                    <option value="${bugg.id}"><a href="<c:url value="/bug/${bugg.id}"/>" target="_blank">${bugg.title}</a></option>
->>>>>>> Stashed changes
                                 </c:forEach>
                             </select>
                         </div>
@@ -141,12 +137,7 @@
                         <div class="input-group" style="margin-bottom: 10px;width:250px">
                             <select id="deps" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bug.dependencies}" var="dep">
-<<<<<<< Updated upstream
-                                    <option value="${dep.id}" ondblclick="link(${dep.id})">${dep.title}</option>
-=======
-                                    <option value="${dep.id}"><a href="<c:url value="/bug/${dep.id}"/>" target="_blank">${dep.title}</a></option>
->>>>>>> Stashed changes
-                                </c:forEach>
+                                    <option value="${dep.id}" ondblclick="link(${dep.id})">${dep.title}</option>\ </c:forEach>
                             </select>
                         </div>
                     </td>
