@@ -84,8 +84,18 @@ public class UserDao {
     }
 
     public User getUser(String username) {
-        return template.queryForObject("select id, username, full_name, email from user where username = :username",
+        User result = template.queryForObject("select id, username, full_name, email from user where username = :username",
                 Collections.singletonMap("username", username), new UserMapper());
+        try {
+            template.queryForObject("SELECT 1 FROM user_roles WHERE user_id=:userId AND role_id = 2",
+                    Collections.singletonMap("userId", result.getId()),
+                    Integer.class);
+            result.setAdmin(true);
+        } catch (EmptyResultDataAccessException e) {
+            result.setAdmin(false);
+        }
+
+        return result;
     }
 
     private static class UserMapper implements RowMapper<User> {

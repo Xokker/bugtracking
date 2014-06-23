@@ -98,6 +98,16 @@ public class UsersController {
         return new ModelAndView("user", "user", userService.getCurrentUser());
     }
 
+    @RequestMapping(value = "/me", method = RequestMethod.POST)
+    protected String updateMe(@RequestParam(value = "fullName", required = false) String fullName,
+                              @RequestParam(value = "email", required = false) String email,
+                              @RequestParam(value = "password") String password,
+                              @RequestParam(value = "admin", required = false) Boolean admin,
+                              @RequestParam(value = "backUrl", required = false, defaultValue = "/") String backUrl) {
+        Integer userId = userService.getCurrentUser().getId();
+        return updateUser(fullName, email, password, admin, backUrl, userId);
+    }
+
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
     protected String doPut(@RequestParam(value = "username") String username,
                            @RequestParam(value = "full_name", required = false) String fullName,
