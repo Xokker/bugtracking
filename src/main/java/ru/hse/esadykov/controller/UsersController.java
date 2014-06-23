@@ -56,11 +56,15 @@ public class UsersController {
     protected String updateUser(@RequestParam(value = "fullName", required = false) String fullName,
                                 @RequestParam(value = "email", required = false) String email,
                                 @RequestParam(value = "password") String password,
+                                @RequestParam(value = "admin", required = false) Boolean admin,
                                 @RequestParam(value = "backUrl", required = false, defaultValue = "/") String backUrl,
                                 @PathVariable("id") Integer userId) {
 
         String encodedPassword = StringUtils.isNotBlank(password) ? passwordEncoder.encode(password) : null;
         User user = new User(userId, null, fullName, email, encodedPassword);
+        if (admin != null) {
+            user.setAdmin(admin);
+        }
 
         try {
             userDao.updateUser(user);
@@ -92,6 +96,16 @@ public class UsersController {
     @RequestMapping(value = "/me", method = RequestMethod.GET)
     public ModelAndView me() {
         return new ModelAndView("user", "user", userService.getCurrentUser());
+    }
+
+    @RequestMapping(value = "/me", method = RequestMethod.POST)
+    protected String updateMe(@RequestParam(value = "fullName", required = false) String fullName,
+                              @RequestParam(value = "email", required = false) String email,
+                              @RequestParam(value = "password") String password,
+                              @RequestParam(value = "admin", required = false) Boolean admin,
+                              @RequestParam(value = "backUrl", required = false, defaultValue = "/") String backUrl) {
+        Integer userId = userService.getCurrentUser().getId();
+        return updateUser(fullName, email, password, admin, backUrl, userId);
     }
 
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)

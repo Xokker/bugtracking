@@ -1,6 +1,8 @@
 package ru.hse.esadykov.dao;
 
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,9 +33,20 @@ public class UserDao {
         return template.query("select id, username, full_name, email from user", new UserMapper());
     }
 
+    @Transactional
     public User getUser(int userId) {
-        return template.queryForObject("select id, username, full_name, email from user where id = :id",
+        User result = template.queryForObject("select id, username, full_name, email from user where id = :id",
                 Collections.singletonMap("id", userId), new UserMapper());
+        try {
+            template.queryForObject("SELECT 1 FROM user_roles WHERE user_id=:userId AND role_id = 2",
+                    Collections.singletonMap("userId", userId),
+                    Integer.class);
+            result.setAdmin(true);
+        } catch (EmptyResultDataAccessException e) {
+            result.setAdmin(false);
+        }
+
+        return result;
     }
 
     @Transactional
@@ -71,8 +84,18 @@ public class UserDao {
     }
 
     public User getUser(String username) {
-        return template.queryForObject("select id, username, full_name, email from user where username = :username",
+        User result = template.queryForObject("select id, username, full_name, email from user where username = :username",
                 Collections.singletonMap("username", username), new UserMapper());
+        try {
+            template.queryForObject("SELECT 1 FROM user_roles WHERE user_id=:userId AND role_id = 2",
+                    Collections.singletonMap("userId", result.getId()),
+                    Integer.class);
+            result.setAdmin(true);
+        } catch (EmptyResultDataAccessException e) {
+            result.setAdmin(false);
+        }
+
+        return result;
     }
 
     private static class UserMapper implements RowMapper<User> {
@@ -96,7 +119,14 @@ public class UserDao {
         params.put("password", user.getPassword());
 
         int res = template.update("UPDATE user SET " +
-                "full_name = :fullName, email = :email WHERE id = :id", new MapSqlParameterSource(params));
+                "full_name = :fullName, email = :email WHERE id = :id", params);
+        ImmutableMap<String, Integer> role = ImmutableMap.of("userId", user.getId(), "roleId", 2);
+        if (user.isAdmin()) {
+            template.update("insert ignore into user_roles(user_id, role_id) values (:userId, :roleId)", role);
+        } else {
+            template.update("delete from user_roles where user_id = :userId and role_id = :roleId", role);
+        }
+
         if (user.getPassword() != null) {
             res *= template.update("UPDATE user SET password = :password WHERE id=:id", params);
         }
