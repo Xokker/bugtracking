@@ -4,8 +4,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap-theme.min.css"/>" rel="stylesheet">
     <title>Bug ${bug.title}</title>
 </head>
 <body>
@@ -137,8 +137,7 @@
                         <div class="input-group" style="margin-bottom: 10px;width:250px">
                             <select id="deps" size="10" class="form-control" name="bug_id">
                                 <c:forEach items="${bug.dependencies}" var="dep">
-                                    <option value="${dep.id}" ondblclick="link(${dep.id})">${dep.title}</option>
-                                </c:forEach>
+                                    <option value="${dep.id}" ondblclick="link(${dep.id})">${dep.title}</option>\ </c:forEach>
                             </select>
                         </div>
                     </td>
