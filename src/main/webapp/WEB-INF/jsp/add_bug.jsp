@@ -4,8 +4,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap-theme.min.css"/>" rel="stylesheet">
     <title>Add bug</title>
 </head>
 <body>

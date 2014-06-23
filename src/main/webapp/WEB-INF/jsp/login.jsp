@@ -27,8 +27,8 @@
 
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap-theme.min.css"/>" rel="stylesheet">
 </head>
 <body style=" overflow-y:visible;margin-left:37%;margin-top:10%" onload='document.loginForm.username.focus();'>
 

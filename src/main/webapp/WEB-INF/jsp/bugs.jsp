@@ -4,8 +4,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap-theme.min.css"/>" rel="stylesheet">
 
     <title>Issues</title>
 </head>
@@ -14,7 +14,7 @@
 <jsp:include page="navigation.jsp"/>
 <table class="table-responsive" style="width:98%; margin:1%">
     <tr>
-        <td> <a href="/bugs/add"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
+        <td> <a href="<c:url value="/bugs/add"/>"><button style="margin-bottom: 10px;" type="button" class="btn btn-success">New issue</button></a></td>
         <td>
                 <input style="margin-left:2%;margin-bottom:10px;" id="showclosed" type="checkbox" name="Show closed"
                 <c:if test="${param.showclosed}"> checked="true"</c:if> title="Show closed"> Show closed</input>
@@ -24,8 +24,8 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Newest</a></li>
-                    <li><a href="#">Priority</a></li>
+                    <li><a href="<c:url value="#"/>">Newest</a></li>
+                    <li><a href="<c:url value="#"/>">Priority</a></li>
                 </ul>
                 </div>
         </td>
@@ -38,10 +38,10 @@
 
             <!-- List group -->
             <ul class="list-group">
-                <li class="list-group-item"><a href="#">Everyone's Issues</a></li>
-                <li class="list-group-item"><a href="#">Assigned to me</a></li>
-                <li class="list-group-item"><a href="#">Created by me</a></li>
-                <li class="list-group-item"><a href="#">Viewed by me</a></li>
+                <li class="list-group-item"><a href="<c:url value="#"/>">Everyone's Issues</a></li>
+                <li class="list-group-item"><a href="<c:url value="#"/>">Assigned to me</a></li>
+                <li class="list-group-item"><a href="<c:url value="#"/>">Created by me</a></li>
+                <li class="list-group-item"><a href="<c:url value="#"/>">Viewed by me</a></li>
             </ul>
         </div>
           <div style=" margin-top:20px;overflow-y:auto" class="panel panel-primary">
@@ -51,10 +51,10 @@
                 <!-- List group -->
                 <ul class="list-group">
                     <c:forEach items="${projects}" var="project">
-                        <li class="list-group-item"><a href="?project_id=${project.id}">${project.name}</a></li>
+                        <li class="list-group-item"><a href="<c:url value="?project_id=${project.id}"/>">${project.name}</a></li>
                     </c:forEach>
                     <li class="divider"/>
-                    <li class="list-group-item"><a href="?project_id=-1">All Projects</a></li>
+                    <li class="list-group-item"><a href="<c:url value="?project_id=-1"/>">All Projects</a></li>
                 </ul>
             </div>
         </td>
@@ -75,7 +75,7 @@
                 <tbody>
                 <c:forEach items="${bugs}" var="bug">
                 <tr>
-                    <td><a href="../bug/${bug.id}">${bug.title}</a></td>
+                    <td><a href="<c:url value="../bug/${bug.id}"/>">${bug.title}</a></td>
                     <td>${bug.project.name}</td>
                     <td>${bug.priority}</td>
                     <td>${bug.status}</td>

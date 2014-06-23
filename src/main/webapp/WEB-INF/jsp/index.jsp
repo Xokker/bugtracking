@@ -4,8 +4,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap.min.css"/>" rel="stylesheet">
+    <link href="<c:url value="/resources/css/bootstrap-theme.min.css"/>" rel="stylesheet">
     <title>Bug Tracking</title>
 </head>
 <body>
@@ -51,7 +51,7 @@
              <tbody>
              <c:forEach items="${bugs}" var="bug">
              <tr>
-                 <td><a href="../bug/${bug.id}">${bug.title}</a></td>
+                 <td><a href="<c:url value="../bug/${bug.id}"/>">${bug.title}</a></td>
                  <td>${bug.project.name}</td>
                  <td>${bug.priority}</td>
                  <td>${bug.issueType}</td>
@@ -80,7 +80,7 @@
                  <c:forEach items="${comments}" var="comment">
                  <tr>
                      <td>${comment.author.username}</td>
-                     <td><a href="../bug/${comment.bug.id}">${comment.bug.title}</a></td>
+                     <td><a href="<c:url value="../bug/${comment.bug.id}"/>">${comment.bug.title}</a></td>
                      <td><fmt:formatDate type="both" dateStyle="short"
                                                      pattern="dd.MM.yyyy HH:mm"
                                                      value="${comment.bug.created}"/></td>
