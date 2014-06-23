@@ -25,8 +25,7 @@
         <div style="width:346px;" class="msg">${message}</div>
     </c:if>
 
-    <h2><span class="label label-default">Please, Login BugsBunny. </span></h2>
-    <br/>
+
     <div class="panel panel-primary">
         <div class="panel-heading">Users</div>
     <table class="table table-hover">
