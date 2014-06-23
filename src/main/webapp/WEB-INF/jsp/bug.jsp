@@ -37,7 +37,7 @@
         </div>
 
         <div class="input-group" style="margin-bottom: 10px;width:100%">
-            <span style="width:8%;text-align: left;" class="input-group-addon">Name</span>
+            <span style="width:8%;text-align: left;" class="input-group-addon">Title</span>
             <input type="text" disabled class="form-control" value="${bug.title}">
         </div>
 
@@ -47,7 +47,7 @@
         </div>
 
         <div class="input-group" style="margin-bottom: 10px;width:100%">
-            <span style="width:8%;text-align: left;" class="input-group-addon">Project</span>
+            <span style="width:8%;text-align: left;" class="input-group-addon"><a href="<c:url value="/bugs/?project_id=${bug.project.id}"/>"> Project</a></span>
             <input type="text" disabled value="${bug.project.name}" class="form-control">
         </div>
 

@@ -32,3 +32,9 @@ $(document).ready(function () {
 function link(id) {
     location.href="/bug/"+id;
 }
+function link(id) {
+    location.href="/bug/"+id;
+}
+function linkProj(id) {
+    location.href="/bugs/?project_id="+id;
+}
